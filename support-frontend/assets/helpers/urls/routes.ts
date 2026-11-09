@@ -8,6 +8,7 @@ import type {
 	PaperFulfilmentOptions,
 } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
+import { apiUrl } from 'helpers/abTests/apiRoutes';
 import type { Option } from 'helpers/types/option';
 import {
 	addQueryParamsToURL,
@@ -51,6 +52,8 @@ const routes = {
 		'https://www.studentbeans.com/en-ca/ca/beansid-connect/hosted/the-guardian-digital/student/362bcbd6-b491-4adf-8ca1-9f0c9f69c3b7',
 	supporterPlusStudentBeansEu:
 		'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
+	supporterPlusStudentBeansAu:
+		'/au/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
 	postcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
@@ -66,9 +69,10 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 	countryGroups[countryGroupId].supportRegionId;
 
 function postcodeLookupUrl(postcode: string): string {
-	return `${getOrigin()}${routes.postcodeLookup}/${encodeURIComponent(
-		postcode,
-	)}`;
+	return `${getOrigin()}${apiUrl({
+		apiRouteKey: 'postcodeLookup',
+		param: postcode,
+	})}`;
 }
 
 function paperSubsUrl(

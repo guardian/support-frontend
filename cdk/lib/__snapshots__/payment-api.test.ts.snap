@@ -40,6 +40,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuHttpsEgressSecurityGroup",
       "GuAutoScalingGroup",
       "GuApplicationLoadBalancer",
+      "GuAccessLoggingBucketParameter",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
       "GuAlarm",
@@ -69,6 +70,11 @@ exports[`The Payment API stack matches the snapshot 1`] = `
     "AMIPaymentapi": {
       "Description": "Amazon Machine Image ID for the app payment-api. Use this in conjunction with AMIgo to keep AMIs up to date.",
       "Type": "AWS::EC2::Image::Id",
+    },
+    "AccessLoggingBucket": {
+      "Default": "/account/services/access-logging/bucket",
+      "Description": "S3 bucket to store your access logs",
+      "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "ContributionsStoreSqsQueueCodeArn": {
       "Description": "For the PROD stack you still need to supply this, because PROD instances need access to both PROD and CODE contribution store queues.",
@@ -529,11 +535,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:kinesis:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:kinesis:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -586,11 +588,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -754,7 +752,17 @@ exports[`The Payment API stack matches the snapshot 1`] = `
           },
           {
             "Key": "access_logs.s3.enabled",
-            "Value": "false",
+            "Value": "true",
+          },
+          {
+            "Key": "access_logs.s3.bucket",
+            "Value": {
+              "Ref": "AccessLoggingBucket",
+            },
+          },
+          {
+            "Key": "access_logs.s3.prefix",
+            "Value": "application-load-balancer/PROD/support/payment-api",
           },
         ],
         "Scheme": "internet-facing",
@@ -864,11 +872,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -934,11 +938,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -964,11 +964,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -1010,11 +1006,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -1075,11 +1067,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -1119,11 +1107,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -1149,11 +1133,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -1198,11 +1178,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1221,11 +1197,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1254,11 +1226,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -1311,11 +1279,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -1393,11 +1357,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1454,11 +1414,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                   "Fn::Join": [
                     "",
                     [
-                      "arn:aws:sqs:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
+                      "arn:aws:sqs:eu-west-1:",
                       {
                         "Ref": "AWS::AccountId",
                       },
@@ -1470,11 +1426,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                   "Fn::Join": [
                     "",
                     [
-                      "arn:aws:sqs:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
+                      "arn:aws:sqs:eu-west-1:",
                       {
                         "Ref": "AWS::AccountId",
                       },
@@ -1563,11 +1515,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -1620,11 +1568,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -1844,26 +1788,15 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             },
           ],
           "UserData": {
-            "Fn::Base64": {
-              "Fn::Join": [
-                "",
-                [
-                  "#!/bin/bash
+            "Fn::Base64": "#!/bin/bash
 #!/bin/bash -ev
     mkdir /etc/gu
 
     echo PROD > /etc/gu/stage
 
-    aws --region ",
-                  {
-                    "Ref": "AWS::Region",
-                  },
-                  " s3 cp s3://membership-dist/support/PROD/payment-api/payment-api_0.1_all.deb /tmp
+    aws --region eu-west-1 s3 cp s3://membership-dist/support/PROD/payment-api/payment-api_0.1_all.deb /tmp
     dpkg -i /tmp/payment-api_0.1_all.deb
     /opt/cloudwatch-logs/configure-logs application support PROD payment-api /var/log/payment-api/application.log",
-                ],
-              ],
-            },
           },
         },
         "TagSpecifications": [

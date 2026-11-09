@@ -6,7 +6,7 @@ export const buildPostcodeLookupHandler =
 		idealPostcodeService: IdealPostcodeService,
 	): RequestHandler<{ postcode: string }> =>
 	async (req, res) => {
-		const postcode = decodeURIComponent(req.params.postcode);
+		const postcode = req.params.postcode;
 
 		console.log(`Postcode lookup handler called with ${postcode}`);
 

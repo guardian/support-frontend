@@ -16,6 +16,7 @@ Conditions:
 Resources:
   ProdTable:
     Condition: CreateProdResources
+    DeletionPolicy: Retain
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:
@@ -32,7 +33,7 @@ Resources:
         - AttributeName: "subscriptionName"
           KeyType: "RANGE"
       ProvisionedThroughput:
-        ReadCapacityUnits: 20
+        ReadCapacityUnits: 70
         WriteCapacityUnits: 5
       SSESpecification:
         SSEEnabled: true
@@ -107,6 +108,7 @@ Resources:
 
   CodeTable:
     Condition: CreateCodeResources
+    DeletionPolicy: Retain
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:

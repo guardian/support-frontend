@@ -54,7 +54,7 @@ jobs:
           popd
 
       - name: Setup Scala
-        uses: guardian/setup-scala@v1
+        uses: guardian/setup-scala@v2
 
       - name: Build, test, and package
         run: sbt "project support-frontend" clean test debian:packageBin
