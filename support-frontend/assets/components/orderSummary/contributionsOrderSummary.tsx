@@ -16,6 +16,7 @@ import {
 import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -28,7 +29,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
@@ -169,7 +170,7 @@ export type ContributionsOrderSummaryProps = {
 	landingPageSettings: LandingPageVariant;
 	taxRateConfig: TaxRateConfig;
 	ratePlanLabel?: string;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 	billingPeriod: BillingPeriod;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
@@ -218,9 +219,11 @@ export function ContributionsOrderSummary({
 	const fullPrice =
 		studentDiscount?.fullPriceWithCurrency ??
 		simpleFormatAmount(currency, originalAmount);
-	const promoDiscountPrice =
+	const promotionPrice =
 		promotion &&
-		simpleFormatAmount(currency, promotion.discountedPrice ?? originalAmount);
+		getPromotionDiscountedPrice(promotion, originalAmount, billingPeriod);
+	const promoDiscountPrice =
+		promotion && simpleFormatAmount(currency, promotionPrice ?? originalAmount);
 	const discountPrice =
 		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
 	const title = `Your ${
@@ -252,7 +255,7 @@ export function ContributionsOrderSummary({
 	const savingText = promotion?.discount
 		? `You're saving ${
 				promotion.discount.amount
-		  }% for ${getDiscountDurationText(promotion.discount.durationMonths ?? 0)}`
+		  }% for ${getDiscountDurationText(promotion.discount.durationMonths)}`
 		: null;
 
 	const billingPeriodObj = ratePlanToBillingPeriod(ratePlanKey);
@@ -262,7 +265,7 @@ export function ContributionsOrderSummary({
 			? simpleFormatAmount(
 					currency,
 					calculateWeeklyPrice(
-						promotion?.discountedPrice ?? originalAmount,
+						promotionPrice ?? originalAmount,
 						billingPeriodObj,
 					),
 			  )

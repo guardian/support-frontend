@@ -127,11 +127,18 @@ WeeklyDigitalRestOfWorldInclPromo.args = {
 	ratePlanKey: 'AnnualPlus',
 	countryGroupId: 'UnitedStates',
 	promotion: {
-		name: '10% off for 12 months',
+		name: '25% off for 12 months',
 		description: 'Guardian Weekly Digital United States Annual',
-		promoCode: 'ANNUAL10',
-		numberOfDiscountedPeriods: 12,
-		discountedPrice: 324,
+		promoCode: 'ANNUAL25',
+		campaignCode: 'TEST_CAMPAIGN',
+		appliesTo: {
+			productRatePlanIds: [],
+			countries: ['US'],
+			catalogRatePlans: [],
+		},
+		startTimestamp: '2025-01-01T00:00:00.000Z',
+		endTimestamp: '2026-01-01T00:00:00.000Z',
+		discount: { amount: 25, durationMonths: 12 },
 		isIntroductoryPricing: false,
 	},
 };

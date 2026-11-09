@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import DirectDebitMessage from './DirectDebitMessage';
 import Heading from './heading';
@@ -42,7 +42,7 @@ type ThankYouHeaderProps = {
 	amount: number;
 	currency: CurrencyCode;
 	startDate?: string;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 	observerPrint?: ObserverPrint;
 };
 

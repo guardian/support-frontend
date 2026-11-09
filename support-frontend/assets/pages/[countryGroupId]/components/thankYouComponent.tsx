@@ -3,6 +3,7 @@ import { storage } from '@guardian/libs';
 import { from } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
@@ -19,7 +20,6 @@ import {
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { get } from 'helpers/storage/cookie';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import {
@@ -69,7 +69,7 @@ export type CheckoutComponentProps = {
 	};
 	productKey?: ActiveProductKey;
 	ratePlanKey?: ActiveRatePlanKey;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 	identityUserType: UserType;
 	landingPageSettings: LandingPageVariant;
 };

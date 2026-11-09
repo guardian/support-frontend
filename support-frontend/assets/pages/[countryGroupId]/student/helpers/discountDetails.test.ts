@@ -1,12 +1,11 @@
 import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import {
 	getDiscountDuration,
 	getDiscountSummary,
 	getStudentDiscount,
 } from './discountDetails';
-
-jest.mock('helpers/productPrice/promotions');
 
 jest.mock('helpers/productCatalog', () => ({
 	productCatalog: {
@@ -165,13 +164,19 @@ describe('Discount Details', () => {
 		});
 
 		it('returns discount data when promotion exists with discounted price', () => {
-			const promotion = {
+			const promotion: PromoWithCatalogInformation = {
 				name: 'AU_STUDENT_100',
 				description: '100% discount for Australian students',
 				promoCode: 'UTS_STUDENT',
+				campaignCode: 'TEST_CAMPAIGN',
+				appliesTo: {
+					productRatePlanIds: [],
+					countries: ['AU'],
+					catalogRatePlans: [],
+				},
+				startTimestamp: '2025-01-01T00:00:00.000Z',
+				endTimestamp: '2026-01-01T00:00:00.000Z',
 				discount: { amount: 100, durationMonths: 24 },
-				discountedPrice: 0,
-				numberOfDiscountedPeriods: 24,
 				isIntroductoryPricing: false,
 			};
 
