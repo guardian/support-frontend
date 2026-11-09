@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import {
+	type CountryGroupId,
+	GBPCountries,
+} from '@modules/internationalisation/countryGroup';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -20,13 +23,16 @@ export function PriceRisePolicy({
 	ratePlanKey,
 	countryGroupId,
 }: PriceRisePolicyProps): JSX.Element | null {
-	const noticePeriod = 30;
-	return (
+	const isGBP = countryGroupId === GBPCountries;
+	const isContribution = productKey === 'Contribution';
+	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent'; // TODO: UTS Students
+	const display = isGBP && !isStudentOneYearRatePlan && !isContribution;
+
+	return display ? (
 		<p css={marginTop}>
 			We may increase the price of your subscription in the future. If this
-			happens, we’ll email you at least {noticePeriod} days before it takes
-			effect.
+			happens, we’ll email you at least 30 days before it takes effect.
 			{productKey} {ratePlanKey} {countryGroupId}
 		</p>
-	);
+	) : null;
 }
