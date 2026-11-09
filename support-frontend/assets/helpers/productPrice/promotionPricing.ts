@@ -5,10 +5,6 @@ import {
 	getNumberOfDiscountedPeriods,
 } from './discountedPrice';
 
-/**
- * The price per billing period while the promotion's discount applies,
- * or undefined if the promotion has no discount.
- */
 export function getPromotionDiscountedPrice(
 	promotion: Pick<PromoWithCatalogInformation, 'discount'>,
 	price: number,
@@ -19,10 +15,6 @@ export function getPromotionDiscountedPrice(
 		: undefined;
 }
 
-/**
- * The number of billing periods the promotion's discount applies for,
- * or undefined if the promotion has no discount.
- */
 export function getPromotionDiscountedPeriods(
 	promotion: Pick<PromoWithCatalogInformation, 'discount'>,
 	billingPeriod: RecurringBillingPeriod,

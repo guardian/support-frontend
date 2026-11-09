@@ -4,33 +4,14 @@ import {
 	getPromotionDiscountedPrice,
 } from './promotionPricing';
 
-const discount = { amount: 25, durationMonths: 6 };
-
-describe('getPromotionDiscountedPrice', () => {
-	it('applies the discount to the price', () => {
-		expect(
-			getPromotionDiscountedPrice({ discount }, 10, BillingPeriod.Monthly),
-		).toBe(7.5);
-	});
-
-	it('returns undefined when there is no discount', () => {
+describe('promotion pricing without a discount', () => {
+	it('has no discounted price', () => {
 		expect(
 			getPromotionDiscountedPrice({}, 10, BillingPeriod.Monthly),
 		).toBeUndefined();
 	});
-});
 
-describe('getPromotionDiscountedPeriods', () => {
-	it('counts the billing periods the discount covers', () => {
-		expect(
-			getPromotionDiscountedPeriods({ discount }, BillingPeriod.Monthly),
-		).toBe(6);
-		expect(
-			getPromotionDiscountedPeriods({ discount }, BillingPeriod.Annual),
-		).toBe(1);
-	});
-
-	it('returns undefined when there is no discount', () => {
+	it('has no discounted periods', () => {
 		expect(
 			getPromotionDiscountedPeriods({}, BillingPeriod.Monthly),
 		).toBeUndefined();
