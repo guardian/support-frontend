@@ -1,7 +1,12 @@
 import { css } from '@emotion/react';
-import { ExpressCheckoutElement, useElements } from '@stripe/react-stripe-js';
-import type { ExpressPaymentType } from '@stripe/stripe-js';
+import {
+	ExpressCheckoutElement,
+	useElements,
+	useStripe,
+} from '@stripe/react-stripe-js';
+import type { StripeExpressCheckoutElementConfirmEvent } from '@stripe/stripe-js';
 import { useEffect } from 'react';
+import { isCaState } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 
 /**
@@ -33,8 +38,14 @@ type ExpressCheckoutApplePayProps = {
 	formRef: React.RefObject<HTMLFormElement>;
 	/** Called with the result of Stripe's Apple Pay availability detection */
 	setApplePayIsAvailable: (applePayIsAvailable: boolean) => void;
+	/**
+	 * Called when the user selects an address in the payment sheet, with the
+	 * state/province from that address. Should return the estimated tax, in
+	 * major currency units, or undefined if tax can't be estimated for it.
+	 */
+	getEstimatedTaxForState: (state: string) => number | undefined;
 	/** Called once the user has authorised the payment in the Apple Pay sheet */
-	onConfirmed: (expressPaymentType: ExpressPaymentType) => void;
+	onConfirmed: (event: StripeExpressCheckoutElementConfirmEvent) => void;
 	setErrorMessage: (message: string) => void;
 };
 
@@ -45,9 +56,11 @@ export function ExpressCheckoutApplePay({
 	taxExclusive,
 	formRef,
 	setApplePayIsAvailable,
+	getEstimatedTaxForState,
 	onConfirmed,
 	setErrorMessage,
 }: ExpressCheckoutApplePayProps) {
+	const stripe = useStripe();
 	const elements = useElements();
 
 	const totalAmount = amountExcludingTax + estimatedTaxAmount;
@@ -79,14 +92,25 @@ export function ExpressCheckoutApplePay({
 						return;
 					}
 
-					// We collect the customer's details in the form, so there's no need
-					// to ask for them again in the payment sheet.
+					// We collect the customer's details in the form, but we also ask
+					// for them in the payment sheet so that the details authorised by
+					// the customer are the ones we submit.
 					const options: NonNullable<Parameters<typeof resolve>[0]> = {
-						emailRequired: false,
-						billingAddressRequired: false,
+						emailRequired: true,
 					};
 
 					if (taxExclusive) {
+						/**
+						 * Request an address inside the payment sheet so that we can
+						 * recalculate tax via onShippingAddressChange if the customer
+						 * picks a different address to the one entered in the form.
+						 * shippingRates is required by Stripe whenever
+						 * shippingAddressRequired is true.
+						 */
+						options.shippingAddressRequired = true;
+						options.shippingRates = [
+							{ id: 'free', displayName: 'Free', amount: 0 },
+						];
 						// Show the tax breakdown in the payment sheet
 						options.lineItems = [
 							{
@@ -105,8 +129,51 @@ export function ExpressCheckoutApplePay({
 
 					resolve(options);
 				}}
+				onShippingAddressChange={({ address, resolve, reject }) => {
+					/**
+					 * The "shipping" address is being used here as a proxy for billing
+					 * address, solely to obtain the Canadian province before
+					 * confirmation so that we can calculate the tax and update the
+					 * payment total in real time.
+					 */
+					try {
+						// Currently this will only work for Canada because of a
+						// similar check in getEstimatedSalesTaxConfig
+						if (!isCaState(address.state)) {
+							return;
+						}
+
+						const taxAmount = getEstimatedTaxForState(address.state);
+
+						if (taxAmount === undefined) {
+							return;
+						}
+
+						// Update the Elements amount so the sheet total reflects tax
+						void elements?.update({
+							amount: Math.round((amountExcludingTax + taxAmount) * 100),
+						});
+
+						resolve({
+							// Now that we have a tax amount we can
+							// show the correct pricing information
+							lineItems: [
+								{
+									name: 'Subtotal (excl. tax)',
+									amount: Math.round(amountExcludingTax * 100),
+								},
+								{
+									name: 'Estimated tax',
+									amount: Math.round(taxAmount * 100),
+								},
+							],
+						});
+					} catch {
+						reject();
+					}
+				}}
 				onConfirm={async (event) => {
-					if (!elements) {
+					if (!(stripe && elements)) {
 						console.error('Stripe not loaded');
 						return;
 					}
@@ -120,7 +187,7 @@ export function ExpressCheckoutApplePay({
 						return;
 					}
 
-					onConfirmed(event.expressPaymentType);
+					onConfirmed(event);
 				}}
 				options={{
 					paymentMethods: {

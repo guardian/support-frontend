@@ -47,6 +47,7 @@ import {
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
+import { getEstimatedSalesTaxConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';
@@ -74,6 +75,7 @@ import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { PaymentToken } from '../checkout/helpers/paypalCompletePayments';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
+import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -1068,8 +1070,66 @@ export default function CheckoutForm({
 									taxExclusive={taxExclusive}
 									formRef={formRef}
 									setApplePayIsAvailable={setApplePayIsAvailable}
-									onConfirmed={(expressPaymentType) => {
-										setStripeExpressCheckoutPaymentType(expressPaymentType);
+									getEstimatedTaxForState={(state) => {
+										setBillingState(state);
+
+										// Get the correct tax config now that we have a province
+										// to calculate tax with
+										const updatedTaxConfig = getEstimatedSalesTaxConfig(
+											productCatalog,
+											appConfig.taxRates,
+											productKey,
+											ratePlanKey,
+											state,
+											supportRegionId,
+										);
+
+										return updatedTaxConfig.type === 'tax_exclusive'
+											? calculateAndRoundTax(payment, updatedTaxConfig.rate)
+											: undefined;
+									}}
+									onConfirmed={(event) => {
+										const name = event.billingDetails?.name ?? '';
+
+										/**
+										 * splits by the last space, and uses the head as firstName
+										 * and tail as lastName
+										 */
+										const firstName = name
+											.substring(0, name.lastIndexOf(' ') + 1)
+											.trim();
+										const lastName = name
+											.substring(name.lastIndexOf(' ') + 1, name.length)
+											.trim();
+										setFirstName(firstName);
+										setLastName(lastName);
+
+										event.shippingAddress?.address.postal_code &&
+											setBillingPostcode(
+												event.shippingAddress.address.postal_code,
+											);
+
+										if (
+											!event.shippingAddress?.address.state &&
+											countriesRequiringBillingState.includes(countryId)
+										) {
+											logException(
+												"Could not find state from Stripe's billingDetails",
+												{ supportRegionId, countryGroupId, countryId },
+											);
+										}
+										event.shippingAddress?.address.state &&
+											setBillingState(event.shippingAddress.address.state);
+
+										event.billingDetails?.email &&
+											setEmail(event.billingDetails.email);
+										event.billingDetails?.email &&
+											setConfirmedEmail(event.billingDetails.email);
+
+										setPaymentMethod('StripeExpressCheckoutElement');
+										setStripeExpressCheckoutPaymentType(
+											event.expressPaymentType,
+										);
 										/**
 										 * There is a useEffect that listens to this and submits the
 										 * form when true
