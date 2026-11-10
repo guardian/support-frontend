@@ -101,7 +101,6 @@ lazy val root = (project in file("."))
   )
   .aggregate(
     `support-frontend`,
-    `supporter-product-data`,
     `supporter-product-data-dynamo`,
     `stripe-patrons-data`,
     `support-models`,
@@ -143,17 +142,6 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     `support-internationalisation`,
     `module-retry`,
   )
-
-lazy val `supporter-product-data` = (project in file("supporter-product-data"))
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .configs(IntegrationTest)
-  .settings(
-    integrationTestSettings,
-    scalafmtSettings,
-    libraryDependencies ++= commonDependencies,
-  )
-  .dependsOn(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
-  .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data-dynamo` = (project in file("support-modules/supporter-product-data-dynamo"))
   .settings(
