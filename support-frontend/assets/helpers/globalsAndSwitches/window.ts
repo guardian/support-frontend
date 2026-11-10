@@ -18,6 +18,7 @@ const featureSwitchesSchema = z.object({
 	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
+	enableMParticleConversions: z.optional(z.enum(['On', 'Off'])),
 	enableDeepDiscount: z.optional(z.enum(['On', 'Off'])),
 	enableStudentBeansEuropeAustralia: z.optional(z.enum(['On', 'Off'])),
 });
@@ -25,6 +26,9 @@ const featureSwitchesSchema = z.object({
 export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;
 
 const PaymentConfigSchema = z.object({
+	mParticleConversions: z
+		.object({ apiKey: z.string(), isDevelopmentMode: z.boolean() })
+		.nullish(),
 	geoip: z.optional(
 		z.object({
 			countryCode: z.string(),

@@ -62,6 +62,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val mparticleConfigProvider = new MparticleConfigProvider(config, stage)
 
+  lazy val mParticleConversionsConfigProvider = new MParticleConversionsConfigProvider(config, stage)
+
   lazy val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
 }
 

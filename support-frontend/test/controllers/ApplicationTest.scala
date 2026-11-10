@@ -11,7 +11,7 @@ import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.zuora.api.ReaderType
-import config.{Identity, RecaptchaConfigProvider, StringsConfig}
+import config.{Identity, MParticleConversionsConfigProvider, RecaptchaConfigProvider, StringsConfig}
 import fixtures.TestCSRFComponents
 import io.circe.JsonObject
 import org.mockito.ArgumentMatchers.{any, anyBoolean}
@@ -109,6 +109,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     mock[TickerService],
     mock[MParticleClient],
     mock[PayPalCompletePaymentsConfigProvider],
+    mock[MParticleConversionsConfigProvider],
   )(mock[ExecutionContext])
 
   "/healthcheck" should {
