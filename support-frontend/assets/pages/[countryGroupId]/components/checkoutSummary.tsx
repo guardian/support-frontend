@@ -211,6 +211,7 @@ export default function CheckoutSummary({
 							ratePlanDescription={ratePlanDetail.label}
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
+							originalAmount={originalAmount}
 							promotion={promotion}
 							deliveryDate={
 								isGuardianWeeklyGiftProduct(productKey, ratePlanKey)

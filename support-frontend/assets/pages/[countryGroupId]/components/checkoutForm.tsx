@@ -1294,6 +1294,7 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
+							originalAmount={originalAmount}
 						/>
 					</BoxContents>
 				</Box>
