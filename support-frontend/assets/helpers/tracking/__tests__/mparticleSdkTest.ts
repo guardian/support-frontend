@@ -196,6 +196,35 @@ describe('mParticle SDK adapter', () => {
 		expect(mockSdk.eCommerce.logProductAction).not.toHaveBeenCalled();
 	});
 
+	it.each([
+		{
+			productType: 'DigitalSubscription',
+			ratePlan: 'ThreeMonthGift',
+			billingPeriod: 'Quarterly',
+			contributionType: 'QUARTERLY',
+			conversionKey: 'DigitalSubscription:ThreeMonthGift',
+		},
+		{
+			productType: 'Contribution',
+			ratePlan: 'OneTime',
+			billingPeriod: 'OneTime',
+			contributionType: 'ONE_OFF',
+			conversionKey: 'Contribution:OneTime',
+		},
+	])(
+		'keeps the $conversionKey routing key distinct',
+		({ conversionKey, ...plan }) => {
+			adapter.logPurchase({ ...purchase, ...plan });
+			expect(mockSdk.eCommerce.logProductAction).toHaveBeenCalledWith(
+				7,
+				[mockProduct],
+				{ ...plan, conversionKey, paymentMethod: 'Stripe' },
+				undefined,
+				mockTransaction,
+			);
+		},
+	);
+
 	it('exposes opt-out and upload for the consent-aware caller', () => {
 		adapter.setOptOut(true);
 		adapter.upload();
