@@ -13,7 +13,7 @@ const apiRoutes = {
 	},
 } as const;
 
-export type ApiRouteKey = keyof typeof apiRoutes;
+type ApiRouteKey = keyof typeof apiRoutes;
 
 type ApiUrlParams = {
 	apiRouteKey: ApiRouteKey;
