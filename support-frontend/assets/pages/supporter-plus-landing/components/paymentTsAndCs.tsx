@@ -141,6 +141,7 @@ export interface PaymentTsAndCsProps {
 	studentDiscount?: StudentDiscount;
 	promotion?: PromoWithCatalogInformation;
 	thresholdAmount?: number;
+	originalAmount?: number;
 }
 export function PaymentTsAndCs({
 	productKey,
@@ -149,6 +150,7 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
+	originalAmount,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -188,6 +190,7 @@ export function PaymentTsAndCs({
 					divider,
 					thresholdAmount,
 					promotion,
+					originalAmount ?? thresholdAmount,
 			  );
 
 	const productLabel = getProductLabel(productKey);
