@@ -51,6 +51,8 @@
 		"@guardian/source-development-kitchen": "18.1.1",
 		"@guardian/support-service-lambdas": "catalog:",
 		"@guardian/tsconfig": "0.2.0",
+		"@mparticle/web-adwords-kit": "2.3.2",
+		"@mparticle/web-sdk": "2.81.0",
 		"@paypal/react-paypal-js": "8.9.2",
 		"@preact/preset-vite": "2.10.2",
 		"@sentry/browser": "8.55.0",

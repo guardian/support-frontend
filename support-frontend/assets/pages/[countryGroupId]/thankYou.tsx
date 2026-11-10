@@ -18,7 +18,14 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
+import {
+	getOrderId,
+	successfulContributionConversion,
+} from 'helpers/tracking/googleTagManager';
+import {
+	canUseMParticleConversions,
+	trackMParticleConversion,
+} from 'helpers/tracking/mparticleConversions';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
@@ -39,6 +46,7 @@ type ThankYouConversionTrackingProps = {
 	productKey?: ActiveProductKey;
 	ratePlanKey?: ActiveRatePlanKey;
 	currencyKey: CurrencyCode;
+	mParticleConfig: AppConfig['mParticleConversions'];
 };
 
 function ThankYouConversionTracking({
@@ -46,7 +54,9 @@ function ThankYouConversionTracking({
 	productKey,
 	ratePlanKey,
 	currencyKey,
+	mParticleConfig,
 }: ThankYouConversionTrackingProps) {
+	const { enableMParticleConversions } = useFeatureSwitches();
 	const order = getThankYouOrder();
 	const hasOrder = Boolean(order);
 	const paymentMethod =
@@ -55,26 +65,59 @@ function ThankYouConversionTracking({
 			: order?.paymentMethod;
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey ?? 'OneTime');
 	const conversionProductKey = productKey ?? 'Contribution';
+	const contributionType =
+		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY';
 
 	useEffect(() => {
 		if (!hasOrder) {
-			return;
+			return undefined;
 		}
 
+		if (
+			mParticleConfig &&
+			canUseMParticleConversions(enableMParticleConversions, mParticleConfig)
+		) {
+			successfulContributionConversion(
+				payment.finalAmount,
+				contributionType,
+				currencyKey,
+				paymentMethod ?? 'None',
+				conversionProductKey,
+				'mparticle',
+			);
+			return trackMParticleConversion(mParticleConfig, {
+				orderId: getOrderId(),
+				value: payment.finalAmount,
+				currency: currencyKey,
+				paymentMethod: paymentMethod ?? 'None',
+				contributionType:
+					billingPeriod === BillingPeriod.Quarterly
+						? 'QUARTERLY'
+						: contributionType,
+				productType: conversionProductKey,
+				ratePlan: ratePlanKey ?? 'OneTime',
+				billingPeriod,
+			});
+		}
 		successfulContributionConversion(
 			payment.finalAmount,
-			billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY',
+			contributionType,
 			currencyKey,
 			paymentMethod ?? 'None',
 			conversionProductKey,
 		);
+		return undefined;
 	}, [
 		billingPeriod,
+		contributionType,
+		enableMParticleConversions,
+		mParticleConfig,
 		conversionProductKey,
 		currencyKey,
 		hasOrder,
 		payment.finalAmount,
 		paymentMethod,
+		ratePlanKey,
 	]);
 
 	return null;
@@ -197,6 +240,7 @@ export function ThankYou({
 			productKey={productKey}
 			ratePlanKey={ratePlanKey}
 			currencyKey={currencyKey}
+			mParticleConfig={appConfig.mParticleConversions}
 		/>
 	);
 

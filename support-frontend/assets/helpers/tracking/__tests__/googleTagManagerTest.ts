@@ -81,6 +81,7 @@ describe('googleTagManager', () => {
 				contributionType: 'MONTHLY',
 				productType: 'SupporterPlus',
 				thirdPartyTrackingConsent: 'OptedIn',
+				googleAdsConversionSource: 'gtm',
 			}),
 		);
 		expect(typeof conversion?.orderId).toBe('string');
@@ -92,6 +93,7 @@ describe('googleTagManager', () => {
 				'paymentMethod',
 				'contributionType',
 				'productType',
+				'googleAdsConversionSource',
 				'orderId',
 				'thirdPartyTrackingConsent',
 				'campaignCodeBusinessUnit',
@@ -105,5 +107,35 @@ describe('googleTagManager', () => {
 				(event) => event.event === 'SuccessfulConversion',
 			),
 		).toHaveLength(1);
+
+		successfulContributionConversion(
+			6,
+			'MONTHLY',
+			'GBP',
+			DirectDebit,
+			'SupporterPlus',
+			'mparticle',
+		);
+		expect(window.googleTagManagerDataLayer?.at(-1)).toEqual(
+			expect.objectContaining({
+				event: 'SuccessfulConversion',
+				googleAdsConversionSource: 'mparticle',
+				orderId: conversion?.orderId,
+			}),
+		);
+		successfulContributionConversion(
+			12,
+			'MONTHLY',
+			'GBP',
+			DirectDebit,
+			'SupporterPlus',
+		);
+		expect(window.googleTagManagerDataLayer?.at(-1)).toEqual(
+			expect.objectContaining({
+				event: 'SuccessfulConversion',
+				googleAdsConversionSource: 'gtm',
+				orderId: conversion?.orderId,
+			}),
+		);
 	});
 });
