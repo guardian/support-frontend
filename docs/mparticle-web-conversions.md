@@ -39,6 +39,8 @@ mparticle.web.apiKey = "YOUR_PUBLIC_WEB_INPUT_KEY"
 
 Restart the application after changing configuration. The browser receives only `mParticleConversions: { apiKey, isDevelopmentMode }`; do not put a server API secret or OAuth credential here, or commit a real key to the repository. DEV and CODE use development mode. PROD uses production mode except for recognised test users, who use development mode. The SDK endpoints are configured for the EU region.
 
+Development mode selects the mParticle environment and connection settings; it does not provide a Google Ads sandbox. The kit still sends real requests to the configured Google Ads conversion action, so use the intended test action when validating.
+
 After preparing the matching development connections and GTM preview exception, open `/switches` locally and enable `enableMParticleConversions` as a local override. The override works even before the remote switch exists. Missing keys and disabled switches retain the GTM route. Remove the local override after testing. Enable the remote switch only after the full destination matrix and GTM exception are ready for that environment.
 
 **Consent and identity behaviour**

@@ -75,26 +75,33 @@ describe('mParticle conversions', () => {
 		}
 	});
 
-	it('waits for targeting and both vendor permissions, then sends the exact conversion once', async () => {
-		const { tracker, loader, sdk, consent } = setup();
-		tracker.trackMParticleConversion(config, purchase);
-		expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
-		consent(false);
-		consent(true, false, true);
-		consent(true, true, false);
-		await settle();
-		expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
-		consent(true);
-		await settle();
-		expect(sdk.initialize).toHaveBeenCalledWith(config);
-		expect(sdk.setConsent).toHaveBeenCalledWith(true);
-		expect(sdk.logPurchase).toHaveBeenCalledWith(purchase);
-		expect(sdk.upload).toHaveBeenCalledTimes(1);
-		consent(true);
-		tracker.trackMParticleConversion(config, purchase);
-		await settle();
-		expect(sdk.logPurchase).toHaveBeenCalledTimes(1);
-	});
+	it.each([
+		['targeting', false, true, true],
+		['mParticle', true, false, true],
+		['Google remarketing', true, true, false],
+	] as const)(
+		'waits for %s permission, then sends the exact conversion once',
+		async (_permission, canTarget, mparticle, remarketing) => {
+			const { tracker, loader, sdk, consent } = setup();
+			tracker.trackMParticleConversion(config, purchase);
+			expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
+			consent(canTarget, mparticle, remarketing);
+			await settle();
+			expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
+			expect(sdk.initialize).not.toHaveBeenCalled();
+			expect(sdk.logPurchase).not.toHaveBeenCalled();
+			consent(true);
+			await settle();
+			expect(sdk.initialize).toHaveBeenCalledWith(config);
+			expect(sdk.setConsent).toHaveBeenCalledWith(true);
+			expect(sdk.logPurchase).toHaveBeenCalledWith(purchase);
+			expect(sdk.upload).toHaveBeenCalledTimes(1);
+			consent(true);
+			tracker.trackMParticleConversion(config, purchase);
+			await settle();
+			expect(sdk.logPurchase).toHaveBeenCalledTimes(1);
+		},
+	);
 
 	it('cancels a purchase when the route leaves before consent', async () => {
 		const { tracker, loader, consent } = setup();
@@ -115,6 +122,8 @@ describe('mParticle conversions', () => {
 		);
 		tracker.trackMParticleConversion(config, purchase);
 		consent(true);
+		await settle();
+		expect(loader.loadMParticleSdk).toHaveBeenCalledTimes(1);
 		consent(false);
 		resolveLoad?.(sdk);
 		await settle();
@@ -142,6 +151,25 @@ describe('mParticle conversions', () => {
 		expect(sdk.logPurchase).not.toHaveBeenCalled();
 		expect(sdk.setConsent).toHaveBeenLastCalledWith(false);
 		expect(sdk.setOptOut).toHaveBeenLastCalledWith(true);
+	});
+
+	it('discards the purchase when the route leaves during initialization with consent still granted', async () => {
+		const { tracker, sdk, consent } = setup();
+		let finishInit: (() => void) | undefined;
+		sdk.initialize.mockReturnValue(
+			new Promise<void>((resolve) => {
+				finishInit = resolve;
+			}),
+		);
+		const cancel = tracker.trackMParticleConversion(config, purchase);
+		consent(true);
+		await settle();
+		expect(sdk.initialize).toHaveBeenCalledWith(config);
+		cancel();
+		finishInit?.();
+		await settle();
+		expect(sdk.logPurchase).not.toHaveBeenCalled();
+		expect(sdk.upload).not.toHaveBeenCalled();
 	});
 
 	it('keeps observing withdrawal after dispatch and unmount', async () => {
