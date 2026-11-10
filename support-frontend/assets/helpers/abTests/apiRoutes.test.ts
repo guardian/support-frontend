@@ -6,7 +6,7 @@ describe('apiUrl', () => {
 	it.each([
 		['deliveryAgents', postcode, 'control', '/delivery-agents/N1%209GU'],
 		['deliveryAgents', postcode, 'variant', '/api/delivery-agents/N1%209GU'],
-		['postcodeLookup', postcode, 'control', '/api/postcode-lookup/N1%209GU'],
+		['postcodeLookup', postcode, 'control', '/api/postcode-lookup/N1%209GU'], // scala endpoint deprecated, uses typescript
 		['postcodeLookup', postcode, 'variant', '/api/postcode-lookup/N1%209GU'],
 	] as const)(
 		`returns route for {apiRouteKey:%s, param:%s, participant:%s}: %s`,
