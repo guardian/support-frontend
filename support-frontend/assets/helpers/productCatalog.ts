@@ -317,10 +317,9 @@ const paperArchiveDigitalBenefit = {
 	] as CountryGroupId[],
 };
 
-export const tooltipMultipleAccounts = `You can share your Digital plus access with three other people. Each person gets their own account and login.`;
 const multipleAccountsBenefit = {
 	copy: multipleAccountBenefitCopy,
-	tooltip: tooltipMultipleAccounts,
+	tooltip: `You can share your Digital plus access with three other people. Each person gets their own account and login.`,
 	label: { copy: 'New' },
 };
 
