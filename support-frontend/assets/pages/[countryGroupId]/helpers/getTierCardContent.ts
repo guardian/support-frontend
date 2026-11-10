@@ -1,11 +1,11 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
-import { multipleAccountBenefitCopy } from 'helpers/abTests/multipleAccounts';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getProductDescription,
 	getProductLabel,
+	multipleAccountBenefitCopy,
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
