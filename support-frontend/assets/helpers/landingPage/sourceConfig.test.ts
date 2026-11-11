@@ -2,7 +2,7 @@ import {
 	getSourceConfig,
 	isTestEligibleForSource,
 	sourceConfigs,
-	toSafeReturnPath,
+	toSafeReturnUrl,
 	toSourceKey,
 } from './sourceConfig';
 
@@ -83,30 +83,36 @@ describe('isTestEligibleForSource', () => {
 	});
 });
 
-describe('toSafeReturnPath', () => {
+describe('toSafeReturnUrl', () => {
+	// jsdom runs on localhost, so the base domain is theguardian.com
 	it.each([
-		'/crosswords/quick/17000',
-		'/games/wordiply',
-		'/crosswords/quick/17000?foo=bar#top',
-	])('accepts the same-site path %s', (path) => {
-		expect(toSafeReturnPath(path)).toBe(path);
+		'https://theguardian.com/crosswords/quick/17000',
+		'https://www.theguardian.com/games/wordiply',
+		'https://www.theguardian.com/crosswords/quick/17000?foo=bar#top',
+		'https://manage.theguardian.com/',
+	])('accepts %s', (url) => {
+		expect(toSafeReturnUrl(url)).toBe(url);
 	});
 
 	it.each([
 		undefined,
 		null,
 		'',
+		'/crosswords/quick/17000',
 		'crosswords/quick/17000',
 		'//evil.com',
-		'/\\evil.com',
-		'\\\\evil.com',
 		'https://evil.com',
-		'http://evil.com/crosswords',
+		'https://theguardian.com.evil.com',
+		'https://eviltheguardian.com',
+		'https://evil.com@theguardian.com',
+		'https://theguardian.com@evil.com',
+		'https://user:pass@www.theguardian.com/',
+		'https:\\\\evil.com',
+		'http://www.theguardian.com/crosswords',
 		'javascript:alert(1)',
-		'/\t/evil.com',
-		'/\n/evil.com',
-		'/ok\r\nSet-Cookie: a=b',
-	])('rejects %j', (path) => {
-		expect(toSafeReturnPath(path)).toBeUndefined();
+		'https://www.theguardian.com\t.evil.com',
+		'https://evil.com/?u=https://www.theguardian.com',
+	])('rejects %j', (url) => {
+		expect(toSafeReturnUrl(url)).toBeUndefined();
 	});
 });

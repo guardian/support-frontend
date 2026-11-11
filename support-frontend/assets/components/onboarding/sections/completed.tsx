@@ -76,12 +76,12 @@ export function OnboardingCompleted({
 
 	const { windowWidthIsLessThan } = useWindowWidth();
 
-	// Set by the landing page (?source=...&returnTo=...), e.g. by Puzzles. The
+	// Set by the landing page (?source=...&returnUrl=...), e.g. by Puzzles. The
 	// label only changes when there is somewhere to return to.
-	const { source, returnTo } = getSourceContext() ?? {};
-	const ctaHref = `https://${getBaseDomain()}${returnTo ?? ''}`;
+	const { source, returnUrl } = getSourceContext() ?? {};
+	const ctaHref = returnUrl ?? `https://${getBaseDomain()}`;
 	const ctaCopy =
-		(returnTo ? getSourceConfig(source).returnLabel : undefined) ??
+		(returnUrl ? getSourceConfig(source).returnLabel : undefined) ??
 		'Continue to the Guardian';
 
 	return (

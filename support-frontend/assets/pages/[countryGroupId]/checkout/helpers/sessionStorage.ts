@@ -3,10 +3,7 @@ import { z } from 'zod';
 import * as zm from 'zod/mini';
 import { dateTimeSchema } from 'helpers/globalsAndSwitches/window';
 import type { SourceKey } from 'helpers/landingPage/sourceConfig';
-import {
-	toSafeReturnPath,
-	toSourceKey,
-} from 'helpers/landingPage/sourceConfig';
+import { toSafeReturnUrl, toSourceKey } from 'helpers/landingPage/sourceConfig';
 import { getSession, setSession } from 'helpers/storage/storage';
 
 /**
@@ -31,16 +28,16 @@ export function getReturnAddress(): string {
 }
 
 /**
- * The landing page sets where the reader came from (?source=...&returnTo=...)
+ * The landing page sets where the reader came from (?source=...&returnUrl=...)
  * and the thank-you page reads it. Values are validated on the way in and on
  * the way out.
  */
 const sourceContextKey = 'sourceContext';
 const SourceContextSchema = zm.object({
 	source: zm.optional(zm.string()),
-	returnTo: zm.optional(zm.string()),
+	returnUrl: zm.optional(zm.string()),
 });
-type SourceContext = { source?: SourceKey; returnTo?: string };
+type SourceContext = { source?: SourceKey; returnUrl?: string };
 export function setSourceContext(sourceContext: SourceContext) {
 	setSession(sourceContextKey, sourceContext);
 }
@@ -50,8 +47,8 @@ export function getSourceContext(): SourceContext | undefined {
 		return undefined;
 	}
 	const source = toSourceKey(saved.source);
-	const returnTo = toSafeReturnPath(saved.returnTo);
-	return source ?? returnTo ? { source, returnTo } : undefined;
+	const returnUrl = toSafeReturnUrl(saved.returnUrl);
+	return source ?? returnUrl ? { source, returnUrl } : undefined;
 }
 export function clearSourceContext() {
 	storage.session.remove(sourceContextKey);

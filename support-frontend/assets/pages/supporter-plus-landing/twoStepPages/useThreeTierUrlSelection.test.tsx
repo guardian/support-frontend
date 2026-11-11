@@ -97,14 +97,18 @@ describe('useThreeTierUrlSelection', () => {
 		expect(renderWithSearch('').source).toBeUndefined();
 	});
 
-	it('returns a safe returnTo and ignores unsafe ones', () => {
-		expect(renderWithSearch('?returnTo=/crosswords/quick/17000').returnTo).toBe(
-			'/crosswords/quick/17000',
-		);
+	it('returns a safe returnUrl and ignores unsafe ones', () => {
 		expect(
-			renderWithSearch('?returnTo=https://evil.com').returnTo,
+			renderWithSearch(
+				'?returnUrl=https://www.theguardian.com/crosswords/quick/17000',
+			).returnUrl,
+		).toBe('https://www.theguardian.com/crosswords/quick/17000');
+		expect(
+			renderWithSearch('?returnUrl=https://evil.com').returnUrl,
 		).toBeUndefined();
-		expect(renderWithSearch('?returnTo=//evil.com').returnTo).toBeUndefined();
-		expect(renderWithSearch('').returnTo).toBeUndefined();
+		expect(
+			renderWithSearch('?returnUrl=/crosswords/quick/17000').returnUrl,
+		).toBeUndefined();
+		expect(renderWithSearch('').returnUrl).toBeUndefined();
 	});
 });

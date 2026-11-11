@@ -140,26 +140,26 @@ export function ThreeTierLanding({
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
 		source,
-		returnTo,
+		returnUrl,
 	} = useThreeTierUrlSelection();
 	// ?source= switches on a pre-approved setup, see helpers/landingPage/sourceConfig.ts
 	const { hideContribution, hideSupportOnce, hideStudentOffer } =
 		getSourceConfig(source);
 
 	// The landing page is the single source of truth for where the reader came
-	// from (?source=, ?returnTo=), which the thank-you page uses to send them
+	// from (?source=, ?returnUrl=), which the thank-you page uses to send them
 	// back (e.g. to a puzzle). Visiting it with either stores them; visiting it
 	// without both clears them, so a value left in sessionStorage by an earlier
 	// visit in the same tab can't leak into an unrelated purchase.
 	// Known limitation: entering the checkout directly (skipping this page)
 	// doesn't clear a stale value.
 	useEffect(() => {
-		if (source ?? returnTo) {
-			setSourceContext({ source, returnTo });
+		if (source ?? returnUrl) {
+			setSourceContext({ source, returnUrl });
 		} else {
 			clearSourceContext();
 		}
-	}, [source, returnTo]);
+	}, [source, returnUrl]);
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
