@@ -5,6 +5,7 @@ import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -14,6 +15,7 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
+import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import { getQueryParameter } from 'helpers/urls/url';
 
 dayjs.extend(advancedFormat);
@@ -127,7 +129,7 @@ function finalPrice(
 const discountSummaryCopy = (
 	currency: Currency,
 	price: number,
-	promotion: Promotion,
+	promotion: PromoWithCatalogInformation,
 	billingPeriod: BillingPeriod,
 ) => {
 	/**
@@ -140,7 +142,7 @@ const discountSummaryCopy = (
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const formattedPromotionPrice = simpleFormatAmount(
 		currency,
-		promotion.discountedPrice ?? 0,
+		getPromotionDiscountedPrice(promotion, price, billingPeriod) ?? 0,
 	);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const duration =
@@ -159,12 +161,12 @@ function buildThreeTierCardPromoTerms(
 	discountMarker: string,
 	productName: string,
 	discountSummary: string,
-	{ starts, expires }: Promotion,
+	{ startTimestamp, endTimestamp }: PromoWithCatalogInformation,
 ): string {
-	const startDate = dayjs(starts).format('Do MMMM'); // eg. 15th January
-	const expiryDate = dayjs(expires).format('Do MMMM YYYY'); // eg. 31st April 2028
+	const startDate = dayjs(startTimestamp).format('Do MMMM'); // eg. 15th January
+	const expiryDate = dayjs(endTimestamp).format('Do MMMM YYYY'); // eg. 31st April 2028
 	const promoDuration =
-		starts && expires
+		startTimestamp && endTimestamp
 			? `Offer starts on the ${startDate} and ends on the ${expiryDate}.`
 			: '';
 
