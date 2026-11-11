@@ -6,7 +6,7 @@ import {
 } from './discountedPrice';
 
 export function getPromotionDiscountedPrice(
-	promotion: Pick<PromoWithCatalogInformation, 'discount'>,
+	promotion: PromoWithCatalogInformation,
 	price: number,
 	billingPeriod: RecurringBillingPeriod,
 ): number | undefined {
@@ -16,7 +16,7 @@ export function getPromotionDiscountedPrice(
 }
 
 export function getPromotionDiscountedPeriods(
-	promotion: Pick<PromoWithCatalogInformation, 'discount'>,
+	promotion: PromoWithCatalogInformation,
 	billingPeriod: RecurringBillingPeriod,
 ): number | undefined {
 	return promotion.discount
