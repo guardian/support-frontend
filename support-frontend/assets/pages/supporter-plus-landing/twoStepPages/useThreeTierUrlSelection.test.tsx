@@ -88,4 +88,27 @@ describe('useThreeTierUrlSelection', () => {
 		);
 		expect(renderWithSearch('').forceWeeklyPricing).toBe(false);
 	});
+
+	it('resolves the source case-insensitively and ignores unknown ones', () => {
+		expect(renderWithSearch('?source=puzzles').source).toBe('puzzles');
+		expect(renderWithSearch('?source=%20Puzzles%20').source).toBe('puzzles');
+		expect(renderWithSearch('?source=unknown').source).toBeUndefined();
+		expect(renderWithSearch('?source=toString').source).toBeUndefined();
+		expect(renderWithSearch('').source).toBeUndefined();
+	});
+
+	it('returns a safe returnUrl and ignores unsafe ones', () => {
+		expect(
+			renderWithSearch(
+				'?returnUrl=https://www.theguardian.com/crosswords/quick/17000',
+			).returnUrl,
+		).toBe('https://www.theguardian.com/crosswords/quick/17000');
+		expect(
+			renderWithSearch('?returnUrl=https://evil.com').returnUrl,
+		).toBeUndefined();
+		expect(
+			renderWithSearch('?returnUrl=/crosswords/quick/17000').returnUrl,
+		).toBeUndefined();
+		expect(renderWithSearch('').returnUrl).toBeUndefined();
+	});
 });

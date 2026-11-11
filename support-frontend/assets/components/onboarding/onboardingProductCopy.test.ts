@@ -1,5 +1,5 @@
-import { multipleAccountBenefitCopy } from 'helpers/abTests/multipleAccounts';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import { multipleAccountBenefitCopy } from 'helpers/productCatalog';
 import { getOnboardingProductCopy } from './onboardingProductCopy';
 
 const liveControlVariant: LandingPageVariant = {
