@@ -261,6 +261,7 @@ function OnboardingSummary({
 				billingPeriod,
 				' per ',
 				payment.originalAmount,
+				payment.originalAmount,
 				promotion,
 			) + ' thereafter';
 	}

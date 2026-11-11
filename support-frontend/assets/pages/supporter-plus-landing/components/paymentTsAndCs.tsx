@@ -189,8 +189,8 @@ export function PaymentTsAndCs({
 					billingPeriod,
 					divider,
 					thresholdAmount,
-					promotion,
 					originalAmount ?? thresholdAmount,
+					promotion,
 			  );
 
 	const productLabel = getProductLabel(productKey);

@@ -15,8 +15,8 @@ export const productLegal = (
 	billingPeriod: BillingPeriod,
 	divider: string,
 	thresholdAmount: number,
+	originalAmount: number,
 	promotion?: PromoWithCatalogInformation,
-	promotionBaseAmount: number = thresholdAmount,
 ) => {
 	const currencyCode = detect(countryGroupId);
 	const currency = getCurrencyByCode(currencyCode);
@@ -27,11 +27,8 @@ export const productLegal = (
 	if (promotion) {
 		// EXAMPLE: $8.50/month for the first 6 months, then $17/month
 		const promoPrice =
-			getPromotionDiscountedPrice(
-				promotion,
-				promotionBaseAmount,
-				billingPeriod,
-			) ?? promotionBaseAmount;
+			getPromotionDiscountedPrice(promotion, originalAmount, billingPeriod) ??
+			originalAmount;
 		const promoPriceFormatted = simpleFormatAmount(currency, promoPrice);
 		const discountDuration =
 			getPromotionDiscountedPeriods(promotion, billingPeriod) ?? 0;
