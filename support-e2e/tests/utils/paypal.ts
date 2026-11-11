@@ -58,7 +58,7 @@ export const fillInPayPalDetails = async (page: Page) => {
 	await loginButton.click();
 
 	// This selector differs between the one time and recurring flow
-	const oneTimeSelector = '[data-id=payment-submit-btn]';
+	const oneTimeSelector = '[data-id=one-time-cta]';
 	const recurringSelector = '[data-id=consentButton]';
 	const submitButton = page.locator(`${oneTimeSelector}, ${recurringSelector}`);
 	await submitButton.click();
