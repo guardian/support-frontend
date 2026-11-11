@@ -104,6 +104,12 @@ class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
       testDecoding[DigitalPack](json, _ shouldBe expected)
     }
 
+    "decode a patron membership" in {
+      val json =
+        """{"productType": "PatronMembership", "currency": "GBP", "billingPeriod": "Monthly"}"""
+      val expected = PatronMembership(GBP, Monthly)
+      testDecoding[PatronMembership](json, _ shouldBe expected)
+    }
   }
 
 }
