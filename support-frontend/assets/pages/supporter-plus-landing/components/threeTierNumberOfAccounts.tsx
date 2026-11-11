@@ -2,11 +2,8 @@ import { css } from '@emotion/react';
 import { from, palette, space, textSans15 } from '@guardian/source/foundations';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
-import Tooltip from 'components/tooltip/Tooltip';
 import type { CardTheme } from 'helpers/landingPage/cardTheme';
-import { tooltipMultipleAccounts } from 'helpers/productCatalog';
 import { AccountUsersSvg } from './accountUsersSvg';
-import { AccountUserSvg } from './accountUserSvg';
 
 const accountBorder = (showAccount: boolean) => css`
 	border-bottom: 1px solid ${palette.neutral[86]};
@@ -28,18 +25,6 @@ const accountItems = (justify: 'center' | 'flex-start') => css`
 	${textSans15};
 `;
 
-const accountCopyAndTooltip = css`
-	margin-left: ${space[2]}px;
-	& div {
-		display: none;
-
-		${from.desktop} {
-			display: inline;
-			margin-left: 1px;
-		}
-	}
-`;
-
 const accountCopy = css`
 	margin-left: ${space[2]}px;
 `;
@@ -53,17 +38,11 @@ const accountUpright = css`
 export type ThreeTierNumberOfAccountsProps = {
 	productKey: ProductKey;
 	cardTheme: CardTheme;
-	multipleAccountsVariant?: string;
 };
 export function ThreeTierNumberOfAccounts({
 	productKey,
 	cardTheme,
-	multipleAccountsVariant,
 }: ThreeTierNumberOfAccountsProps): JSX.Element | null {
-	if (!['V1', 'V2'].includes(multipleAccountsVariant ?? '')) {
-		return null;
-	}
-
 	const benefitPill = (
 		<BenefitPill
 			copy={'New'}
@@ -74,10 +53,7 @@ export function ThreeTierNumberOfAccounts({
 		/>
 	);
 
-	if (
-		multipleAccountsVariant === 'V1' &&
-		productKey === 'DigitalSubscription'
-	) {
+	if (productKey === 'DigitalSubscription') {
 		return (
 			<section css={accountBorder(true)}>
 				<span css={accountItems('flex-start')}>
@@ -87,54 +63,6 @@ export function ThreeTierNumberOfAccounts({
 						<AccountUsersSvg />
 					</>
 					<span css={accountCopy}>3 extra accounts to share</span>
-				</span>
-			</section>
-		);
-	}
-
-	if (
-		multipleAccountsVariant === 'V2' &&
-		productKey === 'DigitalSubscription'
-	) {
-		return (
-			<section css={accountBorder(true)}>
-				<span css={accountItems('center')}>
-					<>
-						{benefitPill}
-						<AccountUsersSvg />
-					</>
-					<span css={accountCopyAndTooltip}>
-						4 accounts
-						<Tooltip
-							children={
-								<>
-									<p
-										css={css`
-											margin-bottom: ${space[2]}px;
-										`}
-									>
-										<strong>Extra accounts</strong>
-									</p>
-									<p>{tooltipMultipleAccounts}</p>
-								</>
-							}
-							xAxisOffset={108}
-							yAxisOffset={12}
-							placement="bottom"
-							desktopOnly={true}
-						/>
-					</span>
-				</span>
-			</section>
-		);
-	}
-
-	if (multipleAccountsVariant === 'V2' && productKey === 'SupporterPlus') {
-		return (
-			<section css={accountBorder(true)}>
-				<span css={accountItems('center')}>
-					<AccountUserSvg />
-					<span css={accountCopy}>1 account</span>
 				</span>
 			</section>
 		);

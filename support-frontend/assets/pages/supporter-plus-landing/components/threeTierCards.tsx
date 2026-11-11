@@ -15,33 +15,45 @@ export type ThreeTierCardsProps = {
 	deepDiscount?: boolean;
 };
 
-const container = (cardCount: number) => css`
-	display: flex;
-	flex-direction: column;
-	gap: ${space[3]}px;
+// Cards keep the width they have when there are three, so fewer cards (e.g.
+// two when the Contribution card is hidden) sit centred instead of stretching.
+const minimumColumns = 3;
+const desktopGap = space[5];
 
-	> * {
-		flex-basis: ${100 / cardCount}%;
-	}
+const container = (cardCount: number) => {
+	const columns = Math.max(cardCount, minimumColumns);
+	return css`
+		display: flex;
+		flex-direction: column;
+		gap: ${space[3]}px;
 
-	${between.tablet.and.desktop} {
-		margin: 0 auto;
-		max-width: 340px;
-	}
+		${between.tablet.and.desktop} {
+			margin: 0 auto;
+			max-width: 340px;
+		}
 
-	${from.desktop} {
-		gap: ${space[5]}px;
-		flex-direction: row;
-	}
-`;
+		${from.desktop} {
+			gap: ${desktopGap}px;
+			flex-direction: row;
+			justify-content: center;
 
-const cardIndexToTier = (index: number): 1 | 2 | 3 => {
-	switch (index) {
-		case 1:
+			> * {
+				flex: 0 1 calc((100% - ${(columns - 1) * desktopGap}px) / ${columns});
+			}
+		}
+	`;
+};
+
+// The tier is derived from the product rather than the card's position, so the
+// tier-N-button tracking refs stay stable when a card is hidden
+// (e.g. ?source=puzzles).
+const productToTier = (product: CardContent['product']): 1 | 2 | 3 => {
+	switch (product) {
+		case 'SupporterPlus':
 			return 2;
-		case 2:
+		case 'DigitalSubscription':
 			return 3;
-		case 0:
+		case 'Contribution':
 		default:
 			return 1;
 	}
@@ -80,7 +92,7 @@ export function ThreeTierCards({
 					<ThreeTierCard
 						cardContent={cardContent}
 						cardTheme={cardTheme}
-						cardTier={cardIndexToTier(cardIndex)}
+						cardTier={productToTier(cardContent.product)}
 						key={`threeTierCard${cardIndex}`}
 						promoCount={promoCount}
 						isSubdued={haveLabelAndSelectedCards}
