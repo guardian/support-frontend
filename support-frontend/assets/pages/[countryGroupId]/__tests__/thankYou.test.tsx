@@ -135,10 +135,10 @@ const catalogConversions = recurringProducts.flatMap((productType) => {
 		}));
 });
 
-const pendingOrder = {
+const successfulOrder = {
 	firstName: 'Example Supporter',
 	email: 'supporter@example.com',
-	status: 'pending',
+	status: 'success',
 	paymentMethod: 'Stripe',
 } as NonNullable<ReturnType<typeof getThankYouOrder>>;
 
@@ -164,7 +164,7 @@ describe('ThankYou conversion tracking', () => {
 			value: { csrf: { token: 'csrf-token' } },
 		});
 		jest.mocked(storage.session.get).mockReturnValue(null);
-		jest.mocked(getThankYouOrder).mockReturnValue(pendingOrder);
+		jest.mocked(getThankYouOrder).mockReturnValue(successfulOrder);
 		jest.mocked(getLegacyPromotion).mockReturnValue(undefined);
 		jest.mocked(useFeatureSwitches).mockReturnValue({
 			enableThankYouOnboarding: true,
@@ -352,7 +352,7 @@ describe('ThankYou conversion tracking', () => {
 			discountedPrice: 4,
 		} as Promotion);
 		jest.mocked(getThankYouOrder).mockReturnValue({
-			...pendingOrder,
+			...successfulOrder,
 			paymentMethod: 'StripeExpressCheckoutElement',
 		});
 		jest.mocked(useFeatureSwitches).mockReturnValue({

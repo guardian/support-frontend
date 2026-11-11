@@ -58,7 +58,7 @@ function ThankYouConversionTracking({
 }: ThankYouConversionTrackingProps) {
 	const { enableMParticleConversions } = useFeatureSwitches();
 	const order = getThankYouOrder();
-	const hasOrder = Boolean(order);
+	const hasSuccessfulOrder = order?.status === 'success';
 	const paymentMethod =
 		order?.paymentMethod === 'StripeExpressCheckoutElement'
 			? 'Stripe'
@@ -69,7 +69,7 @@ function ThankYouConversionTracking({
 		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY';
 
 	useEffect(() => {
-		if (!hasOrder) {
+		if (!hasSuccessfulOrder) {
 			return undefined;
 		}
 
@@ -114,7 +114,7 @@ function ThankYouConversionTracking({
 		mParticleConfig,
 		conversionProductKey,
 		currencyKey,
-		hasOrder,
+		hasSuccessfulOrder,
 		payment.finalAmount,
 		paymentMethod,
 		ratePlanKey,
