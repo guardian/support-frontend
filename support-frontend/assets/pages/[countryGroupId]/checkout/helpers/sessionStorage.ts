@@ -1,11 +1,13 @@
 import { storage } from '@guardian/libs';
 import { z } from 'zod';
+import * as zm from 'zod/mini';
 import { dateTimeSchema } from 'helpers/globalsAndSwitches/window';
 import type { SourceKey } from 'helpers/landingPage/sourceConfig';
 import {
 	toSafeReturnPath,
 	toSourceKey,
 } from 'helpers/landingPage/sourceConfig';
+import { getSession, setSession } from 'helpers/storage/storage';
 
 /**
  * The Guardian Ad-Lite Landing Page sets the returnLink in sessionStorage
@@ -34,23 +36,21 @@ export function getReturnAddress(): string {
  * the way out.
  */
 const sourceContextKey = 'sourceContext';
-const SourceContextSchema = z.object({
-	source: z.string().optional(),
-	returnTo: z.string().optional(),
+const SourceContextSchema = zm.object({
+	source: zm.optional(zm.string()),
+	returnTo: zm.optional(zm.string()),
 });
 type SourceContext = { source?: SourceKey; returnTo?: string };
 export function setSourceContext(sourceContext: SourceContext) {
-	storage.session.set(sourceContextKey, sourceContext);
+	setSession(sourceContextKey, sourceContext);
 }
 export function getSourceContext(): SourceContext | undefined {
-	const parsed = SourceContextSchema.safeParse(
-		storage.session.get(sourceContextKey),
-	);
-	if (!parsed.success) {
+	const saved = getSession(sourceContextKey, SourceContextSchema);
+	if (!saved) {
 		return undefined;
 	}
-	const source = toSourceKey(parsed.data.source);
-	const returnTo = toSafeReturnPath(parsed.data.returnTo);
+	const source = toSourceKey(saved.source);
+	const returnTo = toSafeReturnPath(saved.returnTo);
 	return source ?? returnTo ? { source, returnTo } : undefined;
 }
 export function clearSourceContext() {
