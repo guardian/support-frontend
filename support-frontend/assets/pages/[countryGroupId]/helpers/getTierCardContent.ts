@@ -1,11 +1,11 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
-import { multipleAccountBenefitCopy } from 'helpers/abTests/multipleAccounts';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getProductDescription,
 	getProductLabel,
+	multipleAccountBenefitCopy,
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
@@ -28,7 +28,6 @@ type GetTierCardContentParams = {
 	enableDeepDiscount: boolean;
 	urlProductKey?: string;
 	promotion?: Promotion;
-	multipleAccountsVariant?: string;
 };
 
 export function getTierCardContent({
@@ -40,10 +39,8 @@ export function getTierCardContent({
 	enableDeepDiscount,
 	urlProductKey,
 	promotion,
-	multipleAccountsVariant,
 }: GetTierCardContentParams): CardContent {
-	const digitalPlusMultipleAccountsVariant =
-		productKey === 'DigitalSubscription' ? multipleAccountsVariant : undefined;
+	const isDigitalPlus = productKey === 'DigitalSubscription';
 
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -67,18 +64,16 @@ export function getTierCardContent({
 	);
 	const benefits =
 		landingPageVariant.products[productKey]?.benefits ?? defaultBenefits;
-	const benefitsFilteredByMultipleAccounts =
-		digitalPlusMultipleAccountsVariant === 'V1' ||
-		digitalPlusMultipleAccountsVariant === 'V2'
-			? removeBenefitByCopy(benefits, multipleAccountBenefitCopy)
-			: benefits;
+	const benefitsFilteredByMultipleAccounts = isDigitalPlus
+		? removeBenefitByCopy(benefits, multipleAccountBenefitCopy)
+		: benefits;
 
 	const tierProductDescription = {
 		...landingPageVariant.products[productKey],
 		title,
-		titlePill: digitalPlusMultipleAccountsVariant
-			? undefined
-			: getProductDescription(productKey, ratePlanKey).labelPill,
+		titlePill: !isDigitalPlus
+			? getProductDescription(productKey, ratePlanKey).labelPill
+			: undefined,
 		benefits: benefitsFilteredByMultipleAccounts,
 		cta:
 			landingPageVariant.products[productKey]?.cta ??
@@ -133,7 +128,6 @@ export function getTierCardContent({
 			promotion?.discount?.amount,
 		),
 		promotion,
-		multipleAccountsVariant,
 		...tierProductDescription,
 	};
 }

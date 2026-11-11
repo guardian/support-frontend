@@ -45,7 +45,6 @@ export type CardContent = LandingPageProductDescription & {
 	link: string;
 	price: number;
 	promotion?: Promotion;
-	multipleAccountsVariant?: string;
 };
 
 export type ThreeTierCardProps = {
@@ -126,10 +125,10 @@ const previousPriceStrikeThrough = css`
 	text-decoration: line-through;
 `;
 
-const btnStyleOverrides = (showAccount: boolean) => css`
+const btnStyleOverrides = css`
 	width: 100%;
 	justify-content: center;
-	margin-bottom: ${showAccount ? 0 : space[6]}px;
+	margin-bottom: 0px;
 `;
 
 const checkmarkBenefitList = css`
@@ -199,7 +198,6 @@ export function ThreeTierCard({
 		cta,
 		product,
 		billingPeriodsCopy,
-		multipleAccountsVariant,
 	} = cardContent;
 	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -352,20 +350,14 @@ export function ThreeTierCard({
 			</div>
 			<LinkButton
 				href={link}
-				cssOverrides={btnStyleOverrides(
-					!!multipleAccountsVariant && multipleAccountsVariant !== 'CONTROL',
-				)}
+				cssOverrides={btnStyleOverrides}
 				data-qm-trackable={quantumMetricButtonRef}
 				aria-label={linkAriaLabel}
 				theme={themeButtonReaderRevenueBrand}
 			>
 				{cta.copy}
 			</LinkButton>
-			<ThreeTierNumberOfAccounts
-				multipleAccountsVariant={multipleAccountsVariant}
-				productKey={product}
-				cardTheme={cardTheme}
-			/>
+			<ThreeTierNumberOfAccounts productKey={product} cardTheme={cardTheme} />
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>
