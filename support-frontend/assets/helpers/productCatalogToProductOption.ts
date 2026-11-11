@@ -67,6 +67,7 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'GuardianAdLite':
 		case 'Contribution':
 		case 'OneTimeContribution':
+		case 'PatronMembership':
 			return 'NoProductOptions';
 		case 'SupporterPlus':
 		case 'DigitalSubscription':

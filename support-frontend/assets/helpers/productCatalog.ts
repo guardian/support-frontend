@@ -31,6 +31,7 @@ const activeProductKeys = [
 	'SubscriptionCard',
 	'Contribution',
 	'OneTimeContribution',
+	'PatronMembership',
 ] as const;
 
 export type ActiveProductKey = Extract<
@@ -53,6 +54,7 @@ type GuardianWeeklyDomesticRatePlanKey =
 	ProductRatePlanKey<'GuardianWeeklyDomestic'>;
 type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
 type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
+type PatronMembershipRatePlanKey = ProductRatePlanKey<'PatronMembership'>;
 
 export type ActiveRatePlanKey = keyof Record<
 	| OneTimeContributionRatePlanKey
@@ -66,7 +68,8 @@ export type ActiveRatePlanKey = keyof Record<
 	| GuardianWeeklyDomesticRatePlanKey
 	// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents -- we need to investigate how to avoid this duplication, but for now it's easier to maintain the types separately across products
 	| SubscriptionCardRatePlanKey
-	| ContributionRatePlanKey,
+	| ContributionRatePlanKey
+	| PatronMembershipRatePlanKey,
 	true
 >;
 
@@ -513,6 +516,38 @@ export const productCatalogDescription: Record<
 		// Omit one time rate plans for now. We don't expect to use this data and the types in support-frontend
 		// can't handle a billingPeriod of OneTime.
 		ratePlans: {},
+	},
+	PatronMembership: {
+		label: 'Patrons',
+		landingPagePath: '/contribute',
+		benefits: [
+			multipleAccountsBenefit,
+			paperArchiveDigitalBenefit,
+			paperArchiveDigitalBenefitUK,
+			digitalPaperBenefitUK,
+			weeklyDigitalBenefit,
+			editionsDigitalBenefit,
+		],
+		ratePlans: {
+			BylineMonthly: {
+				billingPeriod: BillingPeriod.Monthly,
+			},
+			BylineAnnual: {
+				billingPeriod: BillingPeriod.Annual,
+			},
+			HeadlineMonthly: {
+				billingPeriod: BillingPeriod.Monthly,
+			},
+			HeadlineAnnual: {
+				billingPeriod: BillingPeriod.Annual,
+			},
+			MastheadMonthly: {
+				billingPeriod: BillingPeriod.Monthly,
+			},
+			MastheadAnnual: {
+				billingPeriod: BillingPeriod.Annual,
+			},
+		},
 	},
 };
 
