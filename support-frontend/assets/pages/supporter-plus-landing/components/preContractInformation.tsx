@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans15 } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import {
+	type CountryGroupId,
+	GBPCountries,
+} from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type {
 	ActiveProductKey,
@@ -177,12 +180,14 @@ export function PreContractInformation({
 	// );
 	// return getSummaryTsAndCs(productKey, isWeeklyDigital);
 
-	return (
+	const isGBP = countryGroupId === GBPCountries;
+	const display = isGBP;
+
+	return display ? (
 		<div css={containerSummaryTsCs}>
 			<RenewalTermsPolicy
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				countryGroupId={countryGroupId}
 				currency={currency}
 				amount={amount}
 				promotion={promotion}
@@ -190,16 +195,9 @@ export function PreContractInformation({
 			<CancellationPolicy
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				countryGroupId={countryGroupId}
-				currency={currency}
-				amount={amount}
 				promotion={promotion}
 			/>
-			<PriceRisePolicy
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				countryGroupId={countryGroupId}
-			/>
+			<PriceRisePolicy productKey={productKey} ratePlanKey={ratePlanKey} />
 		</div>
-	);
+	) : null;
 }

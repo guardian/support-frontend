@@ -1244,6 +1244,7 @@ export default function CheckoutForm({
 								countryGroupId={countryGroupId}
 								currency={currencyKey}
 								amount={0}
+								promotion={promotion}
 							/>
 						) : (
 							<SummaryTsAndCs

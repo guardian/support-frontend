@@ -1,9 +1,5 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
-import {
-	type CountryGroupId,
-	GBPCountries,
-} from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { glyph } from 'helpers/internationalisation/currency';
 import type {
@@ -23,7 +19,6 @@ const marginTop = css`
 interface RenewalTermsPolicyProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	countryGroupId: CountryGroupId;
 	currency: CurrencyCode;
 	amount: number;
 	promotion?: Promotion;
@@ -31,12 +26,10 @@ interface RenewalTermsPolicyProps {
 export function RenewalTermsPolicy({
 	productKey,
 	ratePlanKey,
-	countryGroupId,
 	currency,
 	amount,
 	promotion,
 }: RenewalTermsPolicyProps): JSX.Element | null {
-	const isGBP = countryGroupId === GBPCountries;
 	const isOneTimeContribution =
 		productKey === 'Contribution' && ratePlanKey === 'OneTime';
 	const isWeeklyGift =
@@ -44,10 +37,7 @@ export function RenewalTermsPolicy({
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent'; // TODO: UTS Students
 
 	const display =
-		isGBP &&
-		!isOneTimeContribution &&
-		!isWeeklyGift &&
-		!isStudentOneYearRatePlan;
+		!isOneTimeContribution && !isWeeklyGift && !isStudentOneYearRatePlan;
 
 	const currencyGlyph = glyph(currency);
 	const billingPeriod = getBillingPeriodNoun(
@@ -58,7 +48,7 @@ export function RenewalTermsPolicy({
 			Subscription auto-renews monthly. Pay {currencyGlyph}
 			{amount}/ {billingPeriod}, unless you cancel. We’ll remind you every 6
 			months, 2 weeks before your renewal date.
-			{productKey} {ratePlanKey} {countryGroupId},{currency},{amount}
+			{productKey} {ratePlanKey},{currency},{amount}
 			{promotion && 'yes'},
 		</p>
 	) : null;
