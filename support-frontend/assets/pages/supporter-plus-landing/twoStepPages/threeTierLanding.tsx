@@ -231,10 +231,8 @@ export function ThreeTierLanding({
 			contributionType,
 		);
 		const promotion = getTierCardPromotion({
-			supportRegionId,
 			productKey,
 			ratePlanKey,
-			billingPeriod,
 		});
 		return getTierCardContent({
 			supportRegionId,

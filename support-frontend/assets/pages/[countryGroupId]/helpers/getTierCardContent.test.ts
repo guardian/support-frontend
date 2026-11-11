@@ -1,14 +1,25 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type * as ProductCatalog from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import { getTierCardContent } from './getTierCardContent';
+
+const promotion: PromoWithCatalogInformation = {
+	name: 'Test promotion',
+	description: 'Test promotion description',
+	promoCode: '50PERCENTFOR3MONTHS',
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2025-01-01T00:00:00.000Z',
+	isIntroductoryPricing: true,
+	discount: { amount: 2, durationMonths: 3 },
+};
 
 jest.mock('helpers/productCatalog', () => ({
 	...jest.requireActual<typeof ProductCatalog>('helpers/productCatalog'),
@@ -238,14 +249,6 @@ describe('getTierCardContent', () => {
 		);
 	});
 	it('promotion applied (50% off for 3-month) to the monthly eu supporter plus checkout URL', () => {
-		const promotion: Promotion = {
-			name: 'Test promotion',
-			description: 'Test promotion description',
-			promoCode: '50PERCENTFOR3MONTHS',
-			isIntroductoryPricing: true,
-			discountedPrice: 2,
-			discount: { amount: 2, durationMonths: 3 },
-		};
 		const result = getTierCardContent({
 			supportRegionId: SupportRegionId.EU,
 			productKey: 'SupporterPlus',
@@ -274,14 +277,6 @@ describe('getTierCardContent', () => {
 		expect(result.isUserSelected).toBe(true);
 	});
 	it('marks the card as selected when urlSelectedAmount matches the promotion discount', () => {
-		const promotion: Promotion = {
-			name: 'Test promotion',
-			description: 'Test promotion description',
-			promoCode: '50PERCENTFOR3MONTHS',
-			isIntroductoryPricing: true,
-			discountedPrice: 2,
-			discount: { amount: 2, durationMonths: 3 },
-		};
 		const result = getTierCardContent({
 			supportRegionId: SupportRegionId.EU,
 			productKey: 'Contribution',

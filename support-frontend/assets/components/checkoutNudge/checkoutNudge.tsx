@@ -15,12 +15,13 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import { getAppliedPromotion } from 'helpers/productPrice/appliedPromotion';
+import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -106,7 +107,7 @@ export interface CheckoutNudgeProps {
 		label: string;
 		checkListData: BenefitsCheckListData[];
 	};
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 }
 
 export function CheckoutNudge({
@@ -132,11 +133,18 @@ export function CheckoutNudge({
 	const ratePlanDescription = ratePlan === 'Monthly' ? 'month' : 'year';
 
 	const originalPrice = `${currency.glyph}${amount.toString()}`;
-	const displayPrice = promotion?.discountedPrice
-		? simpleFormatAmount(currency, promotion.discountedPrice)
+	const discountedPrice =
+		promotion &&
+		getPromotionDiscountedPrice(
+			promotion,
+			amount,
+			ratePlanToBillingPeriod(ratePlan),
+		);
+	const displayPrice = discountedPrice
+		? simpleFormatAmount(currency, discountedPrice)
 		: originalPrice;
 
-	const getButtonCopy = promotion?.discountedPrice ? (
+	const getButtonCopy = discountedPrice ? (
 		<>
 			{`Support\u00A0`}
 			<span css={previousPriceStrikeThrough}>{originalPrice}</span>
@@ -301,25 +309,15 @@ function getNudgePromotion(
 	promoCodes: string[] | undefined,
 	product: ActiveProductKey,
 	ratePlan: ActiveRatePlanKey,
-	price: number,
-): Promotion | undefined {
-	const recurringBillingPeriod = toRegularBillingPeriod(
-		productCatalog[product]?.ratePlans[ratePlan]?.billingPeriod,
-	);
-	if (!promoCodes?.length || !recurringBillingPeriod) {
+): PromoWithCatalogInformation | undefined {
+	if (!promoCodes?.length) {
 		return undefined;
 	}
 	const variantPromotions = (
 		window.guardian.checkoutNudgePromotions ?? []
 	).filter((promotion) => promoCodes.includes(promotion.promoCode));
 
-	return getLegacyPromotion({
-		promotions: variantPromotions,
-		productKey: product,
-		ratePlanKey: ratePlan,
-		price,
-		billingPeriod: recurringBillingPeriod,
-	});
+	return getAppliedPromotion(variantPromotions, product, ratePlan);
 }
 
 /**
@@ -392,7 +390,6 @@ export function CheckoutNudgeSelector({
 		promoCodes,
 		nudgeToProduct.product,
 		ratePlan,
-		amount,
 	);
 
 	const checkListData =
