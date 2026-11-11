@@ -128,7 +128,14 @@ export function SummaryTsAndCs({
 		const usLegalCopy =
 			['SupporterPlus', 'DigitalSubscription'].includes(productKey) &&
 			countryGroupId === 'UnitedStates'
-				? productLegal(countryGroupId, billingPeriod, '/', amount, promotion)
+				? productLegal(
+						countryGroupId,
+						billingPeriod,
+						'/',
+						amount,
+						amount,
+						promotion,
+				  )
 				: '';
 		const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
 			`automatically charged the amount shown each ${periodNoun} `
