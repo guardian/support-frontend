@@ -5,16 +5,24 @@ import {
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	DefaultProductSelection,
+	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
+import {
+	isTestEligibleForSource,
+	toSourceKey,
+} from '../landingPage/sourceConfig';
 import { selectVariantForTest } from './banditSelection';
-import { randomNumber } from './helpers';
+import { getParticipationFromQueryString, randomNumber } from './helpers';
 import type { PageParticipationsConfig } from './models';
 import {
 	getPageParticipationsWithFallback,
 	type PageParticipationsResultWithFallback,
 } from './pageParticipations';
-import { LANDING_PAGE_PARTICIPATIONS_KEY } from './sessionStorage';
+import {
+	getSessionParticipations,
+	LANDING_PAGE_PARTICIPATIONS_KEY,
+} from './sessionStorage';
 
 // Fallback config in case there's an issue getting it from the server
 const fallbackDefaultProductSelection: DefaultProductSelection = {
@@ -122,12 +130,57 @@ export const landingPageTestConfig: Omit<
 };
 
 /**
+ * Which landing page tests can be selected, depending on ?source= (see
+ * helpers/landingPage/sourceConfig.ts):
+ * - With a valid force or preview param (`test:variant`) in the URL: all of
+ *   them, because those pick their test by name and skip the selection.
+ * - On the landing page: only the tests of the source, or, without one, only the
+ *   tests that don't belong to a source.
+ * - On other pages (checkout, thank-you): the same as without a source, plus any
+ *   source test the landing page already saved in session storage, so they keep
+ *   showing it but never assign it to someone who didn't come from the source.
+ *
+ * Known limitation: a saved participation the landing page no longer accepts
+ * (e.g. a normal test when visiting with ?source=puzzles and no puzzles test is
+ * eligible) stays in session storage, so the checkout can restore a variant
+ * different from the one the landing page showed.
+ */
+function getEligibleTests(tests: LandingPageTest[]): LandingPageTest[] {
+	const { search, pathname } = window.location;
+	const { forceParamName, pageRegex } = landingPageTestConfig;
+	// Same parsing as getPageParticipations: an empty or malformed value is
+	// ignored there, so it must not lift the filter here either.
+	if (
+		getParticipationFromQueryString(search, forceParamName) ||
+		getParticipationFromQueryString(
+			search,
+			forceParamName.replace('force-', 'preview-'),
+		)
+	) {
+		return tests;
+	}
+
+	if (pathname.match(pageRegex)) {
+		const source = toSourceKey(new URLSearchParams(search).get('source'));
+		return tests.filter((test) => isTestEligibleForSource(test.name, source));
+	}
+
+	const savedParticipations =
+		getSessionParticipations(LANDING_PAGE_PARTICIPATIONS_KEY) ?? {};
+	return tests.filter(
+		(test) =>
+			isTestEligibleForSource(test.name, undefined) ||
+			test.name in savedParticipations,
+	);
+}
+
+/**
  * Helper to get landing page test config with tests from settings
  */
 export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPageVariant> {
 	return {
 		...landingPageTestConfig,
-		tests: getSettings().landingPageTests ?? [],
+		tests: getEligibleTests(getSettings().landingPageTests ?? []),
 		selectVariant: (test, mvtId) => {
 			const banditData = getSettings().banditData ?? [];
 
