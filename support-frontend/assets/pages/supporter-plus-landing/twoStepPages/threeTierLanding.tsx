@@ -21,7 +21,6 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { PromoTermsProvider } from 'contexts/PromoTermsContext';
-import { getMultipleAccountsTestVariantParticipation } from 'helpers/abTests/multipleAccounts';
 import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
@@ -124,11 +123,7 @@ export function ThreeTierLanding({
 	supportRegionId,
 	landingPageSettings,
 }: ThreeTierLandingProps): JSX.Element {
-	const { variant: landingPageVariant, participations } = landingPageSettings;
-	const multipleAccountsVariant = getMultipleAccountsTestVariantParticipation(
-		participations,
-		landingPageVariant.name,
-	);
+	const { variant: landingPageVariant } = landingPageSettings;
 	const {
 		productKey: urlProductKey,
 		ratePlanKey: urlSearchParamsRatePlan,
@@ -223,7 +218,6 @@ export function ThreeTierLanding({
 			enableDeepDiscount,
 			urlProductKey,
 			promotion,
-			multipleAccountsVariant,
 		});
 	};
 	const tierCards = [

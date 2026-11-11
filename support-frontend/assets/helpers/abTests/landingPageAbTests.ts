@@ -1,4 +1,7 @@
-import { ProductTierLabel } from 'helpers/productCatalog';
+import {
+	multipleAccountBenefitCopy,
+	ProductTierLabel,
+} from 'helpers/productCatalog';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	DefaultProductSelection,
@@ -7,7 +10,6 @@ import type {
 import { selectVariantForTest } from './banditSelection';
 import { randomNumber } from './helpers';
 import type { PageParticipationsConfig } from './models';
-import { multipleAccountBenefitCopy } from './multipleAccounts';
 import {
 	getPageParticipationsWithFallback,
 	type PageParticipationsResultWithFallback,
