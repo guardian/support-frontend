@@ -5,7 +5,7 @@ import type {
 	SDKProduct,
 } from '@mparticle/web-sdk';
 
-export type MParticleSdkConfig = {
+type MParticleSdkConfig = {
 	apiKey: string;
 	isDevelopmentMode: boolean;
 };
