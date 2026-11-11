@@ -46,7 +46,7 @@ const container = (cardCount: number) => {
 
 // The tier is derived from the product rather than the card's position, so the
 // tier-N-button tracking refs stay stable when a card is hidden
-// (e.g. ?hideContribution=true).
+// (e.g. ?source=puzzles).
 const productToTier = (product: CardContent['product']): 1 | 2 | 3 => {
 	switch (product) {
 		case 'SupporterPlus':
