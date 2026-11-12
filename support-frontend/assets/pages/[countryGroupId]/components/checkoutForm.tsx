@@ -89,6 +89,7 @@ import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheck
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
+import { useDMCCLayout } from '../helpers/useDMCCLayout';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
@@ -188,6 +189,7 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+	const isDMCCA = useDMCCLayout();
 	const abParticipations = useAbParticipations();
 
 	const productCatalog = appConfig.productCatalog;
@@ -1237,7 +1239,7 @@ export default function CheckoutForm({
 									/>
 								)}
 						</div>
-						{countryGroupId === 'GBPCountries' ? (
+						{isDMCCA ? (
 							<PreContractInformation
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}
