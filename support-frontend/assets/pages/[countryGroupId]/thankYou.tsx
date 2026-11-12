@@ -77,27 +77,31 @@ function ThankYouConversionTracking({
 			mParticleConfig &&
 			canUseMParticleConversions(enableMParticleConversions, mParticleConfig)
 		) {
-			successfulContributionConversion(
-				payment.finalAmount,
-				contributionType,
-				currencyKey,
-				paymentMethod ?? 'None',
-				conversionProductKey,
-				'mparticle',
+			return trackMParticleConversion(
+				mParticleConfig,
+				() => ({
+					orderId: getOrderId(),
+					value: payment.finalAmount,
+					currency: currencyKey,
+					paymentMethod: paymentMethod ?? 'None',
+					contributionType:
+						billingPeriod === BillingPeriod.Quarterly
+							? 'QUARTERLY'
+							: contributionType,
+					productType: conversionProductKey,
+					ratePlan: ratePlanKey ?? 'OneTime',
+					billingPeriod,
+				}),
+				(source) =>
+					successfulContributionConversion(
+						payment.finalAmount,
+						contributionType,
+						currencyKey,
+						paymentMethod ?? 'None',
+						conversionProductKey,
+						source,
+					),
 			);
-			return trackMParticleConversion(mParticleConfig, {
-				orderId: getOrderId(),
-				value: payment.finalAmount,
-				currency: currencyKey,
-				paymentMethod: paymentMethod ?? 'None',
-				contributionType:
-					billingPeriod === BillingPeriod.Quarterly
-						? 'QUARTERLY'
-						: contributionType,
-				productType: conversionProductKey,
-				ratePlan: ratePlanKey ?? 'OneTime',
-				billingPeriod,
-			});
 		}
 		successfulContributionConversion(
 			payment.finalAmount,

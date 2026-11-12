@@ -50,10 +50,17 @@ function setup() {
 		allowed: boolean,
 		mparticle = allowed,
 		remarketing = allowed,
+		googleTagManager = allowed,
 	) => {
-		cmp.getConsentFor.mockImplementation((vendor: string) =>
-			vendor === 'mparticle' ? mparticle : remarketing,
-		);
+		cmp.getConsentFor.mockImplementation((vendor: string) => {
+			if (vendor === 'mparticle') {
+				return mparticle;
+			}
+			if (vendor === 'google-tag-manager') {
+				return googleTagManager;
+			}
+			return remarketing;
+		});
 		const callback = cmp.onConsentChange.mock.calls[0]?.[0];
 		callback?.({ canTarget: allowed } as ConsentState);
 	};
@@ -76,40 +83,81 @@ describe('mParticle conversions', () => {
 	});
 
 	it.each([
-		['targeting', false, true, true],
-		['mParticle', true, false, true],
-		['Google remarketing', true, true, false],
+		['vendor grants without global targeting', false, true, true, true],
+		['mParticle', true, false, true, false],
+		['Google remarketing', true, true, false, true],
 	] as const)(
-		'waits for %s permission, then sends the exact conversion once',
-		async (_permission, canTarget, mparticle, remarketing) => {
+		'handles %s consent and sends the exact conversion once',
+		async (
+			_permission,
+			canTarget,
+			mparticle,
+			remarketing,
+			googleTagManager,
+		) => {
 			const { tracker, loader, sdk, consent } = setup();
-			tracker.trackMParticleConversion(config, purchase);
+			const createPurchase = jest.fn(() => purchase);
+			const onRouteSelected = jest.fn();
+			tracker.trackMParticleConversion(config, createPurchase, onRouteSelected);
+			expect(createPurchase).not.toHaveBeenCalled();
 			expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
-			consent(canTarget, mparticle, remarketing);
+			consent(canTarget, mparticle, remarketing, googleTagManager);
 			await settle();
+			if (!canTarget) {
+				expect(onRouteSelected).toHaveBeenCalledWith('mparticle');
+				expect(createPurchase).toHaveBeenCalledTimes(1);
+				expect(sdk.initialize).toHaveBeenCalledWith(config);
+				expect(sdk.setConsent).toHaveBeenCalledWith(true);
+				expect(sdk.logPurchase).toHaveBeenCalledWith(purchase);
+				expect(sdk.upload).toHaveBeenCalledTimes(1);
+				return;
+			}
 			expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
 			expect(sdk.initialize).not.toHaveBeenCalled();
 			expect(sdk.logPurchase).not.toHaveBeenCalled();
+			expect(createPurchase).not.toHaveBeenCalled();
+			expect(onRouteSelected).not.toHaveBeenCalled();
 			consent(true);
 			await settle();
+			expect(onRouteSelected).toHaveBeenCalledWith('mparticle');
+			expect(createPurchase).toHaveBeenCalledTimes(1);
 			expect(sdk.initialize).toHaveBeenCalledWith(config);
 			expect(sdk.setConsent).toHaveBeenCalledWith(true);
 			expect(sdk.logPurchase).toHaveBeenCalledWith(purchase);
 			expect(sdk.upload).toHaveBeenCalledTimes(1);
 			consent(true);
-			tracker.trackMParticleConversion(config, purchase);
+			tracker.trackMParticleConversion(config, () => purchase, jest.fn());
 			await settle();
 			expect(sdk.logPurchase).toHaveBeenCalledTimes(1);
 		},
 	);
 
+	it('uses GTM when mParticle is denied but Google and GTM consent are granted', () => {
+		const { tracker, loader, consent } = setup();
+		const createPurchase = jest.fn(() => purchase);
+		const onRouteSelected = jest.fn();
+		tracker.trackMParticleConversion(config, createPurchase, onRouteSelected);
+		consent(true, false, true, true);
+		expect(onRouteSelected).toHaveBeenCalledWith('gtm');
+		expect(createPurchase).not.toHaveBeenCalled();
+		expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
+	});
+
 	it('cancels a purchase when the route leaves before consent', async () => {
 		const { tracker, loader, consent } = setup();
-		const cancel = tracker.trackMParticleConversion(config, purchase);
+		const createPurchase = jest.fn(() => purchase);
+		const onRouteSelected = jest.fn();
+		const cancel = tracker.trackMParticleConversion(
+			config,
+			createPurchase,
+			onRouteSelected,
+		);
 		cancel();
 		consent(true);
 		await settle();
 		expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
+		expect(createPurchase).not.toHaveBeenCalled();
+		expect(onRouteSelected).not.toHaveBeenCalled();
 	});
 
 	it('does not initialize if consent is withdrawn during the import', async () => {
@@ -120,7 +168,7 @@ describe('mParticle conversions', () => {
 				resolveLoad = resolve;
 			}),
 		);
-		tracker.trackMParticleConversion(config, purchase);
+		tracker.trackMParticleConversion(config, () => purchase, jest.fn());
 		consent(true);
 		await settle();
 		expect(loader.loadMParticleSdk).toHaveBeenCalledTimes(1);
@@ -141,7 +189,7 @@ describe('mParticle conversions', () => {
 				finishInit = resolve;
 			}),
 		);
-		tracker.trackMParticleConversion(config, purchase);
+		tracker.trackMParticleConversion(config, () => purchase, jest.fn());
 		consent(true);
 		await settle();
 		consent(false);
@@ -161,7 +209,11 @@ describe('mParticle conversions', () => {
 				finishInit = resolve;
 			}),
 		);
-		const cancel = tracker.trackMParticleConversion(config, purchase);
+		const cancel = tracker.trackMParticleConversion(
+			config,
+			() => purchase,
+			jest.fn(),
+		);
 		consent(true);
 		await settle();
 		expect(sdk.initialize).toHaveBeenCalledWith(config);
@@ -176,7 +228,11 @@ describe('mParticle conversions', () => {
 		const { tracker, sdk, consent } = setup();
 		const gtag = jest.fn();
 		Object.defineProperty(window, 'gtag', { configurable: true, value: gtag });
-		const cancel = tracker.trackMParticleConversion(config, purchase);
+		const cancel = tracker.trackMParticleConversion(
+			config,
+			() => purchase,
+			jest.fn(),
+		);
 		consent(true);
 		await settle();
 		cancel();
@@ -188,23 +244,30 @@ describe('mParticle conversions', () => {
 			ad_user_data: 'denied',
 			ad_personalization: 'denied',
 		});
+		consent(true);
+		expect(gtag).toHaveBeenCalledWith('consent', 'update', {
+			ad_storage: 'granted',
+			ad_user_data: 'granted',
+			ad_personalization: 'granted',
+		});
 	});
 
 	it('stops mParticle until reload without changing Google consent when only mParticle is withdrawn', async () => {
 		const { tracker, sdk, consent } = setup();
 		const gtag = jest.fn();
 		Object.defineProperty(window, 'gtag', { configurable: true, value: gtag });
-		tracker.trackMParticleConversion(config, purchase);
+		tracker.trackMParticleConversion(config, () => purchase, jest.fn());
 		consent(true);
 		await settle();
 		consent(true, false, true);
 		expect(sdk.setOptOut).toHaveBeenLastCalledWith(true);
 		expect(gtag).not.toHaveBeenCalled();
 		consent(true);
-		tracker.trackMParticleConversion(config, {
-			...purchase,
-			orderId: 'next-purchase',
-		});
+		tracker.trackMParticleConversion(
+			config,
+			() => ({ ...purchase, orderId: 'next-purchase' }),
+			jest.fn(),
+		);
 		await settle();
 		expect(sdk.logPurchase).toHaveBeenCalledTimes(1);
 		expect(sdk.setOptOut).toHaveBeenLastCalledWith(true);
@@ -220,7 +283,7 @@ describe('mParticle conversions', () => {
 	it('contains loading failures without dispatch or retry on a consent callback', async () => {
 		const { tracker, loader, sdk, consent } = setup();
 		loader.loadMParticleSdk.mockRejectedValue(new Error('SDK unavailable'));
-		tracker.trackMParticleConversion(config, purchase);
+		tracker.trackMParticleConversion(config, () => purchase, jest.fn());
 		consent(true);
 		await settle();
 		consent(true);

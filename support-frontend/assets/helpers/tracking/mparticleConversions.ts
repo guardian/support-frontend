@@ -4,7 +4,14 @@ import { logException } from 'helpers/utilities/logger';
 import type { MParticleSdk, Purchase } from './mparticleSdk';
 
 type Config = NonNullable<AppConfig['mParticleConversions']>;
-type PendingConversion = { config: Config; purchase: Purchase };
+type ConversionSource = 'gtm' | 'mparticle';
+type PendingConversion = {
+	config: Config;
+	createPurchase: () => Purchase;
+	onRouteSelected: (source: ConversionSource) => void;
+	route?: ConversionSource;
+	purchase?: Purchase;
+};
 
 export function canUseMParticleConversions(
 	enabled: boolean,
@@ -16,6 +23,7 @@ export function canUseMParticleConversions(
 let observingConsent = false;
 let hasConsent = false;
 let hasGoogleConsent = false;
+let hasGoogleTagManagerConsent = false;
 let stoppedUntilReload = false;
 let pending: PendingConversion | undefined;
 let processing = false;
@@ -25,27 +33,46 @@ let initialized = false;
 const attemptedOrders = new Set<string>();
 
 function isCurrent(conversion: PendingConversion): boolean {
-	return hasConsent && pending === conversion;
+	return (
+		hasConsent && pending === conversion && conversion.route === 'mparticle'
+	);
 }
 
-function denyGoogleConsent(): void {
-	// The kit's opt-out does not unload Google's script. Withdraw ads permissions
-	// immediately, including while SDK initialization is still in progress.
+function updateGoogleConsent(granted: boolean): void {
+	// The kit's opt-out does not unload Google's script, so update the shared signals.
 	const google = window as Window & {
 		gtag?: (...args: unknown[]) => void;
 	};
 	google.gtag?.('consent', 'update', {
-		ad_storage: 'denied',
-		ad_user_data: 'denied',
-		ad_personalization: 'denied',
+		ad_storage: granted ? 'granted' : 'denied',
+		ad_user_data: granted ? 'granted' : 'denied',
+		ad_personalization: granted ? 'granted' : 'denied',
 	});
+}
+
+function selectRoute(conversion: PendingConversion): void {
+	if (pending !== conversion || conversion.route) {
+		return;
+	}
+	if (hasConsent) {
+		try {
+			conversion.purchase = conversion.createPurchase();
+			conversion.route = 'mparticle';
+			conversion.onRouteSelected('mparticle');
+			void dispatch();
+		} catch {
+			pending = undefined;
+			logException('mParticle conversion tracking failed');
+		}
+	} else if (hasGoogleConsent && hasGoogleTagManagerConsent) {
+		conversion.route = 'gtm';
+		pending = undefined;
+		conversion.onRouteSelected('gtm');
+	}
 }
 
 function optOut(): void {
 	if (initialization) {
-		if (!hasGoogleConsent) {
-			denyGoogleConsent();
-		}
 		sdk?.setOptOut(true);
 	}
 	if (initialized && sdk) {
@@ -59,6 +86,15 @@ async function dispatch(): Promise<void> {
 	}
 	const conversion = pending;
 	if (!isCurrent(conversion)) {
+		return;
+	}
+	const purchase = conversion.purchase;
+	if (!purchase) {
+		pending = undefined;
+		return;
+	}
+	if (attemptedOrders.has(purchase.orderId)) {
+		pending = undefined;
 		return;
 	}
 	processing = true;
@@ -86,12 +122,9 @@ async function dispatch(): Promise<void> {
 		sdk.setOptOut(false);
 		sdk.setConsent(true);
 		pending = undefined;
-		if (attemptedOrders.has(conversion.purchase.orderId)) {
-			return;
-		}
 		// Mark before dispatch: a thrown error cannot prove Google received nothing.
-		attemptedOrders.add(conversion.purchase.orderId);
-		sdk.logPurchase(conversion.purchase);
+		attemptedOrders.add(purchase.orderId);
+		sdk.logPurchase(purchase);
 		sdk.upload();
 	} catch {
 		if (pending === conversion) {
@@ -108,10 +141,15 @@ async function dispatch(): Promise<void> {
 
 export function trackMParticleConversion(
 	config: Config,
-	purchase: Purchase,
+	createPurchase: () => Purchase,
+	onRouteSelected: (source: ConversionSource) => void,
 ): () => void {
-	const conversion = { config, purchase };
-	if (!stoppedUntilReload && !attemptedOrders.has(purchase.orderId)) {
+	const conversion: PendingConversion = {
+		config,
+		createPurchase,
+		onRouteSelected,
+	};
+	if (!stoppedUntilReload) {
 		pending = conversion;
 	}
 	if (!observingConsent) {
@@ -120,12 +158,11 @@ export function trackMParticleConversion(
 			onConsentChange((state) => {
 				const previouslyGranted = hasConsent;
 				const previouslyGoogleGranted = hasGoogleConsent;
-				hasGoogleConsent =
-					state.canTarget && getConsentFor('remarketing', state);
+				hasGoogleConsent = getConsentFor('remarketing', state);
+				hasGoogleTagManagerConsent = getConsentFor('google-tag-manager', state);
+				const hasMParticleConsent = getConsentFor('mparticle', state);
 				hasConsent =
-					!stoppedUntilReload &&
-					hasGoogleConsent &&
-					getConsentFor('mparticle', state);
+					!stoppedUntilReload && hasGoogleConsent && hasMParticleConsent;
 				if (!hasConsent && previouslyGranted) {
 					// The kit caches Google consent separately. Do not resume with a
 					// stale cache after withdrawal; a reload starts a fresh lifecycle.
@@ -133,18 +170,27 @@ export function trackMParticleConversion(
 					pending = undefined;
 					optOut();
 				}
-				if (initialization && previouslyGoogleGranted && !hasGoogleConsent) {
-					denyGoogleConsent();
+				if (initialization && previouslyGoogleGranted !== hasGoogleConsent) {
+					updateGoogleConsent(hasGoogleConsent);
 				}
-				if (hasConsent) {
-					void dispatch();
+				if (pending) {
+					selectRoute(pending);
 				}
 			});
 		} catch {
-			pending = undefined;
+			if (pending === conversion) {
+				pending = undefined;
+			}
 			hasConsent = false;
 			logException('mParticle consent unavailable');
+			if (!conversion.route) {
+				conversion.route = 'gtm';
+				conversion.onRouteSelected('gtm');
+			}
 		}
+	}
+	if (pending === conversion) {
+		selectRoute(conversion);
 	}
 	void dispatch();
 	return () => {

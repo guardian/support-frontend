@@ -154,6 +154,12 @@ const renderThankYou = () =>
 describe('ThankYou conversion tracking', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
+		jest
+			.mocked(trackMParticleConversion)
+			.mockImplementation((_config, _createPurchase, onRouteSelected) => {
+				onRouteSelected('mparticle');
+				return () => undefined;
+			});
 		window.history.replaceState(
 			{},
 			'',
@@ -230,10 +236,70 @@ describe('ThankYou conversion tracking', () => {
 	});
 
 	it.each([true, false])(
+		'does not emit a conversion for a pending order (onboarding: %s)',
+		(onboarding) => {
+			jest.mocked(getThankYouOrder).mockReturnValue({
+				...successfulOrder,
+				status: 'pending',
+			});
+			jest.mocked(useFeatureSwitches).mockReturnValue({
+				enableThankYouOnboarding: onboarding,
+				enableMParticleConversions: true,
+			} as ReturnType<typeof useFeatureSwitches>);
+
+			render(
+				<ThankYou
+					supportRegionId={SupportRegionId.UK}
+					appConfig={{ ...appConfig, mParticleConversions: webConfig }}
+					landingPageSettings={landingPageSettings}
+				/>,
+			);
+
+			expect(successfulContributionConversion).not.toHaveBeenCalled();
+			expect(trackMParticleConversion).not.toHaveBeenCalled();
+		},
+	);
+
+	it('uses the GTM conversion route when mParticle consent is denied', () => {
+		jest
+			.mocked(trackMParticleConversion)
+			.mockImplementationOnce((_config, _createPurchase, onRouteSelected) => {
+				onRouteSelected('gtm');
+				return () => undefined;
+			});
+		jest.mocked(useFeatureSwitches).mockReturnValue({
+			enableThankYouOnboarding: true,
+			enableMParticleConversions: true,
+		} as ReturnType<typeof useFeatureSwitches>);
+
+		render(
+			<ThankYou
+				supportRegionId={SupportRegionId.UK}
+				appConfig={{ ...appConfig, mParticleConversions: webConfig }}
+				landingPageSettings={landingPageSettings}
+			/>,
+		);
+
+		expect(successfulContributionConversion).toHaveBeenCalledWith(
+			20,
+			'MONTHLY',
+			'GBP',
+			'Stripe',
+			'SupporterPlus',
+			'gtm',
+		);
+	});
+
+	it.each([true, false])(
 		'uses mParticle on the enabled route (onboarding: %s) and cancels on unmount',
 		(onboarding) => {
 			const cancel = jest.fn();
-			jest.mocked(trackMParticleConversion).mockReturnValue(cancel);
+			jest
+				.mocked(trackMParticleConversion)
+				.mockImplementationOnce((_config, _createPurchase, onRouteSelected) => {
+					onRouteSelected('mparticle');
+					return cancel;
+				});
 			jest.mocked(useFeatureSwitches).mockReturnValue({
 				enableThankYouOnboarding: onboarding,
 				enableMParticleConversions: true,
@@ -254,7 +320,10 @@ describe('ThankYou conversion tracking', () => {
 				'SupporterPlus',
 				'mparticle',
 			);
-			expect(trackMParticleConversion).toHaveBeenCalledWith(config, {
+			const conversionCall = jest.mocked(trackMParticleConversion).mock
+				.calls[0];
+			expect(conversionCall?.[0]).toBe(config);
+			expect(conversionCall?.[1]?.()).toEqual({
 				orderId: 'session-order-123',
 				value: 20,
 				currency: 'GBP',
@@ -264,6 +333,7 @@ describe('ThankYou conversion tracking', () => {
 				ratePlan: 'Monthly',
 				billingPeriod: 'Monthly',
 			});
+			expect(conversionCall?.[2]).toEqual(expect.any(Function));
 			rerender(
 				<ThankYou
 					supportRegionId={SupportRegionId.UK}
@@ -297,7 +367,9 @@ describe('ThankYou conversion tracking', () => {
 			);
 			expect(value).toBeGreaterThan(0);
 			expect(trackMParticleConversion).toHaveBeenCalledTimes(1);
-			expect(trackMParticleConversion).toHaveBeenCalledWith(webConfig, {
+			const createPurchase = jest.mocked(trackMParticleConversion).mock
+				.calls[0]?.[1];
+			expect(createPurchase?.()).toEqual({
 				orderId: 'session-order-123',
 				value: productType === 'SupporterPlus' ? (value ?? 0) + 7 : value,
 				currency: 'GBP',
@@ -330,7 +402,9 @@ describe('ThankYou conversion tracking', () => {
 				landingPageSettings={landingPageSettings}
 			/>,
 		);
-		expect(trackMParticleConversion).toHaveBeenCalledWith(webConfig, {
+		const createPurchase = jest.mocked(trackMParticleConversion).mock
+			.calls[0]?.[1];
+		expect(createPurchase?.()).toEqual({
 			orderId: 'session-order-123',
 			value: 7.5,
 			currency: 'EUR',
@@ -365,7 +439,9 @@ describe('ThankYou conversion tracking', () => {
 				landingPageSettings={landingPageSettings}
 			/>,
 		);
-		expect(trackMParticleConversion).toHaveBeenCalledWith(webConfig, {
+		const createPurchase = jest.mocked(trackMParticleConversion).mock
+			.calls[0]?.[1];
+		expect(createPurchase?.()).toEqual({
 			orderId: 'session-order-123',
 			value: 7,
 			currency: 'USD',
