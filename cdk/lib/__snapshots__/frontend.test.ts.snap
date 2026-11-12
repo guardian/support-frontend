@@ -5,6 +5,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
   "Metadata": {
     "gu:cdk:constructs": [
       "GuAllowPolicy",
+      "GuAllowPolicy",
       "GuGetS3ObjectsPolicy",
       "GuGetS3ObjectsPolicy",
       "GuGetS3ObjectsPolicy",
@@ -1578,6 +1579,38 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "SSMGetF4C837D5",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleFrontend9A970131",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SSMGetParametersF9DFB7CE": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ssm:GetParameters",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:eu-west-1:",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/support/frontend/PROD/play.http.secret.key",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SSMGetParametersF9DFB7CE",
         "Roles": [
           {
             "Ref": "InstanceRoleFrontend9A970131",
