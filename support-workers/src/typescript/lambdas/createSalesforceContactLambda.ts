@@ -109,6 +109,17 @@ export const createNextState = (
 				},
 				...state,
 			};
+		case 'PatronMembership':
+			return {
+				productSpecificState: {
+					productType: 'PatronMembership',
+					product: state.product,
+					productInformation: state.productInformation,
+					paymentMethod: state.paymentMethod,
+					salesForceContact: contactRecord,
+				},
+				...state,
+			};
 		case 'GuardianWeekly':
 			return {
 				productSpecificState: {
