@@ -531,21 +531,27 @@ export const productCatalogDescription: Record<
 		ratePlans: {
 			BylineMonthly: {
 				billingPeriod: BillingPeriod.Monthly,
+				displayName: 'Byline Monthly',
 			},
 			BylineAnnual: {
 				billingPeriod: BillingPeriod.Annual,
+				displayName: 'Byline Annual',
 			},
 			HeadlineMonthly: {
 				billingPeriod: BillingPeriod.Monthly,
+				displayName: 'Headline Monthly',
 			},
 			HeadlineAnnual: {
 				billingPeriod: BillingPeriod.Annual,
+				displayName: 'Headline Annual',
 			},
 			MastheadMonthly: {
 				billingPeriod: BillingPeriod.Monthly,
+				displayName: 'Masthead Monthly',
 			},
 			MastheadAnnual: {
 				billingPeriod: BillingPeriod.Annual,
+				displayName: 'Masthead Annual',
 			},
 		},
 	},
