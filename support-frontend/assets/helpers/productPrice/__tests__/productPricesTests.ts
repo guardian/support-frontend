@@ -12,7 +12,6 @@ import {
 	isNumeric,
 	showPrice,
 } from 'helpers/productPrice/productPrices';
-import { finalPrice } from 'helpers/productPrice/promotions';
 
 // ----- Tests ----- //
 jest.mock('@guardian/ophan-tracker-js', () => () => ({}));
@@ -136,64 +135,6 @@ describe('getProductPrice', () => {
 				savingVsRetail: 10,
 			},
 		);
-	});
-});
-
-describe('finalPrice', () => {
-	const productPrices = {
-		'United Kingdom': {
-			Collection: {
-				Sunday: {
-					Monthly: {
-						GBP: {
-							price: 15.99,
-							currency: 'GBP',
-							fixedTerm: false,
-							promotions: [
-								{
-									name: 'examplePromo',
-									description: 'an example promotion',
-									promoCode: 1234,
-									discountedPrice: 7.99,
-									discount: {
-										amount: 50,
-										durationMonths: 3,
-									},
-								},
-							],
-						},
-					},
-				},
-			},
-		},
-	} as unknown as ProductPrices;
-
-	it('should return the final price with any discounts applied', () => {
-		expect(
-			finalPrice(
-				productPrices,
-				'GB',
-				BillingPeriod.Monthly,
-				'Collection',
-				'Sunday',
-			),
-		).toEqual({
-			currency: 'GBP',
-			fixedTerm: false,
-			price: 7.99,
-			promotions: [
-				{
-					name: 'examplePromo',
-					description: 'an example promotion',
-					promoCode: 1234,
-					discountedPrice: 7.99,
-					discount: {
-						amount: 50,
-						durationMonths: 3,
-					},
-				},
-			],
-		});
 	});
 });
 
