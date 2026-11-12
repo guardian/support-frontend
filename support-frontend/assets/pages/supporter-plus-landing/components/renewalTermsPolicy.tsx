@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
-import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -15,14 +14,12 @@ const marginTop = css`
 interface RenewalTermsPolicyProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	currency: CurrencyCode;
 	amount: number;
 	promotion?: Promotion;
 }
 export function RenewalTermsPolicy({
 	productKey,
 	ratePlanKey,
-	currency,
 	amount,
 	promotion,
 }: RenewalTermsPolicyProps): JSX.Element | null {
@@ -37,9 +34,7 @@ export function RenewalTermsPolicy({
 
 	return display ? (
 		<p css={marginTop}>
-			{getRenewalTermsPolicyCopy(productKey, ratePlanKey)}
-			{productKey} {ratePlanKey},{currency},{amount}
-			{promotion && 'yes'},
+			{getRenewalTermsPolicyCopy(productKey, ratePlanKey, amount, promotion)}
 		</p>
 	) : null;
 }

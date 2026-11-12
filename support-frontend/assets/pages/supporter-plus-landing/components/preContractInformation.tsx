@@ -4,7 +4,6 @@ import {
 	type CountryGroupId,
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
-import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -30,7 +29,6 @@ interface PreContractInformationProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
-	currency: CurrencyCode;
 	amount: number;
 	promotion?: Promotion;
 }
@@ -38,7 +36,6 @@ export function PreContractInformation({
 	productKey,
 	ratePlanKey,
 	countryGroupId,
-	currency,
 	amount,
 	promotion,
 }: PreContractInformationProps): JSX.Element | null {
@@ -188,7 +185,6 @@ export function PreContractInformation({
 			<RenewalTermsPolicy
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				currency={currency}
 				amount={amount}
 				promotion={promotion}
 			/>

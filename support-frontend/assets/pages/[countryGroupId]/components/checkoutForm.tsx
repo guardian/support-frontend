@@ -1244,8 +1244,7 @@ export default function CheckoutForm({
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}
 								countryGroupId={countryGroupId}
-								currency={currencyKey}
-								amount={0}
+								amount={originalAmount}
 								promotion={promotion}
 							/>
 						) : (
