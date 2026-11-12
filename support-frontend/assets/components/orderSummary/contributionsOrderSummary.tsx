@@ -152,7 +152,7 @@ export type ContributionsOrderSummaryProps = {
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
-	startDate: React.ReactNode;
+	startDate: JSX.Element | undefined;
 	landingPageSettings: LandingPageVariant;
 	taxRateConfig: TaxRateConfig;
 	ratePlanLabel?: string;
