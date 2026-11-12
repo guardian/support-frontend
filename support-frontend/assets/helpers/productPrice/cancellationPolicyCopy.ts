@@ -3,6 +3,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from './promotions';
+import type { Policy } from './renewalTermsPolicyCopy';
 
 const digitalMonthlyCopy =
 	'Cancel anytime, via your account. Cancel within 14 days of sign-up and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
@@ -20,9 +21,7 @@ const printGiftCopy = `By proceeding, you are agreeing to our Terms & Conditions
 const observerDeliveryCopy = printMonthlyDeliveryCopy;
 const observerSubscriptionCopy = printMonthlySubscriptionCopy;
 
-const cancellationCopy: Partial<
-	Record<ActiveProductKey, Partial<Record<ActiveRatePlanKey, string>>>
-> = {
+const cancellationCopy: Policy = {
 	GuardianAdLite: {
 		Monthly: digitalMonthlyCopy,
 	},
