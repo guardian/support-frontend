@@ -37,7 +37,7 @@
 		"@aws-sdk/client-sqs": "catalog:",
 		"@guardian/support-service-lambdas": "catalog:",
 		"dayjs": "1.11.13",
-		"stripe": "17.7.0",
+		"stripe": "23.1.0",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
