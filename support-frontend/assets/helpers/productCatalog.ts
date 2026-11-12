@@ -11,7 +11,6 @@ import type {
 	ProductRatePlanKey,
 } from '@modules/product-catalog/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { multipleAccountBenefitCopy } from './abTests/multipleAccounts';
 import { isObserverSubdomain } from './globalsAndSwitches/observer';
 
 export enum ProductTierLabel {
@@ -317,10 +316,10 @@ const paperArchiveDigitalBenefit = {
 	] as CountryGroupId[],
 };
 
-export const tooltipMultipleAccounts = `You can share your Digital plus access with three other people. Each person gets their own account and login.`;
+export const multipleAccountBenefitCopy = 'Three extra accounts to share';
 const multipleAccountsBenefit = {
 	copy: multipleAccountBenefitCopy,
-	tooltip: tooltipMultipleAccounts,
+	tooltip: `You can share your Digital plus access with three other people. Each person gets their own account and login.`,
 	label: { copy: 'New' },
 };
 

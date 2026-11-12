@@ -12,7 +12,7 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -21,13 +21,17 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { PromoTermsProvider } from 'contexts/PromoTermsContext';
-import { getMultipleAccountsTestVariantParticipation } from 'helpers/abTests/multipleAccounts';
 import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
+import { getSourceConfig } from 'helpers/landingPage/sourceConfig';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	clearSourceContext,
+	setSourceContext,
+} from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import { getTierCardContent } from 'pages/[countryGroupId]/helpers/getTierCardContent';
 import { getTierCardPromotion } from 'pages/[countryGroupId]/helpers/getTierCardPromotion';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
@@ -124,17 +128,33 @@ export function ThreeTierLanding({
 	supportRegionId,
 	landingPageSettings,
 }: ThreeTierLandingProps): JSX.Element {
-	const { variant: landingPageVariant, participations } = landingPageSettings;
-	const multipleAccountsVariant = getMultipleAccountsTestVariantParticipation(
-		participations,
-		landingPageVariant.name,
-	);
+	const { variant: landingPageVariant } = landingPageSettings;
 	const {
 		productKey: urlProductKey,
 		ratePlanKey: urlSearchParamsRatePlan,
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
+		source,
+		returnUrl,
 	} = useThreeTierUrlSelection();
+	// ?source= switches on a pre-approved setup, see helpers/landingPage/sourceConfig.ts
+	const { hideContribution, hideSupportOnce, hideStudentOffer } =
+		getSourceConfig(source);
+
+	// The landing page is the single source of truth for where the reader came
+	// from (?source=, ?returnUrl=), which the thank-you page uses to send them
+	// back (e.g. to a puzzle). Visiting it with either stores them; visiting it
+	// without both clears them, so a value left in sessionStorage by an earlier
+	// visit in the same tab can't leak into an unrelated purchase.
+	// Known limitation: entering the checkout directly (skipping this page)
+	// doesn't clear a stale value.
+	useEffect(() => {
+		if (source ?? returnUrl) {
+			setSourceContext({ source, returnUrl });
+		} else {
+			clearSourceContext();
+		}
+	}, [source, returnUrl]);
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
@@ -151,10 +171,12 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const showStudentOffer = useStudentBeansRegionValid(
+	// The hook is called unconditionally, then combined with the source config
+	const studentBeansRegionValid = useStudentBeansRegionValid(
 		supportRegionId,
 		Country.detect(),
 	);
+	const showStudentOffer = studentBeansRegionValid && !hideStudentOffer;
 
 	const countdownSettings = countdownSwitchOn()
 		? landingPageVariant.countdownSettings
@@ -223,11 +245,13 @@ export function ThreeTierLanding({
 			enableDeepDiscount,
 			urlProductKey,
 			promotion,
-			multipleAccountsVariant,
 		});
 	};
+	// A source with hideContribution shows only All-access digital and Digital plus
+	// (e.g. the puzzles two-tier landing page). Remember the variant's
+	// defaultProductSelection should not point at the hidden Contribution card.
 	const tierCards = [
-		getTierCard('Contribution'),
+		...(hideContribution ? [] : [getTierCard('Contribution')]),
 		getTierCard('SupporterPlus'),
 		getTierCard('DigitalSubscription'),
 	];
@@ -318,22 +342,28 @@ export function ThreeTierLanding({
 						/>
 					</div>
 				</Container>
-				<Container
-					sideBorders
-					borderColor="rgba(170, 170, 180, 0.5)"
-					cssOverrides={lightContainer}
-				>
-					<SupportOnce
-						currency={glyph(currencyId)}
-						countryGroupId={countryGroupId}
-					/>
-					{showStudentOffer && (
-						<StudentOffer
-							currencyKey={currencyId}
-							supportRegionId={supportRegionId}
-						/>
-					)}
-				</Container>
+				{/* The container is skipped when both blocks are hidden, otherwise it
+				would render as an empty band below the cards. */}
+				{(!hideSupportOnce || showStudentOffer) && (
+					<Container
+						sideBorders
+						borderColor="rgba(170, 170, 180, 0.5)"
+						cssOverrides={lightContainer}
+					>
+						{!hideSupportOnce && (
+							<SupportOnce
+								currency={glyph(currencyId)}
+								countryGroupId={countryGroupId}
+							/>
+						)}
+						{showStudentOffer && (
+							<StudentOffer
+								currencyKey={currencyId}
+								supportRegionId={supportRegionId}
+							/>
+						)}
+					</Container>
+				)}
 			</PageScaffold>
 		</PromoTermsProvider>
 	);

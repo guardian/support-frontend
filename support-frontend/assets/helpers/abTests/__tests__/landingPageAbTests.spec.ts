@@ -5,11 +5,21 @@ import {
 	getLandingPageTestConfig,
 	landingPageTestConfig,
 } from '../landingPageAbTests';
-import { LANDING_PAGE_PARTICIPATIONS_KEY } from '../sessionStorage';
+import type * as SessionStorage from '../sessionStorage';
+import {
+	getSessionParticipations,
+	LANDING_PAGE_PARTICIPATIONS_KEY,
+} from '../sessionStorage';
 
 jest.mock('../../globalsAndSwitches/globals', () => ({
 	__esModule: true,
 	getSettings: jest.fn(),
+}));
+
+jest.mock('../sessionStorage', () => ({
+	__esModule: true,
+	...jest.requireActual<typeof SessionStorage>('../sessionStorage'),
+	getSessionParticipations: jest.fn(),
 }));
 
 const mockTest: LandingPageTest = {
@@ -67,9 +77,7 @@ describe('getLandingPageTestConfig', () => {
 		typeof getSettings
 	>;
 
-	afterEach(() => {
-		jest.clearAllMocks();
-	});
+	afterEach(() => {});
 
 	it('returns config with tests from settings', () => {
 		mockGetSettings.mockReturnValue({
@@ -163,9 +171,7 @@ describe('bandit selection integration', () => {
 		typeof getSettings
 	>;
 
-	afterEach(() => {
-		jest.clearAllMocks();
-	});
+	afterEach(() => {});
 
 	it('uses selectVariantForTest when banditData is available in settings', () => {
 		const testWithMethodology: LandingPageTest = {
@@ -217,4 +223,96 @@ describe('bandit selection integration', () => {
 
 		expect(config.tests).toEqual([testWithoutBandit]);
 	});
+});
+
+describe('getLandingPageTestConfig tests by source', () => {
+	const puzzlesTest: LandingPageTest = { ...mockTest, name: 'PUZZLES_HUB' };
+	const originalLocation = window.location;
+	const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
+
+	const mockLocation = (pathname: string, search = '') => {
+		Object.defineProperty(window, 'location', {
+			value: { pathname, search },
+			writable: true,
+		});
+	};
+
+	const testNames = () => getLandingPageTestConfig().tests.map((t) => t.name);
+
+	beforeEach(() => {
+		mockGetSessionParticipations.mockReturnValue(undefined);
+		jest.mocked(getSettings).mockReturnValue({
+			landingPageTests: [puzzlesTest, mockTest],
+		} as ReturnType<typeof getSettings>);
+	});
+
+	afterEach(() => {
+		Object.defineProperty(window, 'location', {
+			value: originalLocation,
+			writable: true,
+		});
+	});
+
+	it('only offers the tests of the source on the landing page', () => {
+		mockLocation('/eu/contribute', '?source=puzzles');
+
+		expect(testNames()).toEqual(['PUZZLES_HUB']);
+	});
+
+	it('keeps the tests of a source out of the landing page without it', () => {
+		mockLocation('/eu/contribute');
+
+		expect(testNames()).toEqual(['TEST_LP']);
+	});
+
+	it('ignores an unknown source', () => {
+		mockLocation('/eu/contribute', '?source=unknown');
+
+		expect(testNames()).toEqual(['TEST_LP']);
+	});
+
+	it('keeps the tests of a source out of other pages...', () => {
+		mockLocation('/eu/checkout');
+
+		expect(testNames()).toEqual(['TEST_LP']);
+	});
+
+	it('...unless the landing page already saved one in session storage', () => {
+		mockLocation('/eu/thank-you');
+		mockGetSessionParticipations.mockReturnValue({ PUZZLES_HUB: 'VARIANT_A' });
+
+		expect(testNames()).toEqual(['PUZZLES_HUB', 'TEST_LP']);
+	});
+
+	it('offers every test when the URL forces one, with or without a source', () => {
+		mockLocation(
+			'/eu/contribute',
+			'?force-landing-page=PUZZLES_HUB%3AVARIANT_A',
+		);
+
+		expect(testNames()).toEqual(['PUZZLES_HUB', 'TEST_LP']);
+	});
+
+	it('offers every test when the URL previews one', () => {
+		mockLocation(
+			'/eu/contribute',
+			'?preview-landing-page=PUZZLES_HUB%3AVARIANT_A',
+		);
+
+		expect(testNames()).toEqual(['PUZZLES_HUB', 'TEST_LP']);
+	});
+
+	it.each([
+		'?force-landing-page=',
+		'?force-landing-page=PUZZLES_HUB',
+		'?force-landing-page=PUZZLES_HUB%3A',
+		'?preview-landing-page=malformed',
+	])(
+		'keeps filtering when the override is empty or malformed (%s)',
+		(search) => {
+			mockLocation('/eu/contribute', search);
+
+			expect(testNames()).toEqual(['TEST_LP']);
+		},
+	);
 });
