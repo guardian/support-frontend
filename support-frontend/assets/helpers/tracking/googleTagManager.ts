@@ -22,6 +22,7 @@ type ContributionConversionData = {
 	paymentMethod: PaymentMethod;
 	contributionType: ContributionType;
 	productType: ActiveProductKey;
+	googleAdsConversionSource: 'gtm' | 'mparticle';
 };
 
 type SubscriptionConversionData = {
@@ -67,7 +68,7 @@ const googleTagManagerDataQueue: Array<() => void> = [];
 const googleAnalyticsEventQueue: Array<() => void> = [];
 
 // ----- Functions ----- //
-function getOrderId() {
+export function getOrderId() {
 	let orderId = getSession('orderId', z.string());
 
 	if (orderId === null) {
@@ -258,6 +259,7 @@ function successfulContributionConversion(
 	sourceCurrency: CurrencyCode,
 	paymentMethod: PaymentMethod,
 	productKey: ActiveProductKey,
+	googleAdsConversionSource: 'gtm' | 'mparticle' = 'gtm',
 ): void {
 	const contributionConversionData: ContributionConversionData = {
 		value: amount,
@@ -265,6 +267,7 @@ function successfulContributionConversion(
 		paymentMethod,
 		contributionType,
 		productType: productKey,
+		googleAdsConversionSource,
 	};
 
 	sendData('SuccessfulConversion', contributionConversionData);

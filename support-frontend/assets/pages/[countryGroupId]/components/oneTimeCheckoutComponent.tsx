@@ -733,6 +733,7 @@ export function OneTimeCheckoutComponent({
 							email: email,
 							paymentMethod: paymentMethod,
 							status: 'success', // retry pending mechanism not applied to one-time payments
+							finalAmount,
 						});
 
 						// If we successfully create a Payment Intent then this call will redirect to the paypal confirmation page.
@@ -756,6 +757,7 @@ export function OneTimeCheckoutComponent({
 					email: email,
 					paymentMethod: paymentMethod,
 					status: 'success', // retry pending mechanism not applied to one-time payments
+					finalAmount,
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());

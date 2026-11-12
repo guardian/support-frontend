@@ -14,7 +14,7 @@ import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.promotions.PromoWithCatalogInformation
 import com.typesafe.scalalogging.StrictLogging
-import config.{RecaptchaConfigProvider, StringsConfig}
+import config.{MParticleConversionsConfig, MParticleConversionsConfigProvider, RecaptchaConfigProvider, StringsConfig}
 import controllers.AppConfig.CsrfToken
 import io.circe.generic.semiauto.deriveEncoder
 import views.html.helper.CSRF
@@ -65,6 +65,7 @@ case class AppConfig private (
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
+    mParticleConversions: Option[MParticleConversionsConfig],
 )
 
 object AppConfig {
@@ -93,6 +94,7 @@ object AppConfig {
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
+      mParticleConversions: Option[MParticleConversionsConfig],
   ): AppConfig =
     AppConfig(
       geoip = Geoip(
@@ -174,6 +176,7 @@ object AppConfig {
         ),
       ),
       settings = settings,
+      mParticleConversions = mParticleConversions,
     )
 
   case class Geoip(countryGroup: String, countryCode: String, stateCode: String)
@@ -213,6 +216,7 @@ class Application(
     tickerService: TickerService,
     mparticleClient: MParticleClient,
     payPalCompletePaymentsConfigProvider: PayPalCompletePaymentsConfigProvider,
+    mParticleConversionsConfigProvider: MParticleConversionsConfigProvider,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
@@ -657,6 +661,7 @@ class Application(
         user = request.user,
         tickerData = tickerService.getTickers(),
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
+        mParticleConversions = mParticleConversionsConfigProvider.get(isTestUser),
       ),
     ).withSettingsSurrogateKey
   }
@@ -703,6 +708,7 @@ class Application(
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,
+      mParticleConversions = mParticleConversionsConfigProvider.get(isTestUser),
     )
     Ok(appConfig.asJson)
   }

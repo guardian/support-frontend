@@ -290,6 +290,12 @@ importers:
       '@guardian/tsconfig':
         specifier: 0.2.0
         version: 0.2.0
+      '@mparticle/web-adwords-kit':
+        specifier: 2.3.2
+        version: 2.3.2(@mparticle/event-models@1.3.1)
+      '@mparticle/web-sdk':
+        specifier: 2.81.0
+        version: 2.81.0(@mparticle/event-models@1.3.1)
       '@paypal/react-paypal-js':
         specifier: 8.9.2
         version: 8.9.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -2430,6 +2436,17 @@ packages:
     peerDependencies:
       '@types/react': '>=16'
       react: '>=16'
+
+  '@mparticle/event-models@1.3.1':
+    resolution: {integrity: sha512-FvRiQ1tFfIax8aOT9NTX6zVe3vgwwyHC5cX1uslCdU9KwRM7egWH6az4o6fo1N7HSY+nnzzeL4b5Pp6v3fDUaA==}
+
+  '@mparticle/web-adwords-kit@2.3.2':
+    resolution: {integrity: sha512-jmT1pRPg+BJMh8lJpcociMFqWIUiVdOpgFMnr7HhMLnwGs6FqF9Qc14S01QPG2maK7zwsRCOzgtCEzBOMzu56g==}
+
+  '@mparticle/web-sdk@2.81.0':
+    resolution: {integrity: sha512-z/Gsgt4sGwsnUUMVndELQdfMT1tvli/p4jjq98DMaxuvpK9pHcWfCykWsEs/qLPOgoreARJhwxkqkykTL01ikw==}
+    peerDependencies:
+      '@mparticle/event-models': ^1.3.1
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -11124,6 +11141,19 @@ snapshots:
       '@types/mdx': 2.0.13
       '@types/react': 18.2.0
       react: 18.2.0
+
+  '@mparticle/event-models@1.3.1': {}
+
+  '@mparticle/web-adwords-kit@2.3.2(@mparticle/event-models@1.3.1)':
+    dependencies:
+      '@mparticle/web-sdk': 2.81.0(@mparticle/event-models@1.3.1)
+    transitivePeerDependencies:
+      - '@mparticle/event-models'
+
+  '@mparticle/web-sdk@2.81.0(@mparticle/event-models@1.3.1)':
+    dependencies:
+      '@babel/runtime': 7.26.10
+      '@mparticle/event-models': 1.3.1
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true

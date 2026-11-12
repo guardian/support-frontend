@@ -72,6 +72,7 @@ const OrderSchema = z.object({
 		'None',
 	]),
 	status: z.enum(['success', 'pending']),
+	finalAmount: z.number().optional(),
 	deliveryDate: dateTimeSchema.optional(),
 	accountNumber: z.string().optional(),
 	taxConfig: z

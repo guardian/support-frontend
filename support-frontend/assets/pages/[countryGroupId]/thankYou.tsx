@@ -1,16 +1,31 @@
 import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import { useEffect } from 'react';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
+	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
-import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	billingPeriodToContributionType,
+	ratePlanToBillingPeriod,
+	toRegularBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import {
+	getOrderId,
+	successfulContributionConversion,
+} from 'helpers/tracking/googleTagManager';
+import {
+	canUseMParticleConversions,
+	trackMParticleConversion,
+} from 'helpers/tracking/mparticleConversions';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
@@ -19,11 +34,99 @@ import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyti
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import { getThankYouOrder } from './checkout/helpers/sessionStorage';
 import type { OnboardingProductKey } from './components/onboardingComponent';
 import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
 
 const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
+
+type ThankYouConversionTrackingProps = {
+	payment: { finalAmount: number };
+	productKey?: ActiveProductKey;
+	ratePlanKey?: ActiveRatePlanKey;
+	currencyKey: CurrencyCode;
+	mParticleConfig: AppConfig['mParticleConversions'];
+};
+
+function ThankYouConversionTracking({
+	payment,
+	productKey,
+	ratePlanKey,
+	currencyKey,
+	mParticleConfig,
+}: ThankYouConversionTrackingProps) {
+	const { enableMParticleConversions } = useFeatureSwitches();
+	const order = getThankYouOrder();
+	const hasSuccessfulOrder = order?.status === 'success';
+	const conversionValue = order?.finalAmount ?? payment.finalAmount;
+	const paymentMethod =
+		order?.paymentMethod === 'StripeExpressCheckoutElement'
+			? 'Stripe'
+			: order?.paymentMethod;
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey ?? 'OneTime');
+	const conversionProductKey = productKey ?? 'Contribution';
+	const contributionType =
+		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY';
+
+	useEffect(() => {
+		if (!hasSuccessfulOrder) {
+			return undefined;
+		}
+
+		if (
+			mParticleConfig &&
+			canUseMParticleConversions(enableMParticleConversions, mParticleConfig)
+		) {
+			return trackMParticleConversion(
+				mParticleConfig,
+				() => ({
+					orderId: getOrderId(),
+					value: conversionValue,
+					currency: currencyKey,
+					paymentMethod: paymentMethod ?? 'None',
+					contributionType:
+						billingPeriod === BillingPeriod.Quarterly
+							? 'QUARTERLY'
+							: contributionType,
+					productType: conversionProductKey,
+					ratePlan: ratePlanKey ?? 'OneTime',
+					billingPeriod,
+				}),
+				(source) =>
+					successfulContributionConversion(
+						conversionValue,
+						contributionType,
+						currencyKey,
+						paymentMethod ?? 'None',
+						conversionProductKey,
+						source,
+					),
+			);
+		}
+		successfulContributionConversion(
+			conversionValue,
+			contributionType,
+			currencyKey,
+			paymentMethod ?? 'None',
+			conversionProductKey,
+		);
+		return undefined;
+	}, [
+		billingPeriod,
+		contributionType,
+		enableMParticleConversions,
+		mParticleConfig,
+		conversionProductKey,
+		currencyKey,
+		hasSuccessfulOrder,
+		conversionValue,
+		paymentMethod,
+		ratePlanKey,
+	]);
+
+	return null;
+}
 
 type ThankYouProps = {
 	supportRegionId: SupportRegionId;
@@ -136,6 +239,16 @@ export function ThankYou({
 		}
 	}
 
+	const conversionTracking = (
+		<ThankYouConversionTracking
+			payment={payment}
+			productKey={productKey}
+			ratePlanKey={ratePlanKey}
+			currencyKey={currencyKey}
+			mParticleConfig={appConfig.mParticleConversions}
+		/>
+	);
+
 	if (
 		enableThankYouOnboarding &&
 		productKey !== undefined &&
@@ -143,31 +256,37 @@ export function ThankYou({
 		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
 	) {
 		return (
-			<AnalyticsProfileCacheProvider>
-				<OnboardingComponent
-					supportRegionId={supportRegionId}
-					csrf={csrf}
-					payment={payment}
-					productKey={productKey as OnboardingProductKey}
-					ratePlanKey={ratePlanKey ?? 'OneTime'}
-					promotion={promotion}
-					identityUserType={userType}
-					landingPageSettings={landingPageSettings}
-				/>
-			</AnalyticsProfileCacheProvider>
+			<>
+				{conversionTracking}
+				<AnalyticsProfileCacheProvider>
+					<OnboardingComponent
+						supportRegionId={supportRegionId}
+						csrf={csrf}
+						payment={payment}
+						productKey={productKey as OnboardingProductKey}
+						ratePlanKey={ratePlanKey ?? 'OneTime'}
+						promotion={promotion}
+						identityUserType={userType}
+						landingPageSettings={landingPageSettings}
+					/>
+				</AnalyticsProfileCacheProvider>
+			</>
 		);
 	}
 
 	return (
-		<ThankYouComponent
-			supportRegionId={supportRegionId}
-			csrf={csrf}
-			payment={payment}
-			productKey={productKey}
-			ratePlanKey={ratePlanKey}
-			promotion={promotion}
-			identityUserType={userType}
-			landingPageSettings={landingPageSettings}
-		/>
+		<>
+			{conversionTracking}
+			<ThankYouComponent
+				supportRegionId={supportRegionId}
+				csrf={csrf}
+				payment={payment}
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				promotion={promotion}
+				identityUserType={userType}
+				landingPageSettings={landingPageSettings}
+			/>
+		</>
 	);
 }

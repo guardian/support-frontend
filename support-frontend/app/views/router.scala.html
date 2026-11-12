@@ -5,6 +5,7 @@
 @import com.gu.support.promotions.PromoWithCatalogInformation
 @import io.circe.JsonObject
 @import services.Tickers
+@import config.MParticleConversionsConfig
 
 @import com.gu.identity.model.User
 @import views.ViewHelpers.outputJson
@@ -25,6 +26,7 @@
   user: Option[User],
   tickerData: Option[Tickers],
   homeDeliveryPostcodes: Option[List[String]] = None,
+  mParticleConversions: Option[MParticleConversionsConfig] = None,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(
@@ -46,6 +48,7 @@
     window.guardian.promotions = @Html(outputJson(promotions))
     window.guardian.checkoutNudgePromotions = @Html(outputJson(checkoutNudgePromotions))
     window.guardian.tickerData = @Html(outputJson(tickerData))
+    window.guardian.mParticleConversions = @Html(outputJson(mParticleConversions).replace("<", "\\u003c"))
   </script>
 
   @homeDeliveryPostcodes.map { postcodes =>
