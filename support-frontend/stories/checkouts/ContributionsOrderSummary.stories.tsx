@@ -9,7 +9,6 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import {
 	getProductLabel,
@@ -335,13 +334,7 @@ DigitalSubscription.args = {
 			thresholdAmount={27}
 		/>
 	),
-	startDate: (
-		<OrderSummaryStartDate
-			productKey="DigitalSubscription"
-			ratePlanKey={'Monthly'}
-			startDate={'Friday, April 11, 2025'}
-		/>
-	),
+	startDate: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change

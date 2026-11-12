@@ -7,7 +7,7 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
+import { GuardianWeeklyDigitalOrderSummaryStartDate } from 'components/orderSummary/guardianWeeklyDigitalOrderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { Payment } from 'helpers/forms/checkouts';
@@ -22,7 +22,10 @@ import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig'
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
 import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/planData';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyDigitalProduct,
+	isGuardianWeeklyGiftProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
@@ -192,11 +195,11 @@ export default function CheckoutSummary({
 					}}
 					enableCheckList={true}
 					startDate={
-						<OrderSummaryStartDate
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							startDate={formatUserDate(weeklyDeliveryDate)}
-						/>
+						isGuardianWeeklyDigitalProduct(productKey, ratePlanKey) ? (
+							<GuardianWeeklyDigitalOrderSummaryStartDate
+								startDate={formatUserDate(weeklyDeliveryDate)}
+							/>
+						) : undefined
 					}
 					tsAndCs={
 						<OrderSummaryTsAndCs
