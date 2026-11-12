@@ -134,13 +134,10 @@ function getRenewalTerms(amount: number): Policy {
 	};
 }
 
-function getPromotionRenewalTerms(
-	renewalTerms: Policy,
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
+function getPromotionalRenewalTerms(
 	amount: number,
 	promotion: Promotion,
-) {
+): Policy {
 	const promotionAnnualTerms = promotionAnnual(amount, promotion);
 	const promotionDigitalMonthlyTerms = promotionDigitalMonthly(
 		amount,
@@ -152,40 +149,29 @@ function getPromotionRenewalTerms(
 		promotion,
 	);
 	const promotionObserverMonthlyTerms = promotionObserverMonthly(amount);
-	const promotionRenewalTerms = {
-		...renewalTerms,
-		Contribution: {
-			...renewalTerms.Contribution,
-			Monthly: '',
-		},
+	return {
 		GuardianAdLite: {
-			...renewalTerms.GuardianAdLite,
 			Monthly: promotionDigitalMonthlyTerms,
 		},
 		SupporterPlus: {
-			...renewalTerms.SupporterPlus,
 			Monthly: promotionDigitalMonthlyTerms,
 			AnnualPlus: promotionAnnualTerms,
 		},
 		DigitalSubscription: {
-			...renewalTerms.DigitalSubscription,
 			Monthly: promotionDigitalMonthlyTerms,
 			AnnualPlus: promotionAnnualTerms,
 		},
 		GuardianWeeklyDomestic: {
-			...renewalTerms.GuardianWeeklyDomestic,
 			MonthlyPlus: promotionPrintMonthlyTerms,
 			QuarterlyPlus: promotionPrintQuarterlyTerms,
 			AnnualPlus: promotionAnnualTerms,
 		},
 		GuardianWeeklyRestOfWorld: {
-			...renewalTerms.GuardianWeeklyRestOfWorld,
 			MonthlyPlus: promotionPrintMonthlyTerms,
 			QuarterlyPlus: promotionPrintQuarterlyTerms,
 			AnnualPlus: promotionAnnualTerms,
 		},
 		SubscriptionCard: {
-			...renewalTerms.SubscriptionCard,
 			EverydayPlus: promotionPrintMonthlyTerms,
 			SixdayPlus: promotionPrintMonthlyTerms,
 			WeekendPlus: promotionPrintMonthlyTerms,
@@ -193,7 +179,6 @@ function getPromotionRenewalTerms(
 			Sunday: promotionObserverMonthlyTerms,
 		},
 		HomeDelivery: {
-			...renewalTerms.HomeDelivery,
 			EverydayPlus: promotionPrintMonthlyTerms,
 			SixdayPlus: promotionPrintMonthlyTerms,
 			WeekendPlus: promotionPrintMonthlyTerms,
@@ -201,7 +186,6 @@ function getPromotionRenewalTerms(
 			Sunday: promotionObserverMonthlyTerms,
 		},
 	};
-	return promotionRenewalTerms[productKey]?.[ratePlanKey];
 }
 
 export function getRenewalTermsPolicyCopy(
@@ -210,14 +194,7 @@ export function getRenewalTermsPolicyCopy(
 	amount: number,
 	promotion?: Promotion,
 ) {
-	const renewalTerms = getRenewalTerms(amount);
 	return promotion
-		? getPromotionRenewalTerms(
-				renewalTerms,
-				productKey,
-				ratePlanKey,
-				amount,
-				promotion,
-		  )
-		: renewalTerms[productKey]?.[ratePlanKey];
+		? getPromotionalRenewalTerms(amount, promotion)[productKey]?.[ratePlanKey]
+		: getRenewalTerms(amount)[productKey]?.[ratePlanKey];
 }
