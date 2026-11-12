@@ -32,6 +32,7 @@ case class FeatureSwitches(
     enableStripePaymentElement: Option[SwitchState],
     enableDeepDiscount: Option[SwitchState],
     enableStudentBeansEuropeAustralia: Option[SwitchState],
+    enableDMCCLayout: Option[SwitchState],
     enableMParticleConversions: Option[SwitchState] = None,
 )
 

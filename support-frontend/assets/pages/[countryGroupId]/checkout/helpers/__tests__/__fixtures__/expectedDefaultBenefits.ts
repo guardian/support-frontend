@@ -1,5 +1,5 @@
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
-import { multipleAccountBenefitCopy } from 'helpers/abTests/multipleAccounts';
+import { multipleAccountBenefitCopy } from 'helpers/productCatalog';
 
 const ContributionBenefits = [
 	{

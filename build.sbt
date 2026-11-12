@@ -42,7 +42,7 @@ inThisBuild(
     organization := "com.gu",
     scalaVersion := "2.13.18",
     // Force plexus-utils to 3.6.1 to avoid CVE in the version pulled in transitively by Play
-    dependencyOverrides += "org.codehaus.plexus" % "plexus-utils" % "3.6.1",
+    dependencyOverrides += "org.codehaus.plexus" % "plexus-utils" % "4.0.3",
     // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
     updateOptions := updateOptions.value.withCachedResolution(true),
     assembly / assemblyMergeStrategy := {
@@ -101,7 +101,6 @@ lazy val root = (project in file("."))
   )
   .aggregate(
     `support-frontend`,
-    `supporter-product-data`,
     `supporter-product-data-dynamo`,
     `stripe-patrons-data`,
     `support-models`,
@@ -143,17 +142,6 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     `support-internationalisation`,
     `module-retry`,
   )
-
-lazy val `supporter-product-data` = (project in file("supporter-product-data"))
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .configs(IntegrationTest)
-  .settings(
-    integrationTestSettings,
-    scalafmtSettings,
-    libraryDependencies ++= commonDependencies,
-  )
-  .dependsOn(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
-  .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data-dynamo` = (project in file("support-modules/supporter-product-data-dynamo"))
   .settings(

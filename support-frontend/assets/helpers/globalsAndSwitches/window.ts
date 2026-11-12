@@ -21,6 +21,7 @@ const featureSwitchesSchema = z.object({
 	enableMParticleConversions: z.optional(z.enum(['On', 'Off'])),
 	enableDeepDiscount: z.optional(z.enum(['On', 'Off'])),
 	enableStudentBeansEuropeAustralia: z.optional(z.enum(['On', 'Off'])),
+	enableDMCCLayout: z.optional(z.enum(['On', 'Off'])),
 });
 
 export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;
