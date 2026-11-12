@@ -115,7 +115,7 @@ class StripeBackend(
         .createPaymentIntent(request)
         .leftMap(err => {
           val errorCodesToIgnore = Seq("email_invalid")
-          if (!errorCodesToIgnore.contains(err.declineCode)) {
+          if (!err.declineCode.exists(errorCodesToIgnore.contains)) {
             cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
           }
           logger.info(
