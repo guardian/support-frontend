@@ -1,16 +1,12 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
-import { glyph } from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import {
-	getBillingPeriodNoun,
-	ratePlanToBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { getRenewalTermsPolicyCopy } from 'helpers/productPrice/renewalTermsPolicyCopy';
 
 const marginTop = css`
 	margin-top: ${space[2]}px;
@@ -39,15 +35,9 @@ export function RenewalTermsPolicy({
 	const display =
 		!isOneTimeContribution && !isWeeklyGift && !isStudentOneYearRatePlan;
 
-	const currencyGlyph = glyph(currency);
-	const billingPeriod = getBillingPeriodNoun(
-		ratePlanToBillingPeriod(ratePlanKey),
-	);
 	return display ? (
 		<p css={marginTop}>
-			Subscription auto-renews monthly. Pay {currencyGlyph}
-			{amount}/ {billingPeriod}, unless you cancel. We’ll remind you every 6
-			months, 2 weeks before your renewal date.
+			{getRenewalTermsPolicyCopy(productKey, ratePlanKey)}
 			{productKey} {ratePlanKey},{currency},{amount}
 			{promotion && 'yes'},
 		</p>

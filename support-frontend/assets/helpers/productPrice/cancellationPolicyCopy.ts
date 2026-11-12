@@ -139,6 +139,10 @@ export function getCancellationCopy(
 	ratePlanKey: ActiveRatePlanKey,
 	promotion?: Promotion,
 ) {
+	// const currencyGlyph = glyph(currency);
+	// const billingPeriod = getBillingPeriodNoun(
+	// 	ratePlanToBillingPeriod(ratePlanKey),
+	// );
 	return promotion
 		? promotionalCancellationCopy(productKey, ratePlanKey, promotion)
 		: cancellationCopy[productKey]?.[ratePlanKey] ?? '';
