@@ -9,7 +9,6 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import {
 	getProductLabel,
@@ -132,7 +131,7 @@ Default.args = {
 			</p>
 		</>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -169,7 +168,7 @@ RecurringContribution.args = {
 			countryGroupId={GBPCountries}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -207,7 +206,7 @@ SupporterPlus.args = {
 			thresholdAmount={12}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -245,7 +244,7 @@ SupporterPlusWithTax.args = {
 			thresholdAmount={15}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -295,7 +294,7 @@ DigitalPlusWithTaxAndDiscount.args = {
 			countryGroupId={Canada}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -335,13 +334,7 @@ DigitalSubscription.args = {
 			thresholdAmount={27}
 		/>
 	),
-	startDate: (
-		<OrderSummaryStartDate
-			productKey="DigitalSubscription"
-			ratePlanKey={'Monthly'}
-			startDate={'Friday, April 11, 2025'}
-		/>
-	),
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -379,7 +372,7 @@ StudentOneYear.args = {
 			thresholdAmount={9}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -418,7 +411,7 @@ WeeklyPricing.args = {
 			thresholdAmount={12}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -467,7 +460,7 @@ WeeklyPricingWithPromotion.args = {
 			thresholdAmount={12}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -505,7 +498,7 @@ WeeklyPricingWithTax.args = {
 			thresholdAmount={15}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
