@@ -4,13 +4,18 @@ import type {
 } from 'helpers/productCatalog';
 import type { Promotion } from './promotions';
 
-const digitalMonthlyCopy = `Cancel anytime, via your account. Cancel within 14 days of sign-up and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.`;
-const digitalAnnualCopy = `Cancel anytime, via your account. Cancel within 14 days of sign-up or each renewal and receive a full refund of your last payment. See more about your cooling-off rights in your full pre-contract information here.`;
+const digitalMonthlyCopy =
+	'Cancel anytime, via your account. Cancel within 14 days of sign-up and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
+const digitalAnnualCopy =
+	'Cancel anytime, via your account. Cancel within 14 days of sign-up or each renewal and receive a full refund of your last payment. See more about your cooling-off rights in your full pre-contract information here.';
 const studentAnnualCopy = `You may cancel your All-access digital subscription within 14 days of taking out the subscription. If you do, you'll receive a full refund and your subscription will stop immediately. To cancel, go to Manage My Account or see our Terms. This subscription does not auto-renew.`;
 
-const printMonthlyDeliveryCopy = `Cancel anytime, via your account. Cancel within 14 days of receiving your first issue and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.`;
-const printMonthlySubscriptionCopy = `Cancel anytime, via your account. Cancel within 14 days of receiving your subscription card and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.`;
-const printAnnualDeliveryCopy = `Cancel anytime, via your account. Cancel within 14 days of receiving your first issue and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.`;
+const printMonthlyDeliveryCopy =
+	'Cancel anytime, via your account. Cancel within 14 days of receiving your first issue and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
+const printMonthlySubscriptionCopy =
+	'Cancel anytime, via your account. Cancel within 14 days of receiving your subscription card and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
+const printAnnualDeliveryCopy =
+	'Cancel anytime, via your account. Cancel within 14 days of receiving your first issue and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
 const printGiftCopy = `By proceeding, you are agreeing to our Terms & Conditions. This subscription does not auto-renew. If you cancel within 14 days of sign-up, you’ll receive a full refund. To cancel within 14 days of sign-up and receive a refund contact Customer Service.`;
 const observerDeliveryCopy = printMonthlyDeliveryCopy;
 const observerSubscriptionCopy = printMonthlySubscriptionCopy;
