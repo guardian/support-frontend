@@ -88,13 +88,7 @@ describe('mParticle conversions', () => {
 		['Google remarketing', true, true, false, true],
 	] as const)(
 		'handles %s consent and sends the exact conversion once',
-		async (
-			_permission,
-			canTarget,
-			mparticle,
-			remarketing,
-			googleTagManager,
-		) => {
+		async (permission, canTarget, mparticle, remarketing, googleTagManager) => {
 			const { tracker, loader, sdk, consent } = setup();
 			const createPurchase = jest.fn(() => purchase);
 			const onRouteSelected = jest.fn();
@@ -103,6 +97,13 @@ describe('mParticle conversions', () => {
 			expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
 			consent(canTarget, mparticle, remarketing, googleTagManager);
 			await settle();
+			if (permission === 'Google remarketing') {
+				expect(onRouteSelected).toHaveBeenCalledWith('gtm');
+				expect(createPurchase).not.toHaveBeenCalled();
+				expect(loader.loadMParticleSdk).not.toHaveBeenCalled();
+				expect(sdk.initialize).not.toHaveBeenCalled();
+				return;
+			}
 			if (!canTarget) {
 				expect(onRouteSelected).toHaveBeenCalledWith('mparticle');
 				expect(createPurchase).toHaveBeenCalledTimes(1);

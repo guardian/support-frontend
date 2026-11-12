@@ -30,7 +30,7 @@ let processing = false;
 let sdk: MParticleSdk | undefined;
 let initialization: Promise<void> | undefined;
 let initialized = false;
-const attemptedOrders = new Set<string>();
+const routedOrders = new Set<string>();
 
 function isCurrent(conversion: PendingConversion): boolean {
 	return (
@@ -50,24 +50,59 @@ function updateGoogleConsent(granted: boolean): void {
 	});
 }
 
-function selectRoute(conversion: PendingConversion): void {
-	if (pending !== conversion || conversion.route) {
+function selectGtmRoute(
+	conversion: PendingConversion,
+	discardIfNotPermitted = false,
+): void {
+	if (pending !== conversion) {
 		return;
 	}
-	if (hasConsent) {
-		try {
-			conversion.purchase = conversion.createPurchase();
-			conversion.route = 'mparticle';
-			conversion.onRouteSelected('mparticle');
-			void dispatch();
-		} catch {
+	if (!hasGoogleTagManagerConsent) {
+		if (discardIfNotPermitted) {
 			pending = undefined;
-			logException('mParticle conversion tracking failed');
 		}
-	} else if (hasGoogleConsent && hasGoogleTagManagerConsent) {
+		return;
+	}
+	try {
+		const purchase = conversion.purchase;
+		if (purchase && routedOrders.has(purchase.orderId)) {
+			pending = undefined;
+			return;
+		}
 		conversion.route = 'gtm';
 		pending = undefined;
+		if (purchase) {
+			routedOrders.add(purchase.orderId);
+		}
 		conversion.onRouteSelected('gtm');
+	} catch {
+		pending = undefined;
+		logException('mParticle conversion tracking failed');
+	}
+}
+
+function selectRoute(conversion: PendingConversion): void {
+	if (pending !== conversion || conversion.route === 'gtm') {
+		return;
+	}
+	if (hasConsent && !stoppedUntilReload) {
+		if (conversion.route === 'mparticle') {
+			return;
+		}
+		try {
+			const purchase = conversion.createPurchase();
+			if (routedOrders.has(purchase.orderId)) {
+				pending = undefined;
+				return;
+			}
+			conversion.purchase = purchase;
+			conversion.route = 'mparticle';
+			void dispatch();
+		} catch {
+			selectGtmRoute(conversion);
+		}
+	} else {
+		selectGtmRoute(conversion);
 	}
 }
 
@@ -93,7 +128,7 @@ async function dispatch(): Promise<void> {
 		pending = undefined;
 		return;
 	}
-	if (attemptedOrders.has(purchase.orderId)) {
+	if (routedOrders.has(purchase.orderId)) {
 		pending = undefined;
 		return;
 	}
@@ -114,6 +149,7 @@ async function dispatch(): Promise<void> {
 		initialized = true;
 		if (!hasConsent) {
 			optOut();
+			selectGtmRoute(conversion, true);
 			return;
 		}
 		if (pending !== conversion) {
@@ -122,13 +158,14 @@ async function dispatch(): Promise<void> {
 		sdk.setOptOut(false);
 		sdk.setConsent(true);
 		pending = undefined;
-		// Mark before dispatch: a thrown error cannot prove Google received nothing.
-		attemptedOrders.add(purchase.orderId);
+		// Once the native event is committed, a thrown error cannot prove it was not sent.
+		routedOrders.add(purchase.orderId);
+		conversion.onRouteSelected('mparticle');
 		sdk.logPurchase(purchase);
 		sdk.upload();
 	} catch {
 		if (pending === conversion) {
-			pending = undefined;
+			selectGtmRoute(conversion, true);
 		}
 		logException('mParticle conversion tracking failed');
 	} finally {
@@ -149,9 +186,7 @@ export function trackMParticleConversion(
 		createPurchase,
 		onRouteSelected,
 	};
-	if (!stoppedUntilReload) {
-		pending = conversion;
-	}
+	pending = conversion;
 	if (!observingConsent) {
 		observingConsent = true;
 		try {
@@ -167,8 +202,10 @@ export function trackMParticleConversion(
 					// The kit caches Google consent separately. Do not resume with a
 					// stale cache after withdrawal; a reload starts a fresh lifecycle.
 					stoppedUntilReload = true;
-					pending = undefined;
 					optOut();
+					if (pending) {
+						selectGtmRoute(pending, true);
+					}
 				}
 				if (initialization && previouslyGoogleGranted !== hasGoogleConsent) {
 					updateGoogleConsent(hasGoogleConsent);
@@ -178,15 +215,9 @@ export function trackMParticleConversion(
 				}
 			});
 		} catch {
-			if (pending === conversion) {
-				pending = undefined;
-			}
 			hasConsent = false;
 			logException('mParticle consent unavailable');
-			if (!conversion.route) {
-				conversion.route = 'gtm';
-				conversion.onRouteSelected('gtm');
-			}
+			selectGtmRoute(conversion, true);
 		}
 	}
 	if (pending === conversion) {
@@ -195,7 +226,11 @@ export function trackMParticleConversion(
 	void dispatch();
 	return () => {
 		if (pending === conversion) {
-			pending = undefined;
+			if (conversion.route === 'mparticle') {
+				selectGtmRoute(conversion, true);
+			} else {
+				pending = undefined;
+			}
 		}
 	};
 }

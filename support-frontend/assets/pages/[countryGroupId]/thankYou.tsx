@@ -59,6 +59,7 @@ function ThankYouConversionTracking({
 	const { enableMParticleConversions } = useFeatureSwitches();
 	const order = getThankYouOrder();
 	const hasSuccessfulOrder = order?.status === 'success';
+	const conversionValue = order?.finalAmount ?? payment.finalAmount;
 	const paymentMethod =
 		order?.paymentMethod === 'StripeExpressCheckoutElement'
 			? 'Stripe'
@@ -81,7 +82,7 @@ function ThankYouConversionTracking({
 				mParticleConfig,
 				() => ({
 					orderId: getOrderId(),
-					value: payment.finalAmount,
+					value: conversionValue,
 					currency: currencyKey,
 					paymentMethod: paymentMethod ?? 'None',
 					contributionType:
@@ -94,7 +95,7 @@ function ThankYouConversionTracking({
 				}),
 				(source) =>
 					successfulContributionConversion(
-						payment.finalAmount,
+						conversionValue,
 						contributionType,
 						currencyKey,
 						paymentMethod ?? 'None',
@@ -104,7 +105,7 @@ function ThankYouConversionTracking({
 			);
 		}
 		successfulContributionConversion(
-			payment.finalAmount,
+			conversionValue,
 			contributionType,
 			currencyKey,
 			paymentMethod ?? 'None',
@@ -119,7 +120,7 @@ function ThankYouConversionTracking({
 		conversionProductKey,
 		currencyKey,
 		hasSuccessfulOrder,
-		payment.finalAmount,
+		conversionValue,
 		paymentMethod,
 		ratePlanKey,
 	]);
