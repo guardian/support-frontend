@@ -27,7 +27,10 @@ import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNud
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import { buildBackButtonPath } from '../checkout/helpers/backButton';
+import {
+	addSourceContextToPath,
+	buildBackButtonPath,
+} from '../checkout/helpers/backButton';
 import {
 	getBenefitsChecklist,
 	getProductBenefitsChecklist,
@@ -158,7 +161,7 @@ export default function CheckoutSummary({
 	const backUrl =
 		backButtonOrigin +
 		parameteriseUrl(
-			`/${supportRegionId}${backButtonPath}`,
+			addSourceContextToPath(`/${supportRegionId}${backButtonPath}`),
 			promotion?.promoCode,
 			getPaperFulfilmentOption(productKey),
 		);
