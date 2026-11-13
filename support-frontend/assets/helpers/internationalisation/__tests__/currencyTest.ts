@@ -6,7 +6,7 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
-import { detect } from '../currency';
+import { detect, fromCountry } from '../currency';
 
 let mockCurrency: CurrencyCode | null | undefined = null;
 jest.mock('helpers/urls/url', () => ({
@@ -45,5 +45,14 @@ describe('detect currency', () => {
 	it('should return the currency for the supplied country group if there is no query parameter set (EURCountries)', () => {
 		mockCurrency = null;
 		expect(detect(EURCountries)).toEqual('EUR');
+	});
+});
+
+describe('fromCountry', () => {
+	it('should return the currency for a country', () => {
+		expect(fromCountry('GB')).toEqual('GBP');
+		expect(fromCountry('US')).toEqual('USD');
+		expect(fromCountry('AU')).toEqual('AUD');
+		expect(fromCountry('NZ')).toEqual('NZD');
 	});
 });

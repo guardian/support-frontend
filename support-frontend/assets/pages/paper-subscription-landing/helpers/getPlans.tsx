@@ -11,7 +11,7 @@ import { extendedGlyph } from 'helpers/internationalisation/currency';
 import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
 import { getAppliedPromotion } from 'helpers/productPrice/appliedPromotion';
 import { getDiscountedPrice } from 'helpers/productPrice/discountedPrice';
-import { getDiscountVsRetail } from 'helpers/productPrice/productPrices';
+import { getDiscountVsRetail } from 'helpers/productPrice/paperSavingsVsRetail';
 import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import {
 	fixDecimals,

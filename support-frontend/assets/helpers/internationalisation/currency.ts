@@ -1,18 +1,27 @@
 // ----- Imports ----- //
 
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
+import {
+	countryGroups,
+	GBPCountries,
+} from '@modules/internationalisation/countryGroup';
 import {
 	type CurrencyCode,
 	getCurrencyByCode,
 } from '@modules/internationalisation/currency';
 import { getQueryParameter } from 'helpers/urls/url';
+import { CountryGroup } from './classes/countryGroup';
 
 // ----- Functions ----- //
 function fromCountryGroupId(countryGroupId: CountryGroupId): CurrencyCode {
 	const countryGroup = countryGroups[countryGroupId];
 
 	return countryGroup.currency;
+}
+
+function fromCountry(country: CountryCode): CurrencyCode {
+	return fromCountryGroupId(CountryGroup.fromCountry(country) ?? GBPCountries);
 }
 
 function fromString(s: string): CurrencyCode | null | undefined {
@@ -60,4 +69,4 @@ const extendedGlyph = (c: CurrencyCode): string =>
 	getCurrencyByCode(c).extendedGlyph;
 
 // ----- Exports ----- //
-export { detect, fromCountryGroupId, glyph, extendedGlyph };
+export { detect, fromCountry, fromCountryGroupId, glyph, extendedGlyph };
