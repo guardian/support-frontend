@@ -12,6 +12,7 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
+import { fromCountry } from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -27,7 +28,6 @@ import type { CsrfState } from 'helpers/types/csrf';
 import { getManageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { getCurrency } from '../../helpers/productPrice/productPrices';
 import AppDownload from './appDownload/AppDownload';
 import AppDownloadBadges from './appDownload/AppDownloadBadges';
 import {
@@ -348,7 +348,7 @@ export const getThankYouModuleData = ({
 				<WhatNext
 					productKey={productKey}
 					ratePlanKey={ratePlanKey}
-					currency={getCurrency(countryId)}
+					currency={fromCountry(countryId)}
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}
