@@ -142,7 +142,7 @@ const discountSummaryCopy = (
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const formattedPromotionPrice = simpleFormatAmount(
 		currency,
-		getPromotionDiscountedPrice(promotion, price, billingPeriod) ?? 0,
+		getPromotionDiscountedPrice(promotion, price, billingPeriod),
 	);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const duration =

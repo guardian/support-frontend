@@ -215,12 +215,13 @@ export function ThreeTierCard({
 		? calculateWeeklyPrice(price, billingPeriod)
 		: price;
 
-	const promotionPrice =
-		promotion && getPromotionDiscountedPrice(promotion, price, billingPeriod);
+	const promotionPrice = promotion
+		? getPromotionDiscountedPrice(promotion, price, billingPeriod)
+		: price;
 	const mainDiscountedPrice = promotion
 		? showWeeklyPrice
-			? calculateWeeklyPrice(promotionPrice ?? price, billingPeriod)
-			: promotionPrice ?? price
+			? calculateWeeklyPrice(promotionPrice, billingPeriod)
+			: promotionPrice
 		: undefined;
 
 	const formattedMainPrice = simpleFormatAmount(currency, mainPrice);

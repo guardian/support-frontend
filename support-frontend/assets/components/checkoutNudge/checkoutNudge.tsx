@@ -133,13 +133,13 @@ export function CheckoutNudge({
 	const ratePlanDescription = ratePlan === 'Monthly' ? 'month' : 'year';
 
 	const originalPrice = `${currency.glyph}${amount.toString()}`;
-	const discountedPrice =
-		promotion &&
-		getPromotionDiscountedPrice(
-			promotion,
-			amount,
-			ratePlanToBillingPeriod(ratePlan),
-		);
+	const discountedPrice = promotion?.discount
+		? getPromotionDiscountedPrice(
+				promotion,
+				amount,
+				ratePlanToBillingPeriod(ratePlan),
+		  )
+		: undefined;
 	const displayPrice = discountedPrice
 		? simpleFormatAmount(currency, discountedPrice)
 		: originalPrice;
