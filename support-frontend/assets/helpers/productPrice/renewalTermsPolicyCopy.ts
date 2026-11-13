@@ -19,12 +19,12 @@ const digitalAndPrintAnnual = (fullPrice: number): string => {
 	);
 	return `Subscription auto-renews annually. Pay £${fullPrice}/year, unless you cancel. Equivalent to £${monthlyEquivalent}/month. We'll remind you every year, 2 weeks before your renewal date.`;
 };
-const printQuarterly = (amount: number) => {
+const printQuarterly = (fullPrice: number) => {
 	const monthlyEquivalent = monthlyEquivalentPrice(
-		amount,
+		fullPrice,
 		BillingPeriod.Quarterly,
 	);
-	return `Subscription auto-renews quarterly. Pay £${amount}/quarter, unless you cancel. Equivalent to £${monthlyEquivalent}/month for each quarter. We'll remind you every 6 months, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews quarterly. Pay £${fullPrice}/quarter, unless you cancel. Equivalent to £${monthlyEquivalent}/month for each quarter. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 };
 
 const promotionDigitalMonthly = (
@@ -84,69 +84,72 @@ export type Policy = Partial<
 	Record<ActiveProductKey, Partial<Record<ActiveRatePlanKey, string>>>
 >;
 
-function getRenewalTerms(amount: number): Policy {
+function getRenewalTerms(fullPrice: number): Policy {
 	return {
 		Contribution: {
-			Monthly: contributionMonthly(amount),
-			Annual: digitalAndPrintAnnual(amount),
+			Monthly: contributionMonthly(fullPrice),
+			Annual: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianAdLite: {
-			Monthly: digitalAndPrintMonthly(amount),
+			Monthly: digitalAndPrintMonthly(fullPrice),
 		},
 		SupporterPlus: {
-			Monthly: digitalAndPrintMonthly(amount),
-			MonthlyTaxExclusive: digitalAndPrintMonthly(amount),
-			Annual: digitalAndPrintAnnual(amount),
-			AnnualTaxExclusive: digitalAndPrintAnnual(amount),
+			Monthly: digitalAndPrintMonthly(fullPrice),
+			MonthlyTaxExclusive: digitalAndPrintMonthly(fullPrice),
+			Annual: digitalAndPrintAnnual(fullPrice),
+			AnnualTaxExclusive: digitalAndPrintAnnual(fullPrice),
 		},
 		DigitalSubscription: {
-			Monthly: digitalAndPrintMonthly(amount),
-			MonthlyTaxExclusive: digitalAndPrintMonthly(amount),
-			Annual: digitalAndPrintAnnual(amount),
-			AnnualTaxExclusive: digitalAndPrintAnnual(amount),
+			Monthly: digitalAndPrintMonthly(fullPrice),
+			MonthlyTaxExclusive: digitalAndPrintMonthly(fullPrice),
+			Annual: digitalAndPrintAnnual(fullPrice),
+			AnnualTaxExclusive: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianWeeklyDomestic: {
-			MonthlyPlus: digitalAndPrintMonthly(amount),
-			QuarterlyPlus: printQuarterly(amount),
-			AnnualPlus: digitalAndPrintAnnual(amount),
+			MonthlyPlus: digitalAndPrintMonthly(fullPrice),
+			QuarterlyPlus: printQuarterly(fullPrice),
+			AnnualPlus: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianWeeklyRestOfWorld: {
-			MonthlyPlus: digitalAndPrintMonthly(amount),
-			QuarterlyPlus: printQuarterly(amount),
-			AnnualPlus: digitalAndPrintAnnual(amount),
+			MonthlyPlus: digitalAndPrintMonthly(fullPrice),
+			QuarterlyPlus: printQuarterly(fullPrice),
+			AnnualPlus: digitalAndPrintAnnual(fullPrice),
 		},
 		SubscriptionCard: {
-			EverydayPlus: digitalAndPrintMonthly(amount),
-			SixdayPlus: digitalAndPrintMonthly(amount),
-			WeekendPlus: digitalAndPrintMonthly(amount),
-			SaturdayPlus: digitalAndPrintMonthly(amount),
-			Sunday: digitalAndPrintMonthly(amount),
+			EverydayPlus: digitalAndPrintMonthly(fullPrice),
+			SixdayPlus: digitalAndPrintMonthly(fullPrice),
+			WeekendPlus: digitalAndPrintMonthly(fullPrice),
+			SaturdayPlus: digitalAndPrintMonthly(fullPrice),
+			Sunday: digitalAndPrintMonthly(fullPrice),
 		},
 		HomeDelivery: {
-			EverydayPlus: digitalAndPrintMonthly(amount),
-			SixdayPlus: digitalAndPrintMonthly(amount),
-			WeekendPlus: digitalAndPrintMonthly(amount),
-			SaturdayPlus: digitalAndPrintMonthly(amount),
-			Sunday: digitalAndPrintMonthly(amount),
+			EverydayPlus: digitalAndPrintMonthly(fullPrice),
+			SixdayPlus: digitalAndPrintMonthly(fullPrice),
+			WeekendPlus: digitalAndPrintMonthly(fullPrice),
+			SaturdayPlus: digitalAndPrintMonthly(fullPrice),
+			Sunday: digitalAndPrintMonthly(fullPrice),
 		},
 	};
 }
 
 function getPromotionalRenewalTerms(
-	amount: number,
+	fullPrice: number,
 	promotion: Promotion,
 ): Policy {
-	const promotionAnnualTerms = promotionAnnual(amount, promotion);
+	const promotionAnnualTerms = promotionAnnual(fullPrice, promotion);
 	const promotionDigitalMonthlyTerms = promotionDigitalMonthly(
-		amount,
+		fullPrice,
 		promotion,
 	);
-	const promotionPrintMonthlyTerms = promotionPrintMonthly(amount, promotion);
+	const promotionPrintMonthlyTerms = promotionPrintMonthly(
+		fullPrice,
+		promotion,
+	);
 	const promotionPrintQuarterlyTerms = promotionPrintQuarterly(
-		amount,
+		fullPrice,
 		promotion,
 	);
-	const promotionObserverMonthlyTerms = promotionObserverMonthly(amount);
+	const promotionObserverMonthlyTerms = promotionObserverMonthly(fullPrice);
 	return {
 		GuardianAdLite: {
 			Monthly: promotionDigitalMonthlyTerms,
