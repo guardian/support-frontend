@@ -219,9 +219,10 @@ export function ContributionsOrderSummary({
 	const fullPrice =
 		studentDiscount?.fullPriceWithCurrency ??
 		simpleFormatAmount(currency, originalAmount);
+	const billingPeriodObj = ratePlanToBillingPeriod(ratePlanKey);
 	const promotionPrice =
 		promotion &&
-		getPromotionDiscountedPrice(promotion, originalAmount, billingPeriod);
+		getPromotionDiscountedPrice(promotion, originalAmount, billingPeriodObj);
 	const promoDiscountPrice =
 		promotion && simpleFormatAmount(currency, promotionPrice ?? originalAmount);
 	const discountPrice =
@@ -257,8 +258,6 @@ export function ContributionsOrderSummary({
 				promotion.discount.amount
 		  }% for ${getDiscountDurationText(promotion.discount.durationMonths)}`
 		: null;
-
-	const billingPeriodObj = ratePlanToBillingPeriod(ratePlanKey);
 
 	const weeklyPrice =
 		isWeeklyPricing && !isWeeklyGift && !isWeeklyDigital && !isWeekly
