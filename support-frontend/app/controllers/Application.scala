@@ -228,30 +228,36 @@ class Application(
       isTestUser: Boolean,
       queryPromos: List[String],
       maybeCountryGroup: Option[CountryGroup],
+      geoData: GeoData,
   ): Seq[PromoWithCatalogInformation] =
-    getPromotionsForCodes(isTestUser, queryPromos ++ defaultPromotionService.allPromoCodes, maybeCountryGroup)
+    getPromotionsForCodes(isTestUser, queryPromos ++ defaultPromotionService.allPromoCodes, maybeCountryGroup, geoData)
 
   // Kept separate from the page promotions so that nudge promo codes are only applied via the nudge
   private def getCheckoutNudgePromotions(
       isTestUser: Boolean,
       maybeCountryGroup: Option[CountryGroup],
+      geoData: GeoData,
   )(implicit settings: AllSettings): Seq[PromoWithCatalogInformation] = {
     val checkoutNudgePromoCodes = settings.checkoutNudgeTests
       .filter(_.status == Live)
       .flatMap(_.variants)
       .flatMap(_.promoCodes.getOrElse(Nil))
-    getPromotionsForCodes(isTestUser, checkoutNudgePromoCodes, maybeCountryGroup)
+    getPromotionsForCodes(isTestUser, checkoutNudgePromoCodes, maybeCountryGroup, geoData)
   }
 
   private def getPromotionsForCodes(
       isTestUser: Boolean,
       promoCodes: List[String],
       maybeCountryGroup: Option[CountryGroup],
+      geoData: GeoData,
   ): Seq[PromoWithCatalogInformation] =
     maybeCountryGroup
       .map { countryGroup =>
         val promotions = cachedPromotionsServiceProvider.forUser(isTestUser).getActive(promoCodes.distinct)
-        ApplicablePromotions.filterByCountryGroup(promotions, countryGroup)
+        geoData.country.filter(countryGroup.countries.contains) match {
+          case Some(country) => ApplicablePromotions.filterByCountry(promotions, country)
+          case None => ApplicablePromotions.filterByCountryGroup(promotions, countryGroup)
+        }
       }
       .getOrElse(Nil)
 
@@ -460,7 +466,7 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryCode))
+    val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryCode), geoData)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
@@ -630,8 +636,9 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryGroupId))
-    val checkoutNudgePromotions = getCheckoutNudgePromotions(isTestUser, CountryGroup.byId(countryGroupId))
+    val countryGroup = CountryGroup.byId(countryGroupId)
+    val promotions = getPromotions(isTestUser, queryPromos, countryGroup, geoData)
+    val checkoutNudgePromotions = getCheckoutNudgePromotions(isTestUser, countryGroup, geoData)
 
     Ok(
       views.html.router(
@@ -675,13 +682,14 @@ class Application(
   def appConfigJson: Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val isTestUser = testUserService.isTestUser(request)
+    val geoData = request.geoData
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
-    val promotions = getPromotions(isTestUser, queryPromos, request.geoData.countryGroup)
-    val checkoutNudgePromotions = getCheckoutNudgePromotions(isTestUser, request.geoData.countryGroup)
+    val promotions = getPromotions(isTestUser, queryPromos, geoData.countryGroup, geoData)
+    val checkoutNudgePromotions = getCheckoutNudgePromotions(isTestUser, geoData.countryGroup, geoData)
 
     val appConfig = AppConfig.fromConfig(
-      geoData = request.geoData,
+      geoData = geoData,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),

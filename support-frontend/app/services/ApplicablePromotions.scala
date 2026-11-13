@@ -1,6 +1,6 @@
 package services
 
-import com.gu.i18n.CountryGroup
+import com.gu.i18n.{Country, CountryGroup}
 import com.gu.support.promotions.PromoWithCatalogInformation
 import org.joda.time.DateTime
 
@@ -33,6 +33,13 @@ object ApplicablePromotions {
       now: DateTime = DateTime.now(),
   ): Seq[PromoWithCatalogInformation] =
     promotions.filter(promotion => isActive(promotion, now) && appliesToCountryGroup(promotion, countryGroup))
+
+  def filterByCountry(
+      promotions: Seq[PromoWithCatalogInformation],
+      country: Country,
+      now: DateTime = DateTime.now(),
+  ): Seq[PromoWithCatalogInformation] =
+    promotions.filter(promotion => isActive(promotion, now) && promotion.appliesTo.countries.contains(country))
 
   private def isActive(promotion: PromoWithCatalogInformation, now: DateTime): Boolean = {
     val hasStarted = now.isEqual(promotion.startTimestamp) || now.isAfter(promotion.startTimestamp)
