@@ -3,8 +3,34 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import {
+	getNumberOfMonthsInBillingPeriod,
+	ratePlanToBillingPeriod,
+} from './billingPeriods';
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 import type { Promotion } from './promotions';
+
+const getPromotionExpiryDate = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	discountBillingPeriods: number,
+): Date => {
+	const startDate = getProductFirstDeliveryDate(productKey) ?? new Date();
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
+	const monthsInPeriod =
+		discountBillingPeriods * getNumberOfMonthsInBillingPeriod(billingPeriod);
+	const promotionExpiryDate = new Date(
+		startDate.setMonth(startDate.getMonth() + monthsInPeriod),
+	);
+	console.log(
+		`*** getPromotionExpiryDate [${productKey}][${ratePlanKey}/${billingPeriod}][periods:${discountBillingPeriods}] monthsInPeriod:${monthsInPeriod} promotionExpiryDate:${formatUserDate(
+			promotionExpiryDate,
+		)}`,
+	);
+	return promotionExpiryDate;
+};
 
 const contributionMonthly = (fullPrice: number): string => {
 	return `We will attempt to take payment of £${fullPrice}, on the 3rd day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
@@ -29,41 +55,50 @@ const printQuarterly = (fullPrice: number) => {
 
 const promotionDigitalMonthly = (
 	fullPrice: number,
+	promotionExpiry: Date,
 	promotion: Promotion,
 ): string => {
-	const { discountedPrice, numberOfDiscountedPeriods, expires } = promotion;
+	const { discountedPrice, numberOfDiscountedPeriods } = promotion;
 	const periods = numberOfDiscountedPeriods ?? 1;
-	console.log('*** promotion', promotion);
-	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${periods} ${
-		periods > 1 ? 'months' : 'month'
-	}, then £${fullPrice}/month from ${expires}, unless you cancel. We'll remind you 2 weeks before ${expires} then every 6 months, 2 weeks before your renewal date.`;
+	const periodName = periods > 1 ? 'months' : 'month';
+	const expiry = formatUserDate(promotionExpiry);
+	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${periods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionPrintMonthly = (
 	fullPrice: number,
+	promotionExpiry: Date,
 	promotion: Promotion,
 ): string => {
-	const { discountedPrice, numberOfDiscountedPeriods, expires } = promotion;
+	const { discountedPrice, numberOfDiscountedPeriods } = promotion;
 	const periods = numberOfDiscountedPeriods ?? 1;
 	const periodName = periods > 1 ? 'months' : 'month';
-	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for the first ${periods} ${periodName}, then £{${fullPrice}}/month from [${expires}], unless you cancel. We'll remind you 2 weeks before ${expires} then every 6 months, 2 weeks before your renewal date.`;
+	const expiry = formatUserDate(promotionExpiry);
+	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for the first ${periods} ${periodName}, then £{${fullPrice}}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionPrintQuarterly = (
 	fullPrice: number,
+	promotionExpiry: Date,
 	promotion: Promotion,
 ): string => {
-	const { discountedPrice, numberOfDiscountedPeriods, expires } = promotion;
+	const { discountedPrice, numberOfDiscountedPeriods } = promotion;
 	const periods = numberOfDiscountedPeriods ?? 1;
 	const periodName = periods > 1 ? 'quarters' : 'quarter';
+	const expiry = formatUserDate(promotionExpiry);
 	const discountMonthlyEquivalent = monthlyEquivalentPrice(
 		discountedPrice ?? 0,
 		BillingPeriod.Quarterly,
 	);
-	return `Subscription auto-renews quarterly. Pay £${discountedPrice}/quarter for ${periods} $${periodName}, then £${fullPrice}/quarter from ${expires}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} $${periodName}, then £${fullPrice}/month for each quarter after. We'll remind you 2 weeks before ${expires} then every 6 months, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews quarterly. Pay £${discountedPrice}/quarter for ${periods} $${periodName}, then £${fullPrice}/quarter from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} $${periodName}, then £${fullPrice}/month for each quarter after. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
-const promotionAnnual = (fullPrice: number, promotion: Promotion): string => {
-	const { discountedPrice, numberOfDiscountedPeriods, expires } = promotion;
+const promotionAnnual = (
+	fullPrice: number,
+	promotionExpiry: Date,
+	promotion: Promotion,
+): string => {
+	const { discountedPrice, numberOfDiscountedPeriods } = promotion;
 	const periods = numberOfDiscountedPeriods ?? 1;
 	const periodName = periods > 1 ? 'years' : 'year';
+	const expiry = formatUserDate(promotionExpiry);
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Annual,
@@ -72,8 +107,7 @@ const promotionAnnual = (fullPrice: number, promotion: Promotion): string => {
 		discountedPrice ?? 0,
 		BillingPeriod.Annual,
 	);
-
-	return `Subscription auto-renews annually. Pay £${fullPrice}/year for ${periods} $${periodName}, then £${fullPrice}/year from ${expires}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then ${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews annually. Pay £${fullPrice}/year for ${periods} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 };
 // TODO : Figma matches, is this Observer promotional Copy correct?
 const promotionObserverMonthly = (fullPrice: number): string => {
@@ -133,20 +167,34 @@ function getRenewalTerms(fullPrice: number): Policy {
 }
 
 function getPromotionalRenewalTerms(
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
 	promotion: Promotion,
 ): Policy {
-	const promotionAnnualTerms = promotionAnnual(fullPrice, promotion);
+	const promotionExpiryDate = getPromotionExpiryDate(
+		productKey,
+		ratePlanKey,
+		promotion.numberOfDiscountedPeriods ?? 0,
+	);
+	const promotionAnnualTerms = promotionAnnual(
+		fullPrice,
+		promotionExpiryDate,
+		promotion,
+	);
 	const promotionDigitalMonthlyTerms = promotionDigitalMonthly(
 		fullPrice,
+		promotionExpiryDate,
 		promotion,
 	);
 	const promotionPrintMonthlyTerms = promotionPrintMonthly(
 		fullPrice,
+		promotionExpiryDate,
 		promotion,
 	);
 	const promotionPrintQuarterlyTerms = promotionPrintQuarterly(
 		fullPrice,
+		promotionExpiryDate,
 		promotion,
 	);
 	const promotionObserverMonthlyTerms = promotionObserverMonthly(fullPrice);
@@ -156,11 +204,15 @@ function getPromotionalRenewalTerms(
 		},
 		SupporterPlus: {
 			Monthly: promotionDigitalMonthlyTerms,
-			AnnualPlus: promotionAnnualTerms,
+			MonthlyTaxExclusive: promotionDigitalMonthlyTerms,
+			Annual: promotionAnnualTerms,
+			AnnualTaxExclusive: promotionAnnualTerms,
 		},
 		DigitalSubscription: {
 			Monthly: promotionDigitalMonthlyTerms,
-			AnnualPlus: promotionAnnualTerms,
+			MonthlyTaxExclusive: promotionDigitalMonthlyTerms,
+			Annual: promotionAnnualTerms,
+			AnnualTaxExclusive: promotionAnnualTerms,
 		},
 		GuardianWeeklyDomestic: {
 			MonthlyPlus: promotionPrintMonthlyTerms,
@@ -192,10 +244,12 @@ function getPromotionalRenewalTerms(
 export function getRenewalTermsPolicyCopy(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	amount: number,
+	fullPrice: number,
 	promotion?: Promotion,
 ) {
 	return promotion
-		? getPromotionalRenewalTerms(amount, promotion)[productKey]?.[ratePlanKey]
-		: getRenewalTerms(amount)[productKey]?.[ratePlanKey];
+		? getPromotionalRenewalTerms(productKey, ratePlanKey, fullPrice, promotion)[
+				productKey
+		  ]?.[ratePlanKey]
+		: getRenewalTerms(fullPrice)[productKey]?.[ratePlanKey];
 }
