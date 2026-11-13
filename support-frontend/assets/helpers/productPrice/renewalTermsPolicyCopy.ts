@@ -6,18 +6,18 @@ import type {
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 import type { Promotion } from './promotions';
 
-const contributionMonthly = (amount: number): string => {
-	return `We will attempt to take payment of £${amount}, on the 3rd day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
+const contributionMonthly = (fullPrice: number): string => {
+	return `We will attempt to take payment of £${fullPrice}, on the 3rd day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
 };
-const digitalAndPrintMonthly = (amount: number): string => {
-	return `Subscription auto-renews monthly. Pay £${amount}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
+const digitalAndPrintMonthly = (fullPrice: number): string => {
+	return `Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 };
-const digitalAndPrintAnnual = (amount: number): string => {
+const digitalAndPrintAnnual = (fullPrice: number): string => {
 	const monthlyEquivalent = monthlyEquivalentPrice(
-		amount,
+		fullPrice,
 		BillingPeriod.Annual,
 	);
-	return `Subscription auto-renews annually. Pay £${amount}/year, unless you cancel. Equivalent to £${monthlyEquivalent}/month. We'll remind you every year, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews annually. Pay £${fullPrice}/year, unless you cancel. Equivalent to £${monthlyEquivalent}/month. We'll remind you every year, 2 weeks before your renewal date.`;
 };
 const printQuarterly = (amount: number) => {
 	const monthlyEquivalent = monthlyEquivalentPrice(
@@ -28,46 +28,44 @@ const printQuarterly = (amount: number) => {
 };
 
 const promotionDigitalMonthly = (
-	amount: number,
+	fullPrice: number,
 	promotion: Promotion,
 ): string => {
-	const { numberOfDiscountedPeriods, expires } = promotion;
+	const { discountedPrice, numberOfDiscountedPeriods, expires } = promotion;
 	const periods = numberOfDiscountedPeriods ?? 1;
-	return `Subscription auto-renews monthly. Pay £${amount}/month for ${periods} [$${
+	console.log('*** promotion', promotion);
+	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${periods} ${
 		periods > 1 ? 'months' : 'month'
-	}], then £{${amount}}/month from [${expires}], unless you cancel. We'll remind you 2 weeks before ${expires} then every 6 months, 2 weeks before your renewal date.`;
+	}, then £${fullPrice}/month from ${expires}, unless you cancel. We'll remind you 2 weeks before ${expires} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionPrintMonthly = (
-	amount: number,
+	fullPrice: number,
 	promotion: Promotion,
 ): string => {
-	const { numberOfDiscountedPeriods, expires } = promotion;
+	const { discountedPrice, numberOfDiscountedPeriods, expires } = promotion;
 	const periods = numberOfDiscountedPeriods ?? 1;
-
-	return `Subscription auto-renews monthly. Pay £${amount}/month for the first ${periods} [$${
-		periods > 1 ? 'months' : 'month'
-	}], then £{${amount}}/month from [${expires}], unless you cancel. We'll remind you 2 weeks before ${expires} then every 6 months, 2 weeks before your renewal date.`;
+	const periodName = periods > 1 ? 'months' : 'month';
+	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for the first ${periods} ${periodName}, then £{${fullPrice}}/month from [${expires}], unless you cancel. We'll remind you 2 weeks before ${expires} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionPrintQuarterly = (
-	amount: number,
+	fullPrice: number,
 	promotion: Promotion,
 ): string => {
-	const { numberOfDiscountedPeriods, expires, discountedPrice } = promotion;
+	const { discountedPrice, numberOfDiscountedPeriods, expires } = promotion;
 	const periods = numberOfDiscountedPeriods ?? 1;
 	const periodName = periods > 1 ? 'quarters' : 'quarter';
 	const discountMonthlyEquivalent = monthlyEquivalentPrice(
 		discountedPrice ?? 0,
 		BillingPeriod.Quarterly,
 	);
-
-	return `Subscription auto-renews quarterly. Pay £${amount}/quarter for ${periods} $${periodName}, then £${amount}/quarter from ${expires}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} $${periodName}, then £${amount}/month for each quarter after. We'll remind you 2 weeks before ${expires} then every 6 months, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews quarterly. Pay £${discountedPrice}/quarter for ${periods} $${periodName}, then £${fullPrice}/quarter from ${expires}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} $${periodName}, then £${fullPrice}/month for each quarter after. We'll remind you 2 weeks before ${expires} then every 6 months, 2 weeks before your renewal date.`;
 };
-const promotionAnnual = (amount: number, promotion: Promotion): string => {
-	const { numberOfDiscountedPeriods, expires, discountedPrice } = promotion;
+const promotionAnnual = (fullPrice: number, promotion: Promotion): string => {
+	const { discountedPrice, numberOfDiscountedPeriods, expires } = promotion;
 	const periods = numberOfDiscountedPeriods ?? 1;
 	const periodName = periods > 1 ? 'years' : 'year';
 	const monthlyEquivalent = monthlyEquivalentPrice(
-		amount,
+		fullPrice,
 		BillingPeriod.Annual,
 	);
 	const discountMonthlyEquivalent = monthlyEquivalentPrice(
@@ -75,11 +73,11 @@ const promotionAnnual = (amount: number, promotion: Promotion): string => {
 		BillingPeriod.Annual,
 	);
 
-	return `Subscription auto-renews annually. Pay £${amount}/year for ${periods} $${periodName}, then £${amount}/year from ${expires}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then ${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews annually. Pay £${fullPrice}/year for ${periods} $${periodName}, then £${fullPrice}/year from ${expires}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then ${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 };
 // TODO : Figma matches, is this Observer promotional Copy correct?
-const promotionObserverMonthly = (amount: number): string => {
-	return `Subscription auto-renews monthly. Pay £${amount}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
+const promotionObserverMonthly = (fullPrice: number): string => {
+	return `Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 };
 
 export type Policy = Partial<
