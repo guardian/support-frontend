@@ -34,7 +34,6 @@ export interface OrderSummaryTsAndCsProps {
 	ratePlanDescription?: string;
 	promotion?: PromoWithCatalogInformation;
 	thresholdAmount?: number;
-	originalAmount?: number;
 	deliveryDate?: Date;
 }
 export function OrderSummaryTsAndCs({
@@ -44,7 +43,6 @@ export function OrderSummaryTsAndCs({
 	promotion,
 	ratePlanDescription,
 	thresholdAmount = 0,
-	originalAmount,
 	deliveryDate,
 }: OrderSummaryTsAndCsProps): JSX.Element {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
@@ -59,7 +57,6 @@ export function OrderSummaryTsAndCs({
 		billingPeriod,
 		'/',
 		thresholdAmount,
-		originalAmount ?? thresholdAmount,
 		promotion,
 	); // promoMessage expected to be a string like: "£10.49/month for the first 6 months, then £20.99/month"
 	const deliveryStart =
