@@ -313,7 +313,7 @@ function getPromotionalCancellation(
 	return promotionalCancellation(productKey, ratePlanKey, firstPayment);
 }
 
-export function getCancellationPolicy(
+function getCancellationPolicy(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	promotion?: Promotion,
