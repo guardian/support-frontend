@@ -66,6 +66,7 @@ import { getWeeklyDays } from 'pages/[countryGroupId]/checkout/helpers/deliveryD
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { PreContractInformation } from 'pages/supporter-plus-landing/components/preContractInformation';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { postcodeIsWithinM25 } from '../../../helpers/forms/deliveryCheck';
@@ -88,6 +89,7 @@ import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheck
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
+import { useDMCCLayout } from '../helpers/useDMCCLayout';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
@@ -187,6 +189,7 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+	const isDMCCA = useDMCCLayout();
 	const abParticipations = useAbParticipations();
 
 	const productCatalog = appConfig.productCatalog;
@@ -1236,15 +1239,25 @@ export default function CheckoutForm({
 									/>
 								)}
 						</div>
-						<SummaryTsAndCs
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							countryGroupId={countryGroupId}
-							ratePlanDescription={ratePlanDescription.label}
-							currency={currencyKey}
-							amount={originalAmount}
-							promotion={promotion}
-						/>
+						{isDMCCA ? (
+							<PreContractInformation
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								countryGroupId={countryGroupId}
+								amount={originalAmount}
+								promotion={promotion}
+							/>
+						) : (
+							<SummaryTsAndCs
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								countryGroupId={countryGroupId}
+								ratePlanDescription={ratePlanDescription.label}
+								currency={currencyKey}
+								amount={originalAmount}
+								promotion={promotion}
+							/>
+						)}
 						<MaybeEstimatedTaxSummary
 							payment={payment}
 							taxRateConfig={taxRateConfig}

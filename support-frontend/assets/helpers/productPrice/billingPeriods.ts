@@ -48,6 +48,18 @@ export function getBillingPeriodTitle(
 	}
 }
 
+export function getNumberOfMonthsInBillingPeriod(billingPeriod: BillingPeriod) {
+	switch (billingPeriod) {
+		case BillingPeriod.Monthly:
+			return 1;
+		case BillingPeriod.Quarterly:
+			return 3;
+		case BillingPeriod.Annual:
+			return 12;
+		default:
+			return 0; // OneTime has 0 months
+	}
+}
 export function getNumberOfMonthsInPeriod(
 	billingPeriod: RecurringBillingPeriod,
 ) {
