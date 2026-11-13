@@ -16,6 +16,7 @@ import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
 	BenefitsCheckList,
@@ -25,7 +26,7 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { type CardTheme } from 'helpers/landingPage/cardTheme';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import {
 	calculateWeeklyPrice,
 	getSanitisedHtml,
@@ -44,7 +45,7 @@ export type CardContent = LandingPageProductDescription & {
 	isDefaultProductSelected: boolean;
 	link: string;
 	price: number;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 };
 
 export type ThreeTierCardProps = {
@@ -214,10 +215,13 @@ export function ThreeTierCard({
 		? calculateWeeklyPrice(price, billingPeriod)
 		: price;
 
+	const promotionPrice = promotion
+		? getPromotionDiscountedPrice(promotion, price, billingPeriod)
+		: price;
 	const mainDiscountedPrice = promotion
 		? showWeeklyPrice
-			? calculateWeeklyPrice(promotion.discountedPrice ?? price, billingPeriod)
-			: promotion.discountedPrice ?? price
+			? calculateWeeklyPrice(promotionPrice, billingPeriod)
+			: promotionPrice
 		: undefined;
 
 	const formattedMainPrice = simpleFormatAmount(currency, mainPrice);
@@ -230,7 +234,8 @@ export function ThreeTierCard({
 		formattedMainDiscountedPrice ?? formattedMainPrice
 	} per ${periodLabel}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
-	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
+	const pillCopy =
+		promotion?.landingPage?.roundelHtml ?? cardContent.label?.copy;
 	const inAdditionToAllAccessDigital = product === 'DigitalSubscription';
 	const parsedBillingPeriodsCopy = parseBillingPeriodCopy(
 		billingPeriodsCopy ?? '',

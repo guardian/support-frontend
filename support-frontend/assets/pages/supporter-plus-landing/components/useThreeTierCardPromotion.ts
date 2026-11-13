@@ -1,15 +1,15 @@
 import type { Currency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { useEffect } from 'react';
 import { usePromoTerms } from 'contexts/PromoTermsContext';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	buildThreeTierCardPromoTerms,
 	discountSummaryCopy,
 } from 'helpers/productPrice/promotions';
 
 type UseThreeTierCardPromotionProps = {
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 	promoCount: number;
 	title: string;
 	price: number;
@@ -38,11 +38,7 @@ export function useThreeTierCardPromotion({
 		promotion && discountSummaryCopy(currency, price, promotion, billingPeriod);
 
 	useEffect(() => {
-		if (
-			!promotion?.discount ||
-			promotion.discountedPrice === undefined ||
-			!discountSummary
-		) {
+		if (!promotion?.discount || !discountSummary) {
 			return;
 		}
 		const description = buildThreeTierCardPromoTerms(
