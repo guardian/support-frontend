@@ -26,12 +26,16 @@ export const productLegal = (
 
 	if (promotion) {
 		// EXAMPLE: $8.50/month for the first 6 months, then $17/month
-		const promoPrice =
-			getPromotionDiscountedPrice(promotion, originalAmount, billingPeriod) ??
-			originalAmount;
+		const promoPrice = getPromotionDiscountedPrice(
+			promotion,
+			originalAmount,
+			billingPeriod,
+		);
 		const promoPriceFormatted = simpleFormatAmount(currency, promoPrice);
-		const discountDuration =
-			getPromotionDiscountedPeriods(promotion, billingPeriod) ?? 0;
+		const discountDuration = getPromotionDiscountedPeriods(
+			promotion,
+			billingPeriod,
+		);
 		return `${promoPriceFormatted}${divider}${periodNoun} for the first ${
 			discountDuration > 1 ? discountDuration : ''
 		} ${periodNoun}${discountDuration > 1 ? 's' : ''}, then ${amountPerPeriod}`;

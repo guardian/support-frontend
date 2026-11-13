@@ -26,15 +26,10 @@ export function toLegacyPromotion(
 		description: promotion.description ?? '',
 		promoCode: promotion.promoCode,
 		isIntroductoryPricing: promotion.isIntroductoryPricing ?? false,
-		discountedPrice: getPromotionDiscountedPrice(
-			promotion,
-			price,
-			billingPeriod,
-		),
-		numberOfDiscountedPeriods: getPromotionDiscountedPeriods(
-			promotion,
-			billingPeriod,
-		),
+		discountedPrice:
+			discount && getPromotionDiscountedPrice(promotion, price, billingPeriod),
+		numberOfDiscountedPeriods:
+			discount && getPromotionDiscountedPeriods(promotion, billingPeriod),
 		discount,
 		landingPage: landingPage && {
 			title: landingPage.title,

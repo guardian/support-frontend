@@ -9,20 +9,20 @@ export function getPromotionDiscountedPrice(
 	promotion: PromoWithCatalogInformation,
 	price: number,
 	billingPeriod: BillingPeriod,
-): number | undefined {
+): number {
 	return promotion.discount && billingPeriod !== BillingPeriod.OneTime
 		? getDiscountedPrice(price, promotion.discount, billingPeriod)
-		: undefined;
+		: price;
 }
 
 export function getPromotionDiscountedPeriods(
 	promotion: PromoWithCatalogInformation,
 	billingPeriod: BillingPeriod,
-): number | undefined {
+): number {
 	return promotion.discount && billingPeriod !== BillingPeriod.OneTime
 		? getNumberOfDiscountedPeriods(
 				promotion.discount.durationMonths,
 				billingPeriod,
 		  )
-		: undefined;
+		: 0;
 }
