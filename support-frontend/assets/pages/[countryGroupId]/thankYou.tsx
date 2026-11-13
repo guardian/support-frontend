@@ -121,10 +121,9 @@ export function ThankYou({
 				getQueryParameter('promoCode'),
 			);
 
-			const discountedPrice = promotion
+			const price = promotion
 				? getPromotionDiscountedPrice(promotion, productPrice, billingPeriod)
-				: undefined;
-			const price = discountedPrice ?? productPrice;
+				: productPrice;
 			/** SupporterPlus can have an additional contribution bolted onto the base price */
 			const finalAmount =
 				price + (productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);

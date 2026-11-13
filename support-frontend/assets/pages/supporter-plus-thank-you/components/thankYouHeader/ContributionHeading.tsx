@@ -60,14 +60,13 @@ export default function ContributionHeading({
 		getCurrencyByCode(currencyCode),
 		amount,
 	);
-	const promotionPrice =
-		(promotion &&
-			getPromotionDiscountedPrice(
+	const promotionPrice = promotion
+		? getPromotionDiscountedPrice(
 				promotion,
 				amount,
 				ratePlanToBillingPeriod(ratePlanKey),
-			)) ??
-		0;
+		  )
+		: 0;
 	const promotionDuration = promotion?.discount?.durationMonths ?? 0;
 	const promotionPriceWithCurrency = simpleFormatAmount(
 		getCurrencyByCode(currencyCode),

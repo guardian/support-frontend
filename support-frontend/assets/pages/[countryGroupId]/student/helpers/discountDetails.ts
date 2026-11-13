@@ -147,17 +147,14 @@ export function getStudentDiscount(
 	const productCatalogDiscountPrice = productCatalog.SupporterPlus?.ratePlans[
 		ratePlanKey
 	]?.pricing[currencyKey] as number;
-	const promotionPrice =
-		promotion &&
-		getPromotionDiscountedPrice(
-			promotion,
-			productCatalogDiscountPrice,
-			billingPeriod,
-		);
-	const discountPriceCurrency = simpleFormatAmount(
-		currency,
-		promotionPrice ?? productCatalogDiscountPrice,
-	);
+	const promotionPrice = promotion
+		? getPromotionDiscountedPrice(
+				promotion,
+				productCatalogDiscountPrice,
+				billingPeriod,
+		  )
+		: productCatalogDiscountPrice;
+	const discountPriceCurrency = simpleFormatAmount(currency, promotionPrice);
 	const discountPriceWithCurrency =
 		discountPriceCurrency !== fullPriceWithCurrency
 			? discountPriceCurrency
@@ -179,9 +176,9 @@ export function getStudentDiscount(
 			: undefined;
 
 	return {
-		amount:
-			promotionPrice ??
-			(productCatalogDiscountPrice || productCatalogFullPrice),
+		amount: promotion
+			? promotionPrice
+			: productCatalogDiscountPrice || productCatalogFullPrice,
 		discountPriceWithCurrency,
 		fullPriceWithCurrency,
 		periodNoun,
