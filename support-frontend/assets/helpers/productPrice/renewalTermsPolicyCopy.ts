@@ -98,19 +98,15 @@ const promotionAnnual = (
 	const periods = numberOfDiscountedPeriods ?? 1;
 	const periodName = periods > 1 ? 'years' : 'year';
 	const expiry = formatUserDate(promotionExpiry);
-	const monthlyEquivalent = monthlyEquivalentPrice(
-		fullPrice,
-		BillingPeriod.Annual,
-	);
 	const discountMonthlyEquivalent = monthlyEquivalentPrice(
 		discountedPrice ?? 0,
 		BillingPeriod.Annual,
 	);
+	const monthlyEquivalent = monthlyEquivalentPrice(
+		fullPrice,
+		BillingPeriod.Annual,
+	);
 	return `Subscription auto-renews annually. Pay £${fullPrice}/year for ${periods} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
-};
-// TODO : Figma matches, is this Observer promotional Copy correct?
-const promotionObserverMonthly = (fullPrice: number): string => {
-	return `Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 };
 
 export type Policy = Partial<
@@ -196,7 +192,6 @@ function getPromotionalRenewalTerms(
 		promotionExpiryDate,
 		promotion,
 	);
-	const promotionObserverMonthlyTerms = promotionObserverMonthly(fullPrice);
 	return {
 		GuardianAdLite: {
 			Monthly: promotionDigitalMonthlyTerms,
@@ -228,14 +223,14 @@ function getPromotionalRenewalTerms(
 			SixdayPlus: promotionPrintMonthlyTerms,
 			WeekendPlus: promotionPrintMonthlyTerms,
 			SaturdayPlus: promotionPrintMonthlyTerms,
-			Sunday: promotionObserverMonthlyTerms,
+			Sunday: promotionPrintMonthlyTerms,
 		},
 		HomeDelivery: {
 			EverydayPlus: promotionPrintMonthlyTerms,
 			SixdayPlus: promotionPrintMonthlyTerms,
 			WeekendPlus: promotionPrintMonthlyTerms,
 			SaturdayPlus: promotionPrintMonthlyTerms,
-			Sunday: promotionObserverMonthlyTerms,
+			Sunday: promotionPrintMonthlyTerms,
 		},
 	};
 }
