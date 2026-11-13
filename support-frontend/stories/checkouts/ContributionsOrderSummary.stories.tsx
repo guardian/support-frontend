@@ -273,7 +273,14 @@ DigitalPlusWithTaxAndDiscount.args = {
 		name: 'Digital Plus Promo',
 		description: '50% off for six months',
 		promoCode: 'TEST_PROMO',
-		discountedPrice: 15,
+		campaignCode: 'TEST_CAMPAIGN',
+		appliesTo: {
+			productRatePlanIds: [],
+			countries: ['GB'],
+			catalogRatePlans: [],
+		},
+		startTimestamp: '2025-01-01T00:00:00.000Z',
+		endTimestamp: '2026-01-01T00:00:00.000Z',
 		discount: {
 			amount: 50,
 			durationMonths: 6,
@@ -452,7 +459,14 @@ WeeklyPricingWithPromotion.args = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: 'TEST_PROMO',
-		discountedPrice: 8,
+		campaignCode: 'TEST_CAMPAIGN',
+		appliesTo: {
+			productRatePlanIds: [],
+			countries: ['GB'],
+			catalogRatePlans: [],
+		},
+		startTimestamp: '2025-01-01T00:00:00.000Z',
+		endTimestamp: '2026-01-01T00:00:00.000Z',
 		discount: {
 			amount: 33,
 			durationMonths: 6,

@@ -22,8 +22,9 @@ import {
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
+import { getAppliedPromotion } from 'helpers/productPrice/appliedPromotion';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
+import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import { getEstimatedSalesTaxConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
@@ -126,17 +127,16 @@ export function Checkout({
 			return <div>Price not found in product catalog</div>;
 		}
 
-		promotion = getLegacyPromotion({
-			promotions: appConfig.promotions ?? [],
+		promotion = getAppliedPromotion(
+			appConfig.promotions ?? [],
 			productKey,
 			ratePlanKey,
-			price: productPrice,
-			billingPeriod,
-			promoCode: getQueryParameter('promoCode'),
-		});
+			getQueryParameter('promoCode'),
+		);
 
-		const discountedPrice = promotion?.discountedPrice ?? undefined;
-		const price = discountedPrice ?? productPrice;
+		const price = promotion
+			? getPromotionDiscountedPrice(promotion, productPrice, billingPeriod)
+			: productPrice;
 		/** SupporterPlus can have an additional contribution bolted onto the base price */
 		const finalAmount =
 			price + (productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);

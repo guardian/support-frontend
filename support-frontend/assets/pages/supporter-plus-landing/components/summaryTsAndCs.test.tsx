@@ -1,11 +1,11 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { render } from '@testing-library/react';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { SummaryTsAndCs } from './summaryTsAndCs';
 
 // Mocking price retrieval from productCatalog (not available in window at runtime)
@@ -22,12 +22,19 @@ const ratePlanDescription: Partial<
 	Sunday: 'The Observer',
 };
 
-const promotionUSDSupporterPlus: Promotion = {
+const promotionUSDSupporterPlus: PromoWithCatalogInformation = {
 	name: 'Supporter Plus Promo',
 	description: 'USD offer for Supporter Plus',
 	promoCode: 'S_PLUS_MONTHLY_BAU_USDCAN',
-	numberOfDiscountedPeriods: 6,
-	discountedPrice: 15,
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: {
+		productRatePlanIds: [],
+		countries: ['US'],
+		catalogRatePlans: [],
+	},
+	startTimestamp: '2025-01-01T00:00:00.000Z',
+	endTimestamp: '2026-01-01T00:00:00.000Z',
+	discount: { amount: 25, durationMonths: 6 },
 	isIntroductoryPricing: false,
 };
 

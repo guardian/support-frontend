@@ -8,6 +8,7 @@ import {
 import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import {
 	ExpressCheckoutElement,
 	useElements,
@@ -52,7 +53,6 @@ import {
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import {
 	getEstimatedSalesTaxConfig,
@@ -150,7 +150,7 @@ type CheckoutFormProps = {
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
 	paypalClientId: string;

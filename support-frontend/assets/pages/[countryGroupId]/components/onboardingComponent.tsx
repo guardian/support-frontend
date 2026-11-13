@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
 import { space } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useSearchParams } from 'react-router';
 import ContentBox from 'components/onboarding/contentBox';
@@ -27,7 +28,6 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import * as cookie from 'helpers/storage/cookie';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
@@ -56,7 +56,7 @@ export interface OnboardingProps {
 	};
 	productKey?: OnboardingProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 	landingPageSettings: LandingPageVariant;
 	identityUserType: UserType;
 }

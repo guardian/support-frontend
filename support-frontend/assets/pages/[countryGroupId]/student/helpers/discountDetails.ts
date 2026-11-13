@@ -1,6 +1,7 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type {
 	ActiveProductKey,
@@ -11,7 +12,7 @@ import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
 export function getDiscountDuration({
@@ -79,7 +80,7 @@ function isStudent(
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
 	allowStudentBeansAU: boolean,
-	promotion?: Promotion,
+	promotion?: PromoWithCatalogInformation,
 	requirePromotion?: boolean,
 ): boolean {
 	// excludes institutions with ratePlan OneYearStudent when switch enableStudentBeansEuropeAustralia On
@@ -114,7 +115,7 @@ export function getStudentDiscount(
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
 	allowStudentBeansAU: boolean,
-	promotion?: Promotion,
+	promotion?: PromoWithCatalogInformation,
 	requirePromotion?: boolean,
 ): StudentDiscount | undefined {
 	if (
@@ -146,10 +147,14 @@ export function getStudentDiscount(
 	const productCatalogDiscountPrice = productCatalog.SupporterPlus?.ratePlans[
 		ratePlanKey
 	]?.pricing[currencyKey] as number;
-	const discountPriceCurrency = simpleFormatAmount(
-		currency,
-		promotion?.discountedPrice ?? productCatalogDiscountPrice,
-	);
+	const promotionPrice = promotion
+		? getPromotionDiscountedPrice(
+				promotion,
+				productCatalogDiscountPrice,
+				billingPeriod,
+		  )
+		: productCatalogDiscountPrice;
+	const discountPriceCurrency = simpleFormatAmount(currency, promotionPrice);
 	const discountPriceWithCurrency =
 		discountPriceCurrency !== fullPriceWithCurrency
 			? discountPriceCurrency
@@ -171,9 +176,9 @@ export function getStudentDiscount(
 			: undefined;
 
 	return {
-		amount:
-			promotion?.discountedPrice ??
-			(productCatalogDiscountPrice || productCatalogFullPrice),
+		amount: promotion
+			? promotionPrice
+			: productCatalogDiscountPrice || productCatalogFullPrice,
 		discountPriceWithCurrency,
 		fullPriceWithCurrency,
 		periodNoun,
