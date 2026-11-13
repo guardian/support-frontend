@@ -15,21 +15,20 @@ import type { Promotion } from './promotions';
 const getPromotionExpiryDate = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	discountBillingPeriods: number,
+	discountPeriods: number,
 ): Date => {
 	const startDate = getProductFirstDeliveryDate(productKey) ?? new Date();
-	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const monthsInPeriod =
-		discountBillingPeriods * getNumberOfMonthsInBillingPeriod(billingPeriod);
-	const promotionExpiryDate = new Date(
-		startDate.setMonth(startDate.getMonth() + monthsInPeriod),
-	);
+		discountPeriods *
+		getNumberOfMonthsInBillingPeriod(ratePlanToBillingPeriod(ratePlanKey));
 	console.log(
-		`*** getPromotionExpiryDate [${productKey}][${ratePlanKey}/${billingPeriod}][periods:${discountBillingPeriods}] monthsInPeriod:${monthsInPeriod} promotionExpiryDate:${formatUserDate(
-			promotionExpiryDate,
+		`*** getPromotionExpiryDate [${productKey}][${ratePlanKey}/${ratePlanToBillingPeriod(
+			ratePlanKey,
+		)}][periods:${discountPeriods}] monthsInPeriod:${monthsInPeriod} promotionExpiryDate:${formatUserDate(
+			new Date(startDate.setMonth(startDate.getMonth() + monthsInPeriod)),
 		)}`,
 	);
-	return promotionExpiryDate;
+	return new Date(startDate.setMonth(startDate.getMonth() + monthsInPeriod));
 };
 
 const contributionMonthly = (fullPrice: number): string => {
