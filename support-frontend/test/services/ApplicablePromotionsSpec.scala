@@ -124,4 +124,14 @@ class ApplicablePromotionsSpec extends AnyWordSpec with Matchers {
       codesByCountryGroup(Seq(promotion("UKONLY")), CountryGroup.US) shouldBe empty
     }
   }
+
+  "ApplicablePromotions.filterByCountry" should {
+    "exclude a promotion for a different country in the same region" in {
+      val france = CountryGroup.countryByCode("FR").get
+      val armenia = CountryGroup.countryByCode("AM").get
+      val promotions = Seq(promotion("ARMENIA", Set(armenia)), promotion("FRANCE", Set(france)))
+
+      ApplicablePromotions.filterByCountry(promotions, france, now).map(_.promoCode) shouldBe Seq("FRANCE")
+    }
+  }
 }
