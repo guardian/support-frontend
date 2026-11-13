@@ -109,7 +109,7 @@ const promotionAnnual = (
 	return `Subscription auto-renews annually. Pay £${fullPrice}/year for ${periods} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 };
 
-export type Policy = Partial<
+type Policy = Partial<
 	Record<ActiveProductKey, Partial<Record<ActiveRatePlanKey, string>>>
 >;
 
