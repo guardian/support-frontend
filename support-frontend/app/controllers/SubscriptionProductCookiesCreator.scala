@@ -43,7 +43,7 @@ case class SubscriptionProductCookiesCreator(domain: GuardianDomain) {
     // https://github.com/guardian/dotcom-rendering/blob/3c4700cae532993ace6f40c3b59c337f3efe2247/dotcom-rendering/src/client/userFeatures/user-features.ts
 
     val productCookies: List[Cookie] = product match {
-      case _: SupporterPlus | _: TierThree | _: DigitalPack | _: Paper =>
+      case _: SupporterPlus | _: TierThree | _: DigitalPack | _: Paper | _: PatronMembership =>
         List(adFreeCookie(now), allowRejectAllCookie(now), hideSupportMessagingCookie(now))
 
       case _: Contribution | _: GuardianWeekly => List(hideSupportMessagingCookie(now))

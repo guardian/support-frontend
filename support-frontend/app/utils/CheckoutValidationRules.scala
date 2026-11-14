@@ -83,6 +83,7 @@ object CheckoutValidationRules {
         ) // Tier three has the same fields as Guardian Weekly
       case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
       case _: GuardianAdLite => PaidProductValidation.passes(createSupportWorkersRequest)
+      case _: PatronMembership => PaidProductValidation.passes(createSupportWorkersRequest)
     }) match {
       case Invalid(message) if PreservableErrorMessages.isMessagePreservable(message) => Invalid(message)
       case Invalid(message) =>

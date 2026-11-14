@@ -61,6 +61,13 @@ case class DigitalPack(
   override def describe: String = s"$billingPeriod-DigitalPack-$currency"
 }
 
+case class PatronMembership(
+    currency: Currency,
+    billingPeriod: BillingPeriod,
+) extends ProductType {
+  override def describe: String = s"$billingPeriod-PatronMembership-$currency"
+}
+
 case class Paper(
     currency: Currency = GBP,
     billingPeriod: BillingPeriod = Monthly,
@@ -103,6 +110,8 @@ object ProductType {
     discriminatedType.variant[GuardianWeekly]("GuardianWeekly")
   implicit val codecDigital: discriminatedType.VariantCodec[DigitalPack] =
     discriminatedType.variant[DigitalPack]("DigitalPack")
+  implicit val codecPatronMembership: discriminatedType.VariantCodec[PatronMembership] =
+    discriminatedType.variant[PatronMembership]("PatronMembership")
   implicit val codecGuardianAdLite: discriminatedType.VariantCodec[GuardianAdLite] =
     discriminatedType.variant[GuardianAdLite]("GuardianAdLite")
 
@@ -116,6 +125,7 @@ object ProductType {
         codecGuardianWeekly,
         codecDigital,
         codecGuardianAdLite,
+        codecPatronMembership,
       ),
     )
 
