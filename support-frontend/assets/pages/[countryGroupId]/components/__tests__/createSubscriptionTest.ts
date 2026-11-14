@@ -1,5 +1,45 @@
-import type { StatusResponse } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import { pollUntilCompleteOrTimeout } from '../createSubscription';
+import type {
+	RegularPaymentRequest,
+	StatusResponse,
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import {
+	createSubscription,
+	pollUntilCompleteOrTimeout,
+} from '../createSubscription';
+
+describe('createSubscription', () => {
+	it('sends the CMP snapshot and existing consent field to the conversion endpoint', async () => {
+		const request = {
+			similarProductsConsent: false,
+			cmpConsentSnapshot: {
+				capturedAt: '2026-10-12T10:00:00.000Z',
+				consentManagerVersion: '1.0.0',
+				framework: 'usnat',
+				usnat: { doNotSell: true, signalStatus: 'ready' },
+			},
+		} as unknown as RegularPaymentRequest;
+		const originalFetch = global.fetch;
+		const fetchMock = jest.fn().mockResolvedValue({
+			ok: true,
+			json: () =>
+				Promise.resolve({ status: 'success', trackingUri: '/support/status' }),
+		});
+		global.fetch = fetchMock as unknown as typeof fetch;
+
+		try {
+			await createSubscription(request);
+
+			expect(fetchMock).toHaveBeenCalledWith(
+				'/subscribe/create',
+				expect.objectContaining({
+					body: JSON.stringify(request),
+				}),
+			);
+		} finally {
+			global.fetch = originalFetch;
+		}
+	});
+});
 
 describe('pollUntilCompleteOrTimeout', () => {
 	it('returns immediately if the payment is successful', async () => {

@@ -9,6 +9,7 @@ import type { SendAcquisitionEventState } from '../model/sendAcquisitionEventSta
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
+import { stringifyWithCmpConsentRedacted } from '../util/logging';
 
 const stage = stageFromEnvironment();
 
@@ -19,7 +20,7 @@ const productCatalogProvider = new ServiceProvider(stage, async (stage) => {
 export const handler = async (
 	state: WrappedState<SendAcquisitionEventState>,
 ) => {
-	console.info(`Input is ${JSON.stringify(state)}`);
+	console.info(`Input is ${stringifyWithCmpConsentRedacted(state)}`);
 	const sendThankYouEmailState = state.state.sendThankYouEmailState;
 
 	const productRatePlan = getProductRatePlan(

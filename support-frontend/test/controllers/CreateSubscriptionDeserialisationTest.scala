@@ -20,6 +20,55 @@ class CreateSubscriptionDeserialisationTest extends AnyFlatSpec with Matchers wi
 
   }
 
+  it should "deserialise a CMP consent snapshot alongside existing conversion fields" in {
+    val snapshot =
+      """{"capturedAt":"2026-10-12T10:00:00.000Z","consentManagerVersion":"1.0.0","framework":"tcfv2","gpcSignal":false,"tcfv2":{"gdprApplies":true,"consents":{"1":true,"4":false},"vendorConsents":{"755":true},"eventStatus":"useractioncomplete","addtlConsent":"","tcString":"encoded"}}"""
+    val request = testData.head.replace(
+      "\"similarProductsConsent\": false",
+      s"\"similarProductsConsent\": false, \"cmpConsentSnapshot\": $snapshot",
+    )
+
+    val actual = decode[CreateSupportWorkersRequest](request).value
+
+    actual.similarProductsConsent shouldBe Some(false)
+    actual.cmpConsentSnapshot.map(_.framework) shouldBe Some("tcfv2")
+    actual.cmpConsentSnapshot.flatMap(_.tcfv2).map(_.consents) shouldBe Some(
+      Map("1" -> true, "4" -> false),
+    )
+    actual.cmpConsentSnapshot.flatMap(_.tcfv2).map(_.gdprApplies) shouldBe Some(Some(true))
+  }
+
+  it should "treat a missing CMP snapshot as unknown" in {
+    decode[CreateSupportWorkersRequest](testData.head).value.cmpConsentSnapshot shouldBe None
+    val requestWithNullSnapshot = testData.head.replace(
+      "\"similarProductsConsent\": false",
+      "\"similarProductsConsent\": false, \"cmpConsentSnapshot\": null",
+    )
+    decode[CreateSupportWorkersRequest](requestWithNullSnapshot).value.cmpConsentSnapshot shouldBe None
+  }
+
+  it should "deserialise USNAT and AUS consent snapshots" in {
+    val usnatSnapshot =
+      """{"capturedAt":"2026-10-12T10:00:00.000Z","consentManagerVersion":"1.0.0","framework":"usnat","usnat":{"doNotSell":true,"signalStatus":"ready"}}"""
+    val ausSnapshot =
+      """{"capturedAt":"2026-10-12T10:00:00.000Z","consentManagerVersion":"1.0.0","framework":"aus","aus":{"personalisedAdvertising":false,"signalStatus":"ready"}}"""
+    val usnatRequest = testData.head.replace(
+      "\"similarProductsConsent\": false",
+      s"\"similarProductsConsent\": false, \"cmpConsentSnapshot\": $usnatSnapshot",
+    )
+    val ausRequest = testData.head.replace(
+      "\"similarProductsConsent\": false",
+      s"\"similarProductsConsent\": false, \"cmpConsentSnapshot\": $ausSnapshot",
+    )
+
+    decode[CreateSupportWorkersRequest](usnatRequest).value.cmpConsentSnapshot
+      .flatMap(_.usnat)
+      .map(_.doNotSell) shouldBe Some(true)
+    decode[CreateSupportWorkersRequest](ausRequest).value.cmpConsentSnapshot
+      .flatMap(_.aus)
+      .map(_.personalisedAdvertising) shouldBe Some(false)
+  }
+
 }
 
 object CreateSubscriptionDeserialisationTest {

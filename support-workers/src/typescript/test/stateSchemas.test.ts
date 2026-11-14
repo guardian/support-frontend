@@ -20,6 +20,61 @@ import createDigitalPackSubscription from './fixtures/createZuoraSubscription/di
 import sendThankYouDigitalPackJson from './fixtures/sendThankYouEmail/digitalSubscriptionState.json';
 
 describe('stateSchemas', () => {
+	test.each([
+		[
+			'tcfv2',
+			{
+				framework: 'tcfv2',
+				tcfv2: {
+					gdprApplies: true,
+					consents: { '1': true, '4': false },
+					vendorConsents: { '755': true, '999': false },
+					eventStatus: 'useractioncomplete',
+					addtlConsent: '1~755',
+					tcString: 'tcf-string',
+				},
+			},
+		],
+		[
+			'usnat',
+			{
+				framework: 'usnat',
+				usnat: { doNotSell: true, signalStatus: 'ready' },
+			},
+		],
+		[
+			'aus',
+			{
+				framework: 'aus',
+				aus: { personalisedAdvertising: false, signalStatus: 'ready' },
+			},
+		],
+	] as const)('preserves %s consent in worker state', (_framework, consent) => {
+		const parsed = createPaymentMethodStateSchema.parse({
+			...createPaymentContribution,
+			cmpConsentSnapshot: {
+				capturedAt: '2026-10-12T10:00:00.000Z',
+				consentManagerVersion: '1.0.0',
+				...consent,
+			},
+		});
+
+		expect(parsed.cmpConsentSnapshot).toMatchObject(consent);
+	});
+
+	test('keeps absent and null worker consent as unknown', () => {
+		expect(
+			createPaymentMethodStateSchema.parse(createPaymentContribution)
+				.cmpConsentSnapshot,
+		).toBeUndefined();
+		expect(
+			createPaymentMethodStateSchema.parse({
+				...createPaymentContribution,
+				cmpConsentSnapshot: null,
+			}).cmpConsentSnapshot,
+		).toBeUndefined();
+	});
+
 	test('createPaymentMethodStateSchema works for supporter plus', () => {
 		const supporterPlus = createPaymentMethodStateSchema.parse(
 			createPaymentSupporterPlus,
