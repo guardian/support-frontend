@@ -86,38 +86,28 @@ const studentAnnual = (
 		auto-renew.
 	</p>
 );
-
-const printMonthlyDelivery = (
+const printMonthly = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
 	<p css={marginTop}>
 		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-		within 14 days of receiving your first issue and receive a full refund. See
-		more about your cooling-off rights in your full pre-contract information{' '}
-		{getTerms('here', productKey, ratePlanKey)}.
+		within 14 days of receiving your{' '}
+		{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
+		and receive a full refund. See more about your cooling-off rights in your
+		full pre-contract information {getTerms('here', productKey, ratePlanKey)}.
 	</p>
 );
-const printMonthlySubscription = (
+const printAnnual = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
 	<p css={marginTop}>
 		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-		within 14 days of receiving your subscription card and receive a full
-		refund. See more about your cooling-off rights in your full pre-contract
-		information {getTerms('here', productKey, ratePlanKey)}.
-	</p>
-);
-const printAnnualDelivery = (
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-): JSX.Element => (
-	<p css={marginTop}>
-		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-		within 14 days of receiving your first issue and receive a full refund. See
-		more about your cooling-off rights in your full pre-contract information{' '}
-		{getTerms('here', productKey, ratePlanKey)}.
+		within 14 days of receiving your{' '}
+		{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
+		and receive a full refund. See more about your cooling-off rights in your
+		full pre-contract information {getTerms('here', productKey, ratePlanKey)}.
 	</p>
 );
 const printGift = (
@@ -205,34 +195,34 @@ const getCancellation = (
 			AnnualTaxExclusive: digitalAnnual(productKey, ratePlanKey),
 		},
 		GuardianWeeklyDomestic: {
-			MonthlyPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			QuarterlyPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			AnnualPlus: printAnnualDelivery(productKey, ratePlanKey),
+			MonthlyPlus: printMonthly(productKey, ratePlanKey),
+			QuarterlyPlus: printMonthly(productKey, ratePlanKey),
+			AnnualPlus: printAnnual(productKey, ratePlanKey),
 			ThreeMonthGift: printGift(productKey, ratePlanKey),
 			OneYearGift: printGift(productKey, ratePlanKey),
 		},
 		GuardianWeeklyRestOfWorld: {
-			MonthlyPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			QuarterlyPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			AnnualPlus: printAnnualDelivery(productKey, ratePlanKey),
+			MonthlyPlus: printMonthly(productKey, ratePlanKey),
+			QuarterlyPlus: printMonthly(productKey, ratePlanKey),
+			AnnualPlus: printAnnual(productKey, ratePlanKey),
 			ThreeMonthGift: printGift(productKey, ratePlanKey),
 			OneYearGift: printGift(productKey, ratePlanKey),
 		},
 		SubscriptionCard: {
-			EverydayPlus: printMonthlySubscription(productKey, ratePlanKey),
-			SixdayPlus: printMonthlySubscription(productKey, ratePlanKey),
-			WeekendPlus: printMonthlySubscription(productKey, ratePlanKey),
-			SaturdayPlus: printMonthlySubscription(productKey, ratePlanKey),
-			SundayPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			Sunday: printMonthlyDelivery(productKey, ratePlanKey),
+			EverydayPlus: printMonthly(productKey, ratePlanKey),
+			SixdayPlus: printMonthly(productKey, ratePlanKey),
+			WeekendPlus: printMonthly(productKey, ratePlanKey),
+			SaturdayPlus: printMonthly(productKey, ratePlanKey),
+			SundayPlus: promotionObserverMonthly(productKey, ratePlanKey),
+			Sunday: promotionObserverMonthly(productKey, ratePlanKey),
 		},
 		HomeDelivery: {
-			EverydayPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			SixdayPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			WeekendPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			SaturdayPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			SundayPlus: printMonthlyDelivery(productKey, ratePlanKey),
-			Sunday: printMonthlyDelivery(productKey, ratePlanKey),
+			EverydayPlus: printMonthly(productKey, ratePlanKey),
+			SixdayPlus: printMonthly(productKey, ratePlanKey),
+			WeekendPlus: printMonthly(productKey, ratePlanKey),
+			SaturdayPlus: printMonthly(productKey, ratePlanKey),
+			SundayPlus: promotionObserverMonthly(productKey, ratePlanKey),
+			Sunday: promotionObserverMonthly(productKey, ratePlanKey),
 		},
 	};
 };
@@ -313,7 +303,7 @@ function getPromotionalCancellation(
 	return promotionalCancellation(productKey, ratePlanKey, firstPayment);
 }
 
-function getCancellationPolicy(
+export function getCancellationPolicy(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	promotion?: Promotion,
