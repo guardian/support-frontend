@@ -46,3 +46,6 @@ allowBuilds:
   aws-sdk: true
   esbuild: true
   unrs-resolver: true
+
+minimumReleaseAgeExclude:
+  - '@guardian/consent-manager@2.3.1'
