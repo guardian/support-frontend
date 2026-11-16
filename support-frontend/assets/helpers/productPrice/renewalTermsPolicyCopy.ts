@@ -12,7 +12,7 @@ import {
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 import type { Promotion } from './promotions';
 
-const getPromotionExpiryDate = (
+export const getPromotionExpiryDate = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	discountPeriods: number,
@@ -31,20 +31,20 @@ const getPromotionExpiryDate = (
 	return new Date(startDate.setMonth(startDate.getMonth() + monthsInPeriod));
 };
 
-const contributionMonthly = (fullPrice: number): string => {
+export const contributionMonthly = (fullPrice: number): string => {
 	return `We will attempt to take payment of £${fullPrice}, on the 3rd day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
 };
-const digitalAndPrintMonthly = (fullPrice: number): string => {
+export const digitalAndPrintMonthly = (fullPrice: number): string => {
 	return `Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 };
-const digitalAndPrintAnnual = (fullPrice: number): string => {
+export const digitalAndPrintAnnual = (fullPrice: number): string => {
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Annual,
 	);
 	return `Subscription auto-renews annually. Pay £${fullPrice}/year, unless you cancel. Equivalent to £${monthlyEquivalent}/month. We'll remind you every year, 2 weeks before your renewal date.`;
 };
-const printQuarterly = (fullPrice: number) => {
+export const printQuarterly = (fullPrice: number) => {
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Quarterly,
@@ -52,7 +52,7 @@ const printQuarterly = (fullPrice: number) => {
 	return `Subscription auto-renews quarterly. Pay £${fullPrice}/quarter, unless you cancel. Equivalent to £${monthlyEquivalent}/month for each quarter. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 };
 
-const promotionDigitalMonthly = (
+export const promotionDigitalMonthly = (
 	fullPrice: number,
 	promotionExpiry: Date,
 	promotion: Promotion,
@@ -63,7 +63,7 @@ const promotionDigitalMonthly = (
 	const expiry = formatUserDate(promotionExpiry);
 	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${periods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
-const promotionPrintMonthly = (
+export const promotionPrintMonthly = (
 	fullPrice: number,
 	promotionExpiry: Date,
 	promotion: Promotion,
@@ -74,7 +74,7 @@ const promotionPrintMonthly = (
 	const expiry = formatUserDate(promotionExpiry);
 	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for the first ${periods} ${periodName}, then £{${fullPrice}}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
-const promotionPrintQuarterly = (
+export const promotionPrintQuarterly = (
 	fullPrice: number,
 	promotionExpiry: Date,
 	promotion: Promotion,
@@ -89,7 +89,7 @@ const promotionPrintQuarterly = (
 	);
 	return `Subscription auto-renews quarterly. Pay £${discountedPrice}/quarter for ${periods} $${periodName}, then £${fullPrice}/quarter from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} $${periodName}, then £${fullPrice}/month for each quarter after. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
-const promotionAnnual = (
+export const promotionAnnual = (
 	fullPrice: number,
 	promotionExpiry: Date,
 	promotion: Promotion,
