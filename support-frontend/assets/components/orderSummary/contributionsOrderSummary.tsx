@@ -144,19 +144,6 @@ const startDateWeeklyDigitalList = css`
 	margin-top: ${space[3]}px;
 `;
 
-const startDateList = css`
-	display: block;
-	${textSans14};
-	color: #606060;
-	background-color: ${palette.neutral[97]};
-	border-radius: ${space[3]}px;
-	padding: ${space[3]}px;
-	margin-top: ${space[2]}px;
-	${from.desktop} {
-		margin-top: ${space[4]}px;
-	}
-`;
-
 export type ContributionsOrderSummaryProps = {
 	productKey: ActiveProductKey;
 	productLabel: string;
@@ -165,7 +152,7 @@ export type ContributionsOrderSummaryProps = {
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
-	startDate: React.ReactNode;
+	startDate: JSX.Element | undefined;
 	landingPageSettings: LandingPageVariant;
 	taxRateConfig: TaxRateConfig;
 	ratePlanLabel?: string;
@@ -305,7 +292,6 @@ export function ContributionsOrderSummary({
 				{hasCheckList && showCheckList && (
 					<>
 						<div css={checklistContainer}>{checkList}</div>
-						{!isWeekly && <div css={startDateList}>{startDate}</div>}
 					</>
 				)}
 			</div>
@@ -325,9 +311,7 @@ export function ContributionsOrderSummary({
 				isIntroductoryPricing={promotion?.isIntroductoryPricing ?? false}
 			/>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
-			{isWeeklyDigital && (
-				<div css={startDateWeeklyDigitalList}>{startDate}</div>
-			)}
+			{startDate && <div css={startDateWeeklyDigitalList}>{startDate}</div>}
 			{nudgeSettings && (
 				<CheckoutNudgeSelector
 					nudgeSettings={nudgeSettings}

@@ -4,7 +4,7 @@ import HeroContainer from 'components/hero/HeroContainer';
 import HeroContent from 'components/hero/HeroContent';
 import { PageTitle } from 'components/page/pageTitle';
 import type { LandingPageCopy } from 'helpers/productPrice/landingPageCopy';
-import { promotionHTML } from 'helpers/productPrice/promotions';
+import { promotionHTML } from 'helpers/productPrice/promotionHtml';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { containerHero } from './weeklyGiftHeroStyles';
 

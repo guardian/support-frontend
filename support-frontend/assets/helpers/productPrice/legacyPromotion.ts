@@ -6,9 +6,9 @@ import type {
 } from 'helpers/productCatalog';
 import { getAppliedPromotion } from './appliedPromotion';
 import {
-	getDiscountedPrice,
-	getNumberOfDiscountedPeriods,
-} from './discountedPrice';
+	getPromotionDiscountedPeriods,
+	getPromotionDiscountedPrice,
+} from './promotionPricing';
 import type { Promotion } from './promotions';
 
 /**
@@ -26,12 +26,15 @@ export function toLegacyPromotion(
 		description: promotion.description ?? '',
 		promoCode: promotion.promoCode,
 		isIntroductoryPricing: promotion.isIntroductoryPricing ?? false,
-		discountedPrice: discount
-			? getDiscountedPrice(price, discount, billingPeriod)
-			: undefined,
-		numberOfDiscountedPeriods: discount
-			? getNumberOfDiscountedPeriods(discount.durationMonths, billingPeriod)
-			: undefined,
+		discountedPrice: getPromotionDiscountedPrice(
+			promotion,
+			price,
+			billingPeriod,
+		),
+		numberOfDiscountedPeriods: getPromotionDiscountedPeriods(
+			promotion,
+			billingPeriod,
+		),
 		discount,
 		landingPage: landingPage && {
 			title: landingPage.title,
