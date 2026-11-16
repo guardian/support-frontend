@@ -141,7 +141,7 @@ const promotionDigitalMonthly = (
 	return (
 		<p css={marginTop}>
 			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-			within 14 days of sign-up or your first payment at £${firstPayment} and
+			within 14 days of sign-up or your first payment at £{firstPayment} and
 			receive a full refund of your last payment. See more about your
 			cooling-off rights in your full pre-contract information{' '}
 			{getTerms('here', productKey, ratePlanKey)}.
@@ -156,11 +156,11 @@ const promotionPrintAnnual = (
 	return (
 		<p css={marginTop}>
 			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-			within 14 days of receiving your $
+			within 14 days of receiving your{' '}
 			{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
-			or your first payment at £${firstPayment} and receive a full refund of
-			that payment. See more about your cooling-off rights in your full
-			pre-contract information {getTerms('here', productKey, ratePlanKey)}.
+			or your first payment at £{firstPayment} and receive a full refund of that
+			payment. See more about your cooling-off rights in your full pre-contract
+			information {getTerms('here', productKey, ratePlanKey)}.
 		</p>
 	);
 };
@@ -171,7 +171,7 @@ const promotionObserverMonthly = (
 	return (
 		<p css={marginTop}>
 			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-			within 14 days of receiving your $
+			within 14 days of receiving your{' '}
 			{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
 			and receive a full refund. See more about your cooling-off rights in your
 			full pre-contract information {getTerms('here', productKey, ratePlanKey)}.
