@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import type { Config } from '../config/config';
 import { buildDeliveryAgentsHandler } from '../handlers/deliveryAgents';
+import { buildGetInvitationHandler } from '../handlers/getInvitation';
 import { buildPostcodeLookupHandler } from '../handlers/postcodeLookup';
 import { noCache } from '../middlewares/noCache';
 import { IdealPostcodeService } from '../services/idealPostcodeService';
+import { MultipleAccountApiService } from '../services/multipleAccountApiService';
 import { PaperRoundService } from '../services/paperRoundService';
 
 export const buildApiRouterWithServices = (config: Config) => {
@@ -16,12 +18,22 @@ export const buildApiRouterWithServices = (config: Config) => {
 		config.paperRoundApi.key,
 	);
 
-	return buildApiRouter(idealPostcodeService, paperRoundService);
+	const multipleAccountApiService = new MultipleAccountApiService(
+		config.multipleAccountApi.url,
+		config.multipleAccountApi.key,
+	);
+
+	return buildApiRouter(
+		idealPostcodeService,
+		paperRoundService,
+		multipleAccountApiService,
+	);
 };
 
 export const buildApiRouter = (
 	idealPostcodeService: IdealPostcodeService,
 	paperRoundService: PaperRoundService,
+	multipleAccountApiService: MultipleAccountApiService,
 ) => {
 	const apiRouter = Router();
 
@@ -35,6 +47,12 @@ export const buildApiRouter = (
 		'/delivery-agents/:postcode',
 		noCache,
 		buildDeliveryAgentsHandler(paperRoundService),
+	);
+
+	apiRouter.get(
+		'/invitation/:invitationCode',
+		noCache,
+		buildGetInvitationHandler(multipleAccountApiService),
 	);
 
 	return apiRouter;
