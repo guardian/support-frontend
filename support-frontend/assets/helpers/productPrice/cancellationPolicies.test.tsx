@@ -13,7 +13,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getCancellationPolicy } from './cancellationPolicy';
+import { getCancellationPolicy } from './cancellationPolicies';
 
 const digitalMonthly =
 	'Cancel anytime, via your account. Cancel within 14 days of sign-up and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
