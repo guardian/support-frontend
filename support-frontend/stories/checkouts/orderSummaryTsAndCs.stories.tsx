@@ -43,11 +43,18 @@ WeeklyDigital.args = {
 	countryGroupId: 'UnitedStates',
 	thresholdAmount: 45,
 	promotion: {
-		name: '50% off for 3 months',
+		name: '20% off for 9 months',
 		description: 'Guardian Weekly United States Quarterly',
 		promoCode: 'GUARDIAN_WEEKLY_DIGITAL_USA_QUARTERLY',
-		numberOfDiscountedPeriods: 3,
-		discountedPrice: 54,
+		campaignCode: 'TEST_CAMPAIGN',
+		appliesTo: {
+			productRatePlanIds: [],
+			countries: ['US'],
+			catalogRatePlans: [],
+		},
+		startTimestamp: '2025-01-01T00:00:00.000Z',
+		endTimestamp: '2026-01-01T00:00:00.000Z',
+		discount: { amount: 20, durationMonths: 9 },
 		isIntroductoryPricing: false,
 	},
 };

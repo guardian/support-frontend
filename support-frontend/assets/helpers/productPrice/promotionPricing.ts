@@ -1,4 +1,4 @@
-import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import {
 	getDiscountedPrice,
@@ -8,21 +8,21 @@ import {
 export function getPromotionDiscountedPrice(
 	promotion: PromoWithCatalogInformation,
 	price: number,
-	billingPeriod: RecurringBillingPeriod,
-): number | undefined {
-	return promotion.discount
+	billingPeriod: BillingPeriod,
+): number {
+	return promotion.discount && billingPeriod !== BillingPeriod.OneTime
 		? getDiscountedPrice(price, promotion.discount, billingPeriod)
-		: undefined;
+		: price;
 }
 
 export function getPromotionDiscountedPeriods(
 	promotion: PromoWithCatalogInformation,
-	billingPeriod: RecurringBillingPeriod,
-): number | undefined {
-	return promotion.discount
+	billingPeriod: BillingPeriod,
+): number {
+	return promotion.discount && billingPeriod !== BillingPeriod.OneTime
 		? getNumberOfDiscountedPeriods(
 				promotion.discount.durationMonths,
 				billingPeriod,
 		  )
-		: undefined;
+		: 0;
 }
