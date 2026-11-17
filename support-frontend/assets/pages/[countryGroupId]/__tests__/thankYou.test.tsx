@@ -326,6 +326,8 @@ describe('ThankYou conversion tracking', () => {
 			expect(conversionCall?.[0]).toBe(config);
 			expect(conversionCall?.[1]?.()).toEqual({
 				orderId: 'session-order-123',
+				clientTransactionId: undefined,
+				email: 'supporter@example.com',
 				value: 20,
 				currency: 'GBP',
 				paymentMethod: 'Stripe',
@@ -372,6 +374,8 @@ describe('ThankYou conversion tracking', () => {
 				.calls[0]?.[1];
 			expect(createPurchase?.()).toEqual({
 				orderId: 'session-order-123',
+				clientTransactionId: undefined,
+				email: 'supporter@example.com',
 				value: productType === 'SupporterPlus' ? (value ?? 0) + 7 : value,
 				currency: 'GBP',
 				paymentMethod: 'Stripe',
@@ -407,6 +411,8 @@ describe('ThankYou conversion tracking', () => {
 			.calls[0]?.[1];
 		expect(createPurchase?.()).toEqual({
 			orderId: 'session-order-123',
+			clientTransactionId: undefined,
+			email: 'supporter@example.com',
 			value: 7.5,
 			currency: 'EUR',
 			paymentMethod: 'Stripe',
@@ -444,6 +450,8 @@ describe('ThankYou conversion tracking', () => {
 			.calls[0]?.[1];
 		expect(createPurchase?.()).toEqual({
 			orderId: 'session-order-123',
+			clientTransactionId: undefined,
+			email: 'supporter@example.com',
 			value: 7,
 			currency: 'USD',
 			paymentMethod: 'Stripe',
