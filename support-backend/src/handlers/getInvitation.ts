@@ -15,8 +15,8 @@ type GetInvitationResult =
 
 const parseExpiryDate = (body: string): number | undefined => {
 	try {
-		const parsed = invitationExpirySchema.safeParse(JSON.parse(body));
-		return parsed.success ? parsed.data.expiryDate : undefined;
+		const parsed = invitationExpirySchema.parse(JSON.parse(body));
+		return parsed.expiryDate;
 	} catch {
 		return undefined;
 	}
