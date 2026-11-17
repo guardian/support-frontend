@@ -88,7 +88,7 @@ export const submitForm = async ({
 		paymentFields.paymentType === 'StripeHostedCheckout' &&
 		Boolean(paymentFields.checkoutSessionId);
 	const clientTransactionId = isReturningFromStripeHostedCheckout
-		? (getClientTransactionId() ?? createClientTransactionId())
+		? getClientTransactionId() ?? createClientTransactionId()
 		: createClientTransactionId();
 	const personalData = extractPersonalDataFromForm(formData);
 	const giftRecipient = extractGiftRecipientDataFromForm(formData);
