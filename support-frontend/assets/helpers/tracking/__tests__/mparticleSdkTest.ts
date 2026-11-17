@@ -152,7 +152,7 @@ describe('mParticle SDK adapter', () => {
 		expect(mockUser.setConsentState).toHaveBeenCalledWith(mockConsentState);
 	});
 
-	it('maps purchase data to a commerce purchase without personal identifiers', () => {
+	it('maps email to a purchase event attribute without setting a user identity', () => {
 		const purchaseWithContactData = {
 			...purchase,
 			email: 'member@example.com',
@@ -182,6 +182,7 @@ describe('mParticle SDK adapter', () => {
 				conversionKey: 'SupporterPlus:Monthly',
 				contributionType: 'MONTHLY',
 				paymentMethod: 'Stripe',
+				email: 'member@example.com',
 			},
 			undefined,
 			mockTransaction,

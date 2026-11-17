@@ -60,6 +60,7 @@ function ThankYouConversionTracking({
 	const { enableMParticleConversions } = useFeatureSwitches();
 	const order = getThankYouOrder();
 	const hasSuccessfulOrder = order?.status === 'success';
+	const email = order?.email;
 	const clientTransactionId =
 		order?.clientTransactionId ?? getClientTransactionId() ?? undefined;
 	const conversionValue = order?.finalAmount ?? payment.finalAmount;
@@ -107,6 +108,7 @@ function ThankYouConversionTracking({
 				() => ({
 					orderId: getOrderId(),
 					clientTransactionId,
+					email,
 					value: conversionValue,
 					currency: currencyKey,
 					paymentMethod: paymentMethod ?? 'None',
@@ -133,6 +135,7 @@ function ThankYouConversionTracking({
 		hasSuccessfulOrder,
 		conversionValue,
 		clientTransactionId,
+		email,
 		paymentMethod,
 		ratePlanKey,
 	]);

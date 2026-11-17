@@ -13,6 +13,7 @@ type MParticleSdkConfig = {
 export type Purchase = {
 	orderId: string;
 	clientTransactionId?: string;
+	email?: string;
 	value: number;
 	currency: string;
 	productType: string;
@@ -141,6 +142,7 @@ export async function loadMParticleSdk(): Promise<MParticleSdk> {
 		logPurchase: ({
 			orderId,
 			clientTransactionId,
+			email,
 			value,
 			currency,
 			productType,
@@ -175,6 +177,7 @@ export async function loadMParticleSdk(): Promise<MParticleSdk> {
 					conversionKey: `${productType}:${ratePlan}`,
 					contributionType,
 					paymentMethod,
+					...(email ? { email } : {}),
 					...(clientTransactionId
 						? { client_transaction_id: clientTransactionId }
 						: {}),

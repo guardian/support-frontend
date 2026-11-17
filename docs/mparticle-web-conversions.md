@@ -24,6 +24,7 @@ The native purchase keeps the existing amount, currency and session-scoped `orde
 | `conversionKey`    | Exact `productType:ratePlan`; use this for connection filters                |
 | `contributionType` | `MONTHLY`, `QUARTERLY`, `ANNUAL` or `ONE_OFF`                                |
 | `paymentMethod`    | Existing payment method, with Stripe express checkout normalised to `Stripe` |
+| `email`            | Checkout email, included as an event attribute for visibility in Live Stream |
 | `client_transaction_id` | Client-generated ID also sent in the acquisition event and GTM `SuccessfulConversion` data layer |
 
 Quarterly is represented correctly in the native payload; the existing GTM contribution-type contract is retained. Tax-exclusive, gift, student and print-package plans retain their exact rate-plan keys, even where they share a billing period.
@@ -52,7 +53,7 @@ After preparing the matching development connections and GTM preview exception, 
 
 The native route waits for permission for both the `mparticle` and `remarketing` vendors before loading the SDK. If mParticle consent is denied while both Google remarketing and GTM consent are allowed, the existing GTM route is selected instead. Otherwise, a queued conversion can proceed when an eligible consent route becomes available while the page remains mounted. Leaving the page or withdrawing permission discards pending native work. Withdrawal opts the SDK out and pauses this native route until reload; granting consent again on the same page does not replay the purchase. Google advertising consent signals are denied when Google permission is withdrawn and restored if it is regranted. Withdrawing only mParticle permission does not deny otherwise permitted Google tags.
 
-The integration supplies no email, customer ID or other explicit identity fields. The SDK still collects browser/device/session and page URL metadata and may reuse an identity already persisted by an earlier SDK session. Use a fresh browser profile when validating anonymous behaviour. Do not treat this as a promise that the SDK transmits no personal data.
+The checkout email is included as an event attribute so it is visible alongside the purchase in Live Stream; it is not used to set or alias an mParticle user identity. The SDK still collects browser/device/session and page URL metadata and may reuse an identity already persisted by an earlier SDK session. Use a fresh browser profile when validating anonymous behaviour. Do not treat this as a promise that the SDK transmits no personal data.
 
 The Web SDK's transaction ID remains the existing session-scoped `orderId`. It is created only after the selected sender's consent checks pass and reused for repeated page loads; native dispatch is guarded against repeated attempts during the page runtime. The acquisition publisher preserves its existing server-side transaction ID and sends `client_transaction_id` separately. The shared client ID supports downstream reconciliation across the browser and server events; it does not cause automatic deduplication in mParticle.
 
