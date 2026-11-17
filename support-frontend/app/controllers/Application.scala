@@ -661,7 +661,7 @@ class Application(
         user = request.user,
         tickerData = tickerService.getTickers(),
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
-        mParticleConversions = mParticleConversionsConfigProvider.get(isTestUser),
+        mParticleConversionsConfig = mParticleConversionsConfigProvider.get(isTestUser),
       ),
     ).withSettingsSurrogateKey
   }

@@ -26,7 +26,7 @@
   user: Option[User],
   tickerData: Option[Tickers],
   homeDeliveryPostcodes: Option[List[String]] = None,
-  mParticleConversions: Option[MParticleConversionsConfig] = None,
+  mParticleConversionsConfig: Option[MParticleConversionsConfig] = None,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(
@@ -48,7 +48,7 @@
     window.guardian.promotions = @Html(outputJson(promotions))
     window.guardian.checkoutNudgePromotions = @Html(outputJson(checkoutNudgePromotions))
     window.guardian.tickerData = @Html(outputJson(tickerData))
-    window.guardian.mParticleConversions = @Html(outputJson(mParticleConversions).replace("<", "\\u003c"))
+    window.guardian.mParticleConversions = @Html(outputJson(mParticleConversionsConfig).replace("<", "\\u003c"))
   </script>
 
   @homeDeliveryPostcodes.map { postcodes =>

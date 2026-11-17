@@ -106,7 +106,7 @@ function ThankYouConversionTracking({
 			return trackMParticleConversion(
 				mParticleConfig,
 				() => ({
-					orderId: getOrderId(),
+					orderId: getOrderId(clientTransactionId),
 					clientTransactionId,
 					email,
 					value: conversionValue,

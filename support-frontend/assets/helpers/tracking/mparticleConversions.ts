@@ -224,7 +224,21 @@ export function trackMParticleConversion(
 		selectRoute(conversion);
 	}
 	void dispatch();
+	const useGtmIfNativeIsPending = () => {
+		if (conversion.route === 'mparticle') {
+			selectGtmRoute(conversion);
+		}
+	};
+	const onVisibilityChange = () => {
+		if (document.visibilityState === 'hidden') {
+			useGtmIfNativeIsPending();
+		}
+	};
+	document.addEventListener('visibilitychange', onVisibilityChange);
+	window.addEventListener('pagehide', useGtmIfNativeIsPending);
 	return () => {
+		document.removeEventListener('visibilitychange', onVisibilityChange);
+		window.removeEventListener('pagehide', useGtmIfNativeIsPending);
 		if (pending === conversion) {
 			if (conversion.route === 'mparticle') {
 				selectGtmRoute(conversion, true);

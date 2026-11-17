@@ -4,7 +4,7 @@ The shared generic checkout thank-you tracker can send purchases through the mPa
 
 The browser sends the commerce event to mParticle and the Google Ads Kit sends the conversion to Google. Native forwarding appears in mParticle's dashboard. Posting an event with curl does not execute this browser kit. See the [mParticle Google Ads web integration](https://docs.mparticle.com/integrations/google-ads/event/#web-integration).
 
-`SuccessfulConversion` uses `googleAdsConversionSource: 'mparticle'` for the native route and `'gtm'` for the GTM route. Other GTM consumers remain available when GTM consent allows them. Selecting the native route suppresses the GTM Google Ads conversion through a remotely configured exception; there is no automatic GTM retry if the SDK fails, because a failure cannot prove that Google received nothing.
+`SuccessfulConversion` uses `googleAdsConversionSource: 'mparticle'` for the native route and `'gtm'` for the GTM route. Other GTM consumers remain available when GTM consent allows them. The exception in GTM suppresses the GTM Google Ads conversion after Support Frontend commits to the native route. GTM can take over before native dispatch starts. After that point, a retry could count the purchase twice.
 
 **Configure the destinations before enabling the switch**
 
@@ -14,7 +14,7 @@ The browser sends the commerce event to mParticle and the Google Ads Kit sends t
 4. Register the `personalised_advertising` consent purpose in the workspace. Have the consent owner confirm which Google consent signals it may represent and configure the corresponding mappings/defaults consistently across the Google Ads connections and GTM. A default of Granted is not evidence of the user's choice. Google's [consent-mode guidance](https://developers.google.com/tag-platform/security/concepts/consent-mode) distinguishes collecting consent, communicating it and enforcing it.
 5. In GTM, add Data Layer Variables for `googleAdsConversionSource` and, if a tag needs the shared correlation ID, `clientTransactionId`. Create a Custom Event exception for `SuccessfulConversion` with the condition that `googleAdsConversionSource` equals `mparticle`. Add it **only to the Google Ads conversion tags** served by this tracker. Preserve the existing consent exceptions, Conversion Linker, remarketing and unrelated tags. Preview and publish this exception before enabling native conversions; when the source is `gtm` or absent, existing conversion triggers continue to work. See [GTM trigger exceptions](https://support.google.com/tagmanager/answer/7679316).
 
-The native purchase keeps the existing amount, currency and session-scoped `orderId` as its transaction ID. It sends `client_transaction_id` separately as the shared correlation key, with these other event attributes:
+The native purchase sends the amount, currency and `orderId` as its transaction fields. It sends `client_transaction_id` separately as the shared correlation key, with these other event attributes:
 
 | Attribute          | Example / meaning                                                            |
 | ------------------ | ---------------------------------------------------------------------------- |
@@ -51,11 +51,11 @@ After preparing the matching development connections and GTM preview exception, 
 
 **Consent and identity behaviour**
 
-The native route waits for permission for both the `mparticle` and `remarketing` vendors before loading the SDK. If mParticle consent is denied while both Google remarketing and GTM consent are allowed, the existing GTM route is selected instead. Otherwise, a queued conversion can proceed when an eligible consent route becomes available while the page remains mounted. Leaving the page or withdrawing permission discards pending native work. Withdrawal opts the SDK out and pauses this native route until reload; granting consent again on the same page does not replay the purchase. Google advertising consent signals are denied when Google permission is withdrawn and restored if it is regranted. Withdrawing only mParticle permission does not deny otherwise permitted Google tags.
+The native route waits for permission for both the `mparticle` and `remarketing` vendors before loading the SDK. GTM can take over with GTM consent, and its tags still check their own permissions. A queued conversion can proceed when an eligible consent route becomes available while the page remains mounted. If native dispatch is still pending when the page becomes hidden or is left, the tracker attempts the GTM fallback. Delivery during page exit depends on the browser and GTM being ready. Withdrawal opts the SDK out and pauses the native route until reload. Google advertising consent signals are denied when Google permission is withdrawn and restored if it is regranted.
 
 The checkout email is included as an event attribute so it is visible alongside the purchase in Live Stream; it is not used to set or alias an mParticle user identity. The SDK still collects browser/device/session and page URL metadata and may reuse an identity already persisted by an earlier SDK session. Use a fresh browser profile when validating anonymous behaviour. Do not treat this as a promise that the SDK transmits no personal data.
 
-The Web SDK's transaction ID remains the existing session-scoped `orderId`. It is created only after the selected sender's consent checks pass and reused for repeated page loads; native dispatch is guarded against repeated attempts during the page runtime. The acquisition publisher preserves its existing server-side transaction ID and sends `client_transaction_id` separately. The shared client ID supports downstream reconciliation across the browser and server events; it does not cause automatic deduplication in mParticle.
+The Web SDK and GTM share a transaction `orderId` for each checkout with a `clientTransactionId`. Each new purchase gets its own `orderId`, which is created after consent and reused on reload. Older orders without a client ID use the session order ID. The acquisition publisher preserves its existing server-side transaction ID and sends `client_transaction_id` separately. The shared client ID lets consumers correlate the browser and server events.
 
 **Validate using local or CODE test checkout**
 

@@ -8,7 +8,10 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { productCatalog } from 'helpers/productCatalog';
 import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
+import {
+	getOrderId,
+	successfulContributionConversion,
+} from 'helpers/tracking/googleTagManager';
 import { trackMParticleConversion } from 'helpers/tracking/mparticleConversions';
 import type * as MParticleConversions from 'helpers/tracking/mparticleConversions';
 import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
@@ -61,7 +64,7 @@ jest.mock('helpers/productPrice/legacyPromotion', () => ({
 
 jest.mock('helpers/tracking/googleTagManager', () => ({
 	successfulContributionConversion: jest.fn(),
-	getOrderId: () => 'session-order-123',
+	getOrderId: jest.fn(() => 'session-order-123'),
 }));
 
 jest.mock('helpers/tracking/mparticleConversions', () => ({
@@ -294,6 +297,11 @@ describe('ThankYou conversion tracking', () => {
 	it.each([true, false])(
 		'uses mParticle on the enabled route (onboarding: %s) and cancels on unmount',
 		(onboarding) => {
+			const clientTransactionId = 'checkout-123';
+			jest.mocked(getThankYouOrder).mockReturnValue({
+				...successfulOrder,
+				clientTransactionId,
+			});
 			const cancel = jest.fn();
 			jest
 				.mocked(trackMParticleConversion)
@@ -320,13 +328,14 @@ describe('ThankYou conversion tracking', () => {
 				'Stripe',
 				'SupporterPlus',
 				'mparticle',
+				clientTransactionId,
 			);
 			const conversionCall = jest.mocked(trackMParticleConversion).mock
 				.calls[0];
 			expect(conversionCall?.[0]).toBe(config);
 			expect(conversionCall?.[1]?.()).toEqual({
 				orderId: 'session-order-123',
-				clientTransactionId: undefined,
+				clientTransactionId,
 				email: 'supporter@example.com',
 				value: 20,
 				currency: 'GBP',
@@ -336,6 +345,7 @@ describe('ThankYou conversion tracking', () => {
 				ratePlan: 'Monthly',
 				billingPeriod: 'Monthly',
 			});
+			expect(getOrderId).toHaveBeenCalledWith(clientTransactionId);
 			expect(conversionCall?.[2]).toEqual(expect.any(Function));
 			rerender(
 				<ThankYou

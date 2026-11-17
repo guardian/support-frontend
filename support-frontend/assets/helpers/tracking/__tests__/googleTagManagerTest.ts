@@ -1,6 +1,11 @@
 // ----- Imports ----- //
 import { DirectDebit } from '../../forms/paymentMethods';
-import { _, init, successfulContributionConversion } from '../googleTagManager';
+import {
+	_,
+	getOrderId,
+	init,
+	successfulContributionConversion,
+} from '../googleTagManager';
 import { onConsentChangeEvent } from '../thirdPartyTrackingConsent';
 
 jest.mock('../thirdPartyTrackingConsent', () => ({
@@ -29,7 +34,7 @@ describe('googleTagManager', () => {
 		expect(Object.keys(mapped).length).toEqual(Object.keys(input).length);
 	});
 
-	it('keeps conversions queued until consent and script readiness', async () => {
+	it('queues conversions in our data layer integration until consent and script readiness', async () => {
 		Object.defineProperty(window, 'googleTagManagerDataLayer', {
 			configurable: true,
 			value: undefined,
@@ -67,6 +72,7 @@ describe('googleTagManager', () => {
 			'script[src*="googletagmanager.com/gtm.js"]',
 		);
 		expect(script).not.toBeNull();
+		// Simulate script readiness without loading GTM.
 		script?.onload?.(new Event('load'));
 
 		const conversion = window.googleTagManagerDataLayer?.find(
@@ -108,6 +114,11 @@ describe('googleTagManager', () => {
 			),
 		).toHaveLength(1);
 
+		const clientTransactionId = 'checkout-123';
+		const purchaseOrderId = getOrderId(clientTransactionId);
+		expect(purchaseOrderId).not.toBe(conversion?.orderId);
+		expect(getOrderId('checkout-456')).not.toBe(purchaseOrderId);
+
 		successfulContributionConversion(
 			6,
 			'MONTHLY',
@@ -115,12 +126,14 @@ describe('googleTagManager', () => {
 			DirectDebit,
 			'SupporterPlus',
 			'mparticle',
+			clientTransactionId,
 		);
 		expect(window.googleTagManagerDataLayer?.at(-1)).toEqual(
 			expect.objectContaining({
 				event: 'SuccessfulConversion',
 				googleAdsConversionSource: 'mparticle',
-				orderId: conversion?.orderId,
+				orderId: purchaseOrderId,
+				clientTransactionId,
 			}),
 		);
 		successfulContributionConversion(
@@ -129,12 +142,15 @@ describe('googleTagManager', () => {
 			'GBP',
 			DirectDebit,
 			'SupporterPlus',
+			'gtm',
+			clientTransactionId,
 		);
 		expect(window.googleTagManagerDataLayer?.at(-1)).toEqual(
 			expect.objectContaining({
 				event: 'SuccessfulConversion',
 				googleAdsConversionSource: 'gtm',
-				orderId: conversion?.orderId,
+				orderId: purchaseOrderId,
+				clientTransactionId,
 			}),
 		);
 	});
