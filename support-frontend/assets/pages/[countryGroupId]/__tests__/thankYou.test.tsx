@@ -19,6 +19,7 @@ import { ThankYou } from '../thankYou';
 jest.mock('@guardian/libs', () => ({
 	storage: {
 		session: {
+			isAvailable: jest.fn(() => true),
 			get: jest.fn(),
 		},
 	},
