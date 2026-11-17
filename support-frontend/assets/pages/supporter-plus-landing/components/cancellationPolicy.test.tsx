@@ -33,8 +33,6 @@ const promotionPrintDelivery =
 	'Cancel anytime, via your account. Cancel within 14 days of receiving your first issue or your first payment at £7 and receive a full refund of that payment. See more about your cooling-off rights in your full pre-contract information here.';
 const promotionPrintSubscription =
 	'Cancel anytime, via your account. Cancel within 14 days of receiving your subscription card or your first payment at £7 and receive a full refund of that payment. See more about your cooling-off rights in your full pre-contract information here.';
-const promotionObserverSubscription =
-	'Cancel anytime, via your account. Cancel within 14 days of receiving your subscription card and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
 
 type PolicyCase = readonly [
 	product: ActiveProductKey,
@@ -254,7 +252,7 @@ const policyCases: PolicyCase[] = [
 		'SubscriptionCard',
 		'Sunday',
 		printSubscription,
-		promotionObserverSubscription,
+		printSubscription,
 		observerLinks.TERMS,
 	],
 	[

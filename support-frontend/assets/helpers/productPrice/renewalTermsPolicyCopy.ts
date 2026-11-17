@@ -31,20 +31,20 @@ export const getPromotionExpiryDate = (
 	return new Date(startDate.setMonth(startDate.getMonth() + monthsInPeriod));
 };
 
-export const contributionMonthly = (fullPrice: number): string => {
+const contributionMonthly = (fullPrice: number): string => {
 	return `We will attempt to take payment of £${fullPrice}, on the 3rd day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
 };
-export const digitalAndPrintMonthly = (fullPrice: number): string => {
+const digitalAndPrintMonthly = (fullPrice: number): string => {
 	return `Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 };
-export const digitalAndPrintAnnual = (fullPrice: number): string => {
+const digitalAndPrintAnnual = (fullPrice: number): string => {
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Annual,
 	);
 	return `Subscription auto-renews annually. Pay £${fullPrice}/year, unless you cancel. Equivalent to £${monthlyEquivalent}/month. We'll remind you every year, 2 weeks before your renewal date.`;
 };
-export const printQuarterly = (fullPrice: number) => {
+const printQuarterly = (fullPrice: number) => {
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Quarterly,
