@@ -2,6 +2,7 @@ import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { useEffect } from 'react';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
@@ -11,13 +12,13 @@ import {
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
+import { getAppliedPromotion } from 'helpers/productPrice/appliedPromotion';
 import {
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import { getClientTransactionId } from 'helpers/tracking/acquisitions';
 import {
 	getOrderId,
@@ -187,7 +188,7 @@ export function ThankYou({
 		contributionAmount?: number;
 		finalAmount: number;
 	};
-	let promotion: Promotion | undefined;
+	let promotion: PromoWithCatalogInformation | undefined;
 
 	if (!productParam && !ratePlanParam) {
 		/* OneTime product */
@@ -231,17 +232,16 @@ export function ThankYou({
 				toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
 
 			/** Get any promotions */
-			promotion = getLegacyPromotion({
-				promotions: appConfig.promotions ?? [],
+			promotion = getAppliedPromotion(
+				appConfig.promotions ?? [],
 				productKey,
 				ratePlanKey,
-				price: productPrice,
-				billingPeriod,
-				promoCode: getQueryParameter('promoCode'),
-			});
+				getQueryParameter('promoCode'),
+			);
 
-			const discountedPrice = promotion?.discountedPrice ?? undefined;
-			const price = discountedPrice ?? productPrice;
+			const price = promotion
+				? getPromotionDiscountedPrice(promotion, productPrice, billingPeriod)
+				: productPrice;
 			/** SupporterPlus can have an additional contribution bolted onto the base price */
 			const finalAmount =
 				price + (productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);

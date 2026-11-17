@@ -122,9 +122,17 @@ BillingPeriodsCopy.args = {
 			product: 'DigitalSubscription',
 			...fallBackLandingPageSelection.products.DigitalSubscription,
 			promotion: {
-				discountedPrice: 16,
+				promoCode: 'STORY_PROMO',
+				name: 'Story promo',
+				campaignCode: 'STORY_CAMPAIGN',
+				appliesTo: {
+					productRatePlanIds: [],
+					countries: [],
+					catalogRatePlans: [],
+				},
+				startTimestamp: '2025-01-01T00:00:00.000Z',
 				discount: {
-					amount: 16,
+					amount: 36,
 					durationMonths: 12,
 				},
 			},
@@ -184,15 +192,23 @@ WeeklyPricingWithPromotion.args = {
 			product: 'DigitalSubscription',
 			...fallBackLandingPageSelection.products.DigitalSubscription,
 			promotion: {
-				discountedPrice: 16,
+				promoCode: 'STORY_PROMO',
+				name: 'Story promo',
+				campaignCode: 'STORY_CAMPAIGN',
+				appliesTo: {
+					productRatePlanIds: [],
+					countries: [],
+					catalogRatePlans: [],
+				},
+				startTimestamp: '2025-01-01T00:00:00.000Z',
 				discount: {
-					amount: 16,
+					amount: 36,
 					durationMonths: 12,
 				},
 			},
 		},
 	],
 	currencyId: 'GBP',
-	paymentFrequency: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	showWeeklyPrice: true,
 };

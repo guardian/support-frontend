@@ -1,10 +1,10 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { render } from '@testing-library/react';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { OrderSummaryTsAndCs } from './orderSummaryTsAndCs';
 
 // Mock the date - some of the Ts&Cs include calculated dates
@@ -17,14 +17,22 @@ afterAll(() => {
 });
 
 describe('orderSummaryTs&Cs Snapshot comparison', () => {
-	const promotionWeeklyDigitalUnitedStatesQuarterly: Promotion = {
-		name: '50% off for 3 months',
-		description: 'Guardian Weekly United States Quarterly',
-		promoCode: 'GUARDIAN_WEEKLY_DIGITAL_USA_QUARTERLY',
-		numberOfDiscountedPeriods: 3,
-		discountedPrice: 54,
-		isIntroductoryPricing: false,
-	};
+	const promotionWeeklyDigitalUnitedStatesQuarterly: PromoWithCatalogInformation =
+		{
+			name: '20% off for 9 months',
+			description: 'Guardian Weekly United States Quarterly',
+			promoCode: 'GUARDIAN_WEEKLY_DIGITAL_USA_QUARTERLY',
+			campaignCode: 'TEST_CAMPAIGN',
+			appliesTo: {
+				productRatePlanIds: [],
+				countries: ['US'],
+				catalogRatePlans: [],
+			},
+			startTimestamp: '2025-01-01T00:00:00.000Z',
+			endTimestamp: '2026-01-01T00:00:00.000Z',
+			discount: { amount: 20, durationMonths: 9 },
+			isIntroductoryPricing: false,
+		};
 
 	type OrderSummaryTestParams = [
 		ActiveProductKey,
@@ -60,7 +68,7 @@ describe('orderSummaryTs&Cs Snapshot comparison', () => {
 			ratePlanDescription,
 			amount,
 		) => {
-			const promo: Promotion | undefined =
+			const promo: PromoWithCatalogInformation | undefined =
 				paymentProductKey === 'GuardianWeeklyRestOfWorld' &&
 				activeRatePlanKey === 'QuarterlyPlus' &&
 				countryGroupId === 'UnitedStates'

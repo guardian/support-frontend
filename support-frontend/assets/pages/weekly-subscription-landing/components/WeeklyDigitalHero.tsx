@@ -6,7 +6,7 @@ import { WeeklyLandingPagePackShot } from 'components/packshots/weeklyPackshots'
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
 import type { LandingPageCopy } from 'helpers/productPrice/landingPageCopy';
-import { promotionHTML } from 'helpers/productPrice/promotions';
+import { promotionHTML } from 'helpers/productPrice/promotionHtml';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
 	pageTitleOverrides,

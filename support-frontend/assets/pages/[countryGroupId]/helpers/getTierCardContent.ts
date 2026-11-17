@@ -1,5 +1,6 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -9,7 +10,6 @@ import {
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
@@ -27,7 +27,7 @@ type GetTierCardContentParams = {
 	urlSelectedAmount: string | null;
 	enableDeepDiscount: boolean;
 	urlProductKey?: string;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 };
 
 export function getTierCardContent({

@@ -1,13 +1,12 @@
 import { storage } from '@guardian/libs';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { render, waitFor } from '@testing-library/react';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type * as ProductCatalogFixture from 'fixtures/productCatalogFixture';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { productCatalog } from 'helpers/productCatalog';
-import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	getOrderId,
 	successfulContributionConversion,
@@ -58,10 +57,6 @@ jest.mock('helpers/productCatalog', () => {
 	};
 });
 
-jest.mock('helpers/productPrice/legacyPromotion', () => ({
-	getLegacyPromotion: jest.fn(),
-}));
-
 jest.mock('helpers/tracking/googleTagManager', () => ({
 	successfulContributionConversion: jest.fn(),
 	getOrderId: jest.fn(() => 'session-order-123'),
@@ -102,7 +97,7 @@ const appConfig = {
 const landingPageSettings = {} as LandingPageVariant;
 const webConfig = { apiKey: 'public-web-key', isDevelopmentMode: true };
 
-// All sellable plans in the existing fixture for products served by this route.
+// The recurring plans in the catalog fixture for products served by this route.
 // Discount is a price adjustment, and one-time contributions use the no-product URL.
 const recurringProducts = [
 	'Contribution',
@@ -175,7 +170,6 @@ describe('ThankYou conversion tracking', () => {
 		});
 		jest.mocked(storage.session.get).mockReturnValue(null);
 		jest.mocked(getThankYouOrder).mockReturnValue(successfulOrder);
-		jest.mocked(getLegacyPromotion).mockReturnValue(undefined);
 		jest.mocked(useFeatureSwitches).mockReturnValue({
 			enableThankYouOnboarding: true,
 		} as ReturnType<typeof useFeatureSwitches>);
@@ -437,11 +431,22 @@ describe('ThankYou conversion tracking', () => {
 		window.history.replaceState(
 			{},
 			'',
-			'/?product=SupporterPlus&ratePlan=Monthly&contribution=3',
+			'/?product=SupporterPlus&ratePlan=Monthly&contribution=3&promoCode=THANK_YOU_TEST',
 		);
-		jest.mocked(getLegacyPromotion).mockReturnValue({
-			discountedPrice: 4,
-		} as Promotion);
+		const promotion: PromoWithCatalogInformation = {
+			promoCode: 'THANK_YOU_TEST',
+			name: 'Checkout promotion',
+			campaignCode: 'TEST_CAMPAIGN',
+			startTimestamp: '2026-01-01T00:00:00.000Z',
+			appliesTo: {
+				productRatePlanIds: [],
+				countries: ['US'],
+				catalogRatePlans: [
+					{ productKey: 'SupporterPlus', productRatePlanKey: 'Monthly' },
+				],
+			},
+			discount: { amount: 60, durationMonths: 1 },
+		};
 		jest.mocked(getThankYouOrder).mockReturnValue({
 			...successfulOrder,
 			paymentMethod: 'StripeExpressCheckoutElement',
@@ -452,7 +457,11 @@ describe('ThankYou conversion tracking', () => {
 		render(
 			<ThankYou
 				supportRegionId={SupportRegionId.US}
-				appConfig={{ ...appConfig, mParticleConversions: webConfig }}
+				appConfig={{
+					...appConfig,
+					mParticleConversions: webConfig,
+					promotions: [promotion],
+				}}
 				landingPageSettings={landingPageSettings}
 			/>,
 		);
@@ -462,7 +471,7 @@ describe('ThankYou conversion tracking', () => {
 			orderId: 'session-order-123',
 			clientTransactionId: undefined,
 			email: 'supporter@example.com',
-			value: 7,
+			value: 9,
 			currency: 'USD',
 			paymentMethod: 'Stripe',
 			productType: 'SupporterPlus',
