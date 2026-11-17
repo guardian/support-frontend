@@ -33,6 +33,7 @@ assets/javascripts/lib/bower-components/
 
 support-frontend/conf/keys.conf
 support-frontend/conf/assets.json
+support-frontend/conf/assets-integrity.json
 support-frontend/conf/ssr-cache/
 !support-frontend/conf/ssr-cache/.gitexists
 support-frontend/public/compiled-assets/

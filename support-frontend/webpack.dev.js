@@ -1,6 +1,20 @@
+const fs = require('fs');
+const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
+
+// Dev bundles share file names with prod, so clear any stale SRI hashes
+class ClearIntegrityManifestPlugin {
+	apply(compiler) {
+		const clear = () =>
+			fs.rmSync(path.resolve(__dirname, 'conf/assets-integrity.json'), {
+				force: true,
+			});
+		compiler.hooks.beforeRun.tap('ClearIntegrityManifestPlugin', clear);
+		compiler.hooks.watchRun.tap('ClearIntegrityManifestPlugin', clear);
+	}
+}
 
 // Routes to be handled by the new backend
 const expressRoutePrefixes = [
@@ -39,6 +53,7 @@ module.exports = merge(common('[name].js'), {
 		fallback: { crypto: false },
 	},
 	plugins: [
+		new ClearIntegrityManifestPlugin(),
 		new webpack.DefinePlugin({
 			'globalThis.EMOTION_RUNTIME_AUTO_LABEL': JSON.stringify(true),
 		}),
