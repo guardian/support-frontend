@@ -7,12 +7,12 @@ import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 import type { Promotion } from './promotions';
 import {
 	getPromotionExpiryDate,
-	getRenewalTermsPolicyCopy,
+	getRenewalTermPolicy,
 	promotionAnnual,
 	promotionDigitalMonthly,
 	promotionPrintMonthly,
 	promotionPrintQuarterly,
-} from './renewalTermsPolicyCopy';
+} from './renewalTermPolicies';
 
 const policyContributionMonthly = (firstPayment: number) =>
 	`We will attempt to take payment of £${firstPayment}, on the 3rd day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
@@ -58,7 +58,7 @@ const printMonthlyFullPrice = 19;
 const printQuarterlyFullPrice = 57;
 const printAnnualFullPrice = 300;
 
-describe('getRenewalTermsPolicyCopy', () => {
+describe('getRenewalTermPolicyCopy', () => {
 	it.each([
 		['Contribution', 'Monthly', policyContributionMonthly],
 		['Contribution', 'Annual', policyDigitalAndPrintAnnual],
@@ -74,11 +74,11 @@ describe('getRenewalTermsPolicyCopy', () => {
 		['HomeDelivery', 'Sunday', policyDigitalAndPrintMonthly],
 		['SubscriptionCard', 'EverydayPlus', policyDigitalAndPrintMonthly],
 	] as const)(
-		'renewal terms for product: %s ratePlan: %s',
+		'renewal term for product: %s ratePlan: %s',
 		(product, ratePlan, policy) => {
 			const fullPrice = testPrices[ratePlan] ?? 0;
 			const result =
-				getRenewalTermsPolicyCopy(
+				getRenewalTermPolicy(
 					product as ActiveProductKey,
 					ratePlan as ActiveRatePlanKey,
 					fullPrice,
@@ -360,14 +360,9 @@ describe('getRenewalTermsPolicyCopy', () => {
 			undefined,
 		],
 	] as const)(
-		'promotional renewal terms for product: %s ratePlan: %s amount: %d',
+		'promotional renewal term for product: %s ratePlan: %s amount: %d',
 		(product, ratePlan, amount, promotion, expectedPolicy) => {
-			const result = getRenewalTermsPolicyCopy(
-				product,
-				ratePlan,
-				amount,
-				promotion,
-			);
+			const result = getRenewalTermPolicy(product, ratePlan, amount, promotion);
 			const expiry = getPromotionExpiryDate(
 				product,
 				ratePlan,

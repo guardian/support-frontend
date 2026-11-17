@@ -11,7 +11,7 @@ import type {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { CancellationPolicy } from './cancellationPolicy';
 import { PriceRisePolicy } from './priceRisePolicy';
-import { RenewalTermsPolicy } from './renewalTermsPolicy';
+import { RenewalTermPolicy } from './renewalTermPolicy';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
@@ -182,7 +182,7 @@ export function PreContractInformation({
 
 	return display ? (
 		<div css={containerSummaryTsCs}>
-			<RenewalTermsPolicy
+			<RenewalTermPolicy
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				amount={amount}

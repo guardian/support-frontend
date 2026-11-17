@@ -113,7 +113,7 @@ type Policy = Partial<
 	Record<ActiveProductKey, Partial<Record<ActiveRatePlanKey, string>>>
 >;
 
-function getRenewalTerms(fullPrice: number): Policy {
+function getRenewalTerm(fullPrice: number): Policy {
 	return {
 		Contribution: {
 			Monthly: contributionMonthly(fullPrice),
@@ -161,7 +161,7 @@ function getRenewalTerms(fullPrice: number): Policy {
 	};
 }
 
-function getPromotionalRenewalTerms(
+function getPromotionalRenewalTerm(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
@@ -235,15 +235,15 @@ function getPromotionalRenewalTerms(
 	};
 }
 
-export function getRenewalTermsPolicyCopy(
+export function getRenewalTermPolicy(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
 	promotion?: Promotion,
 ) {
 	return promotion
-		? getPromotionalRenewalTerms(productKey, ratePlanKey, fullPrice, promotion)[
+		? getPromotionalRenewalTerm(productKey, ratePlanKey, fullPrice, promotion)[
 				productKey
 		  ]?.[ratePlanKey]
-		: getRenewalTerms(fullPrice)[productKey]?.[ratePlanKey];
+		: getRenewalTerm(fullPrice)[productKey]?.[ratePlanKey];
 }

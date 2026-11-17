@@ -5,24 +5,24 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getRenewalTermsPolicyCopy } from 'helpers/productPrice/renewalTermsPolicyCopy';
+import { getRenewalTermPolicy } from 'helpers/productPrice/renewalTermPolicies';
 
 const marginTop = css`
 	margin-top: ${space[2]}px;
 `;
 
-interface RenewalTermsPolicyProps {
+interface RenewalTermPolicyProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	amount: number;
 	promotion?: Promotion;
 }
-export function RenewalTermsPolicy({
+export function RenewalTermPolicy({
 	productKey,
 	ratePlanKey,
 	amount,
 	promotion,
-}: RenewalTermsPolicyProps): JSX.Element | null {
+}: RenewalTermPolicyProps): JSX.Element | null {
 	const isOneTimeContribution =
 		productKey === 'Contribution' && ratePlanKey === 'OneTime';
 	const isWeeklyGift =
@@ -34,7 +34,7 @@ export function RenewalTermsPolicy({
 
 	return display ? (
 		<p css={marginTop}>
-			{getRenewalTermsPolicyCopy(productKey, ratePlanKey, amount, promotion)}
+			{getRenewalTermPolicy(productKey, ratePlanKey, amount, promotion)}
 		</p>
 	) : null;
 }
