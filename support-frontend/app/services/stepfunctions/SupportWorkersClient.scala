@@ -61,6 +61,7 @@ case class CreateSupportWorkersRequest(
     deliveryInstructions: Option[String],
     debugInfo: Option[String],
     similarProductsConsent: Option[Boolean],
+    clientTransactionId: Option[String] = None,
 )
 
 object SupportWorkersClient {
@@ -154,6 +155,7 @@ class SupportWorkersClient(
             ophanIds = request.body.ophanIds,
             referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
             supportAbTests = request.body.supportAbTests,
+            clientTransactionId = request.body.clientTransactionId,
           ),
         ),
         appliedPromotion = request.body.appliedPromotion,

@@ -85,6 +85,7 @@ export const acquisitionDataSchema = z.object({
 	ophanIds: ophanIdsSchema,
 	referrerAcquisitionData: referrerAcquisitionDataSchema,
 	supportAbTests: z.array(abTestSchema),
+	clientTransactionId: optionalDropNulls(z.string()),
 });
 export type AcquisitionData = z.infer<typeof acquisitionDataSchema>;
 

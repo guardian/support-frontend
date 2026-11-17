@@ -60,6 +60,7 @@ export function clearSourceContext() {
  */
 const orderKey = 'thankYouOrder';
 const OrderSchema = z.object({
+	clientTransactionId: z.string().optional(),
 	firstName: z.string(),
 	email: z.string(),
 	paymentMethod: z.enum([

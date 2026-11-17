@@ -18,6 +18,7 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { getClientTransactionId } from 'helpers/tracking/acquisitions';
 import {
 	getOrderId,
 	successfulContributionConversion,
@@ -81,7 +82,10 @@ function ThankYouConversionTracking({
 			return trackMParticleConversion(
 				mParticleConfig,
 				() => ({
-					orderId: getOrderId(),
+					orderId:
+						order.clientTransactionId ??
+						getClientTransactionId() ??
+						getOrderId(),
 					value: conversionValue,
 					currency: currencyKey,
 					paymentMethod: paymentMethod ?? 'None',

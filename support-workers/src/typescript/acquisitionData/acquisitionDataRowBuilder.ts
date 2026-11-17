@@ -106,6 +106,7 @@ export type AcquisitionDataRow = {
 	email?: string;
 	similarProductsConsent: boolean | null;
 	paypalTransactionId?: string;
+	clientTransactionId?: string;
 };
 
 export function buildFromState(
@@ -161,6 +162,7 @@ export function buildFromState(
 		// contributions. In future we can figure out whether it's worth finding the equivalent for a recurring PayPal
 		// payment and wire this in, but it's currently not needed.
 		paypalTransactionId: undefined,
+		clientTransactionId: acquisitionData?.clientTransactionId,
 	};
 }
 

@@ -20,6 +20,7 @@ case class AcquisitionData(
     labels: Option[Set[String]],
     postalCode: Option[String],
     countryId: Option[String],
+    clientTransactionId: Option[String] = None,
 )
 
 object AcquisitionData {

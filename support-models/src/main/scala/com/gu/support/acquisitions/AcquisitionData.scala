@@ -63,6 +63,7 @@ case class AcquisitionData(
     ophanIds: OphanIds,
     referrerAcquisitionData: ReferrerAcquisitionData,
     supportAbTests: Set[AbTest],
+    clientTransactionId: Option[String] = None,
 )
 
 object AcquisitionData {
