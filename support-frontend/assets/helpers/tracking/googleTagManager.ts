@@ -23,6 +23,7 @@ type ContributionConversionData = {
 	contributionType: ContributionType;
 	productType: ActiveProductKey;
 	googleAdsConversionSource: 'gtm' | 'mparticle';
+	clientTransactionId?: string;
 };
 
 type SubscriptionConversionData = {
@@ -260,6 +261,7 @@ function successfulContributionConversion(
 	paymentMethod: PaymentMethod,
 	productKey: ActiveProductKey,
 	googleAdsConversionSource: 'gtm' | 'mparticle' = 'gtm',
+	clientTransactionId?: string,
 ): void {
 	const contributionConversionData: ContributionConversionData = {
 		value: amount,
@@ -268,6 +270,7 @@ function successfulContributionConversion(
 		contributionType,
 		productType: productKey,
 		googleAdsConversionSource,
+		...(clientTransactionId ? { clientTransactionId } : {}),
 	};
 
 	sendData('SuccessfulConversion', contributionConversionData);

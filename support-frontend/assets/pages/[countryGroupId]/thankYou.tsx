@@ -60,6 +60,8 @@ function ThankYouConversionTracking({
 	const { enableMParticleConversions } = useFeatureSwitches();
 	const order = getThankYouOrder();
 	const hasSuccessfulOrder = order?.status === 'success';
+	const clientTransactionId =
+		order?.clientTransactionId ?? getClientTransactionId() ?? undefined;
 	const conversionValue = order?.finalAmount ?? payment.finalAmount;
 	const paymentMethod =
 		order?.paymentMethod === 'StripeExpressCheckoutElement'
@@ -74,6 +76,27 @@ function ThankYouConversionTracking({
 		if (!hasSuccessfulOrder) {
 			return undefined;
 		}
+		const sendSuccessfulConversionToGtm = (source?: 'gtm' | 'mparticle') => {
+			const conversionData = [
+				conversionValue,
+				contributionType,
+				currencyKey,
+				paymentMethod ?? 'None',
+				conversionProductKey,
+			] as const;
+
+			if (clientTransactionId) {
+				successfulContributionConversion(
+					...conversionData,
+					source,
+					clientTransactionId,
+				);
+			} else if (source) {
+				successfulContributionConversion(...conversionData, source);
+			} else {
+				successfulContributionConversion(...conversionData);
+			}
+		};
 
 		if (
 			mParticleConfig &&
@@ -82,10 +105,8 @@ function ThankYouConversionTracking({
 			return trackMParticleConversion(
 				mParticleConfig,
 				() => ({
-					orderId:
-						order.clientTransactionId ??
-						getClientTransactionId() ??
-						getOrderId(),
+					orderId: getOrderId(),
+					clientTransactionId,
 					value: conversionValue,
 					currency: currencyKey,
 					paymentMethod: paymentMethod ?? 'None',
@@ -97,24 +118,10 @@ function ThankYouConversionTracking({
 					ratePlan: ratePlanKey ?? 'OneTime',
 					billingPeriod,
 				}),
-				(source) =>
-					successfulContributionConversion(
-						conversionValue,
-						contributionType,
-						currencyKey,
-						paymentMethod ?? 'None',
-						conversionProductKey,
-						source,
-					),
+				(source) => sendSuccessfulConversionToGtm(source),
 			);
 		}
-		successfulContributionConversion(
-			conversionValue,
-			contributionType,
-			currencyKey,
-			paymentMethod ?? 'None',
-			conversionProductKey,
-		);
+		sendSuccessfulConversionToGtm();
 		return undefined;
 	}, [
 		billingPeriod,
@@ -125,6 +132,7 @@ function ThankYouConversionTracking({
 		currencyKey,
 		hasSuccessfulOrder,
 		conversionValue,
+		clientTransactionId,
 		paymentMethod,
 		ratePlanKey,
 	]);

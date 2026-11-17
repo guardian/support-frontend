@@ -12,6 +12,7 @@ type MParticleSdkConfig = {
 
 export type Purchase = {
 	orderId: string;
+	clientTransactionId?: string;
 	value: number;
 	currency: string;
 	productType: string;
@@ -139,6 +140,7 @@ export async function loadMParticleSdk(): Promise<MParticleSdk> {
 		setOptOut: (isOptingOut) => sdk.setOptOut(isOptingOut),
 		logPurchase: ({
 			orderId,
+			clientTransactionId,
 			value,
 			currency,
 			productType,
@@ -173,6 +175,9 @@ export async function loadMParticleSdk(): Promise<MParticleSdk> {
 					conversionKey: `${productType}:${ratePlan}`,
 					contributionType,
 					paymentMethod,
+					...(clientTransactionId
+						? { client_transaction_id: clientTransactionId }
+						: {}),
 				},
 				undefined,
 				transaction,
