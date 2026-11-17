@@ -684,6 +684,21 @@ export default function CheckoutForm({
 
 	const automaticSimilarProductsConsent = countryId === 'US';
 
+	const spacingSubmit = isDMCCA ? 6 : 8;
+	const marginMarketingConsent = isDMCCA
+		? css`
+				margin-top: ${space[6]}px;
+		  `
+		: css`
+				margin: ${space[6]}px 0;
+		  `;
+	const paddingSimilarProductConsent = isDMCCA
+		? css`
+				> div {
+					padding: 10px 0 0 0;
+				}
+		  `
+		: css``;
 	return (
 		<>
 			<form
@@ -1224,11 +1239,7 @@ export default function CheckoutForm({
 								})}
 							</RadioGroup>
 						</FormSection>
-						<div
-							css={css`
-								margin: ${space[6]}px 0;
-							`}
-						>
+						<div css={marginMarketingConsent}>
 							{!isMarketingEmailSession &&
 								showSimilarProductsConsentForRatePlan(
 									productDescription,
@@ -1236,6 +1247,7 @@ export default function CheckoutForm({
 								) && (
 									<SimilarProductsConsent
 										showCheckbox={!automaticSimilarProductsConsent}
+										cssOverrides={paddingSimilarProductConsent}
 									/>
 								)}
 						</div>
@@ -1243,7 +1255,6 @@ export default function CheckoutForm({
 							<PreContractInformation
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}
-								countryGroupId={countryGroupId}
 								amount={originalAmount}
 								promotion={promotion}
 							/>
@@ -1272,7 +1283,8 @@ export default function CheckoutForm({
 						/>
 						<div
 							css={css`
-								margin: ${space[taxExclusive ? 0 : 8]}px 0 ${space[8]}px;
+								margin: ${space[taxExclusive ? 0 : spacingSubmit]}px 0
+									${space[spacingSubmit]}px;
 							`}
 						>
 							<SubmitButton
