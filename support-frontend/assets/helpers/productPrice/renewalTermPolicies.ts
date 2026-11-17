@@ -52,7 +52,7 @@ const printQuarterly = (fullPrice: number) => {
 	return `Subscription auto-renews quarterly. Pay £${fullPrice}/quarter, unless you cancel. Equivalent to £${monthlyEquivalent}/month for each quarter. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 };
 
-export const promotionDigitalMonthly = (
+const promotionDigitalMonthly = (
 	fullPrice: number,
 	promotionExpiry: Date,
 	promotion: Promotion,
@@ -63,7 +63,7 @@ export const promotionDigitalMonthly = (
 	const expiry = formatUserDate(promotionExpiry);
 	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${periods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
-export const promotionPrintMonthly = (
+const promotionPrintMonthly = (
 	fullPrice: number,
 	promotionExpiry: Date,
 	promotion: Promotion,
@@ -72,9 +72,9 @@ export const promotionPrintMonthly = (
 	const periods = numberOfDiscountedPeriods ?? 1;
 	const periodName = periods > 1 ? 'months' : 'month';
 	const expiry = formatUserDate(promotionExpiry);
-	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for the first ${periods} ${periodName}, then £{${fullPrice}}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for the first ${periods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
-export const promotionPrintQuarterly = (
+const promotionPrintQuarterly = (
 	fullPrice: number,
 	promotionExpiry: Date,
 	promotion: Promotion,
@@ -87,9 +87,13 @@ export const promotionPrintQuarterly = (
 		discountedPrice ?? 0,
 		BillingPeriod.Quarterly,
 	);
-	return `Subscription auto-renews quarterly. Pay £${discountedPrice}/quarter for ${periods} $${periodName}, then £${fullPrice}/quarter from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} $${periodName}, then £${fullPrice}/month for each quarter after. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	const monthlyEquivalent = monthlyEquivalentPrice(
+		fullPrice,
+		BillingPeriod.Quarterly,
+	);
+	return `Subscription auto-renews quarterly. Pay £${discountedPrice}/quarter for ${periods} ${periodName}, then £${fullPrice}/quarter from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then £${monthlyEquivalent}/month for each quarter after. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
-export const promotionAnnual = (
+const promotionAnnual = (
 	fullPrice: number,
 	promotionExpiry: Date,
 	promotion: Promotion,
@@ -106,7 +110,7 @@ export const promotionAnnual = (
 		fullPrice,
 		BillingPeriod.Annual,
 	);
-	return `Subscription auto-renews annually. Pay £${fullPrice}/year for ${periods} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews annually. Pay £${discountedPrice}/year for ${periods} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 };
 
 type Policy = Partial<
@@ -218,14 +222,14 @@ function getPromotionalRenewalTerm(
 			QuarterlyPlus: promotionPrintQuarterlyTerms,
 			AnnualPlus: promotionAnnualTerms,
 		},
-		SubscriptionCard: {
+		HomeDelivery: {
 			EverydayPlus: promotionPrintMonthlyTerms,
 			SixdayPlus: promotionPrintMonthlyTerms,
 			WeekendPlus: promotionPrintMonthlyTerms,
 			SaturdayPlus: promotionPrintMonthlyTerms,
 			Sunday: promotionPrintMonthlyTerms,
 		},
-		HomeDelivery: {
+		SubscriptionCard: {
 			EverydayPlus: promotionPrintMonthlyTerms,
 			SixdayPlus: promotionPrintMonthlyTerms,
 			WeekendPlus: promotionPrintMonthlyTerms,
