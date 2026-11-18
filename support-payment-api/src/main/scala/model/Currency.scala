@@ -34,8 +34,7 @@ object Currency extends Enum[Currency] with CirceEnum[Currency] {
     // Note: the max amount is also validated on the client, so should be kept in sync
     val currencyRange = currency match {
       case AUD => Range(min = 1, max = 25000 * transactionCostAsPercentage)
-      case USD => Range(min = 1, max = 10000 * transactionCostAsPercentage)
-      case _ => Range(min = 1, max = 2000 * transactionCostAsPercentage)
+      case _ => Range(min = 1, max = 20000 * transactionCostAsPercentage)
     }
 
     !currencyRange.contains(amount)
