@@ -5,6 +5,7 @@ import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSc
 import { ReaderType } from '@modules/zuora/createSubscription/readerType';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import type { CmpConsentSnapshot } from '../model/cmpConsentSnapshot';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
 import type {
@@ -105,6 +106,7 @@ export type AcquisitionDataRow = {
 	state?: string;
 	email?: string;
 	similarProductsConsent: boolean | null;
+	cmpConsentSnapshot: CmpConsentSnapshot | null;
 	paypalTransactionId?: string;
 };
 
@@ -156,6 +158,7 @@ export function buildFromState(
 		// Pass null rather than undefined for interoperability with the soft-opt-in-consent-setter lambda
 		similarProductsConsent:
 			sendThankYouEmailState.similarProductsConsent ?? null,
+		cmpConsentSnapshot: state.cmpConsentSnapshot ?? null,
 
 		// For now always leave this as undefined, even for PayPal transactions. We do set this for single PayPal
 		// contributions. In future we can figure out whether it's worth finding the equivalent for a recurring PayPal

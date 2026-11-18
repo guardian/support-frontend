@@ -4,6 +4,7 @@ import { optionalDropNulls } from '@modules/schemaUtils';
 import { boolean, z } from 'zod';
 import { addressSchema } from './address';
 import type { CheckoutFailureState } from './checkoutFailureState';
+import { cmpConsentSnapshotSchema } from './cmpConsentSnapshot';
 import type { CreateZuoraSubscriptionState } from './createZuoraSubscriptionState';
 import type { FailureHandlerState } from './failureHandlerState';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
@@ -110,6 +111,7 @@ export const baseStateSchema = z.object({
 	salesforceCaseId: optionalDropNulls(z.string()),
 	acquisitionData: optionalDropNulls(acquisitionDataSchema),
 	similarProductsConsent: optionalDropNulls(boolean()),
+	cmpConsentSnapshot: optionalDropNulls(cmpConsentSnapshotSchema),
 });
 
 export const createPaymentMethodStateSchema = baseStateSchema.merge(

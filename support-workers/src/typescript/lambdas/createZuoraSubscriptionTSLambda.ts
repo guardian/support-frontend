@@ -29,6 +29,7 @@ import { sendThankYouEmailStateSchema } from '../model/sendAcquisitionEventState
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
+import { stringifyWithCmpConsentRedacted } from '../util/logging';
 import { getIfDefined } from '../util/nullAndUndefined';
 import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
@@ -61,7 +62,7 @@ export const handler = async (
 	state: WrappedState<CreateZuoraSubscriptionState>,
 ) => {
 	try {
-		console.info(`Input is ${JSON.stringify(state)}`);
+		console.info(`Input is ${stringifyWithCmpConsentRedacted(state)}`);
 
 		const createZuoraSubscriptionState = state.state;
 		const productSpecificState =
@@ -217,7 +218,7 @@ export const buildOutputState = (
 	const paymentSchedule = buildPaymentSchedule(
 		getIfDefined(
 			previewInvoices.previewResult.invoices[0]?.invoiceItems,
-			`Unable to build payment schedule for subscription ${subscriptionNumber} with state ${JSON.stringify(
+			`Unable to build payment schedule for subscription ${subscriptionNumber} with state ${stringifyWithCmpConsentRedacted(
 				createZuoraSubscriptionState,
 			)}. Preview invoices: ${JSON.stringify(previewInvoices)}`,
 		),
@@ -234,6 +235,7 @@ export const buildOutputState = (
 			requestId: createZuoraSubscriptionState.requestId,
 			analyticsInfo: createZuoraSubscriptionState.analyticsInfo,
 			acquisitionData: createZuoraSubscriptionState.acquisitionData,
+			cmpConsentSnapshot: createZuoraSubscriptionState.cmpConsentSnapshot,
 		},
 		requestInfo: wrappedState.requestInfo,
 		error: wrappedState.error,
