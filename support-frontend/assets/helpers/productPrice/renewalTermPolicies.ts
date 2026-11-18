@@ -249,7 +249,8 @@ export function getRenewalTermPolicy(
 	fullPrice: number,
 	promotion?: Promotion,
 ) {
-	return promotion
+	const isValidPromotion = promotion?.discountedPrice !== undefined;
+	return isValidPromotion
 		? getPromotionalRenewalTerm(productKey, ratePlanKey, fullPrice, promotion)[
 				productKey
 		  ]?.[ratePlanKey]
