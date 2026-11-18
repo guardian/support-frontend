@@ -38,6 +38,7 @@ interface PreContractInformationProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	amount: number;
+	contribution?: number;
 	promotion?: Promotion;
 }
 export function PreContractInformation({
@@ -45,13 +46,17 @@ export function PreContractInformation({
 	ratePlanKey,
 	amount,
 	promotion,
+	contribution,
 }: PreContractInformationProps): JSX.Element {
+	// Include SupporterPlus extra contribution
+	const fullAmount =
+		productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount;
 	return (
 		<div css={containerSummaryTsCs}>
 			<RenewalTermPolicy
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				amount={amount}
+				amount={fullAmount}
 				promotion={promotion}
 			/>
 			<CancellationPolicy

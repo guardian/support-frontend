@@ -1256,6 +1256,7 @@ export default function CheckoutForm({
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}
 								amount={originalAmount}
+								contribution={contributionAmount}
 								promotion={promotion}
 							/>
 						) : (
