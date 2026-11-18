@@ -118,7 +118,7 @@ const printGift = (
 		{getTerms('Terms & Conditions', productKey, ratePlanKey)}. This subscription
 		does not auto-renew. If you cancel within 14 days of sign-up, you'll receive
 		a full refund. To cancel within 14 days of sign-up and receive a refund
-		contact Customer Service.
+		contact {textLink('Customer Service', guardianHelpCentreLink)}.
 	</p>
 );
 
