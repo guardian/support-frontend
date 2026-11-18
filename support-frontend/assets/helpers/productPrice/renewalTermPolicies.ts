@@ -4,6 +4,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import {
 	getNumberOfMonthsInBillingPeriod,
@@ -32,7 +33,9 @@ export const getPromotionExpiryDate = (
 };
 
 const contributionMonthly = (fullPrice: number): string => {
-	return `We will attempt to take payment of £${fullPrice}, on the 3rd day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
+	return `We will attempt to take payment of £${fullPrice}, on the ${getDateWithOrdinal(
+		new Date(),
+	)} day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
 };
 const digitalAndPrintMonthly = (fullPrice: number): string => {
 	return `Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
