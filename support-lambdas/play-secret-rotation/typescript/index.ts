@@ -8,7 +8,7 @@ import {
 // This should match the overlapDuration specified in AppComponents.scala
 const ROTATION_OVERLAP_MS = 2 * 60 * 60 * 1000; // 2 hours
 // This should match the usageDelay specified in AppComponents.scala
-const USAGE_DELAY_MS = 3 * 1000; // 3 minutes
+const USAGE_DELAY_MS = 3 * 60 * 1000; // 3 minutes
 const MIN_ROTATION_INTERVAL_MS = ROTATION_OVERLAP_MS + USAGE_DELAY_MS;
 
 export const handler = async (): Promise<void> => {
