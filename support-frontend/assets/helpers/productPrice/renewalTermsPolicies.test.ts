@@ -54,7 +54,7 @@ const promoPrintQuarterly = (
 		BillingPeriod.Quarterly,
 	)}/month for each quarter after. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 
-const promoAnnual = (
+const promotionAnnual = (
 	fullPrice: number,
 	discountPrice: number,
 	expiry: string,
@@ -91,7 +91,7 @@ const discountPrices: Partial<Record<ActiveRatePlanKey, number>> = {
 	SaturdayPlus: 7,
 	Sunday: 7,
 };
-const promotionMonthly: Promotion = {
+const promoMonthly: Promotion = {
 	name: 'MONTHLY',
 	description: '',
 	promoCode: 'MONTHLY',
@@ -99,7 +99,7 @@ const promotionMonthly: Promotion = {
 	numberOfDiscountedPeriods: 6,
 	discountedPrice: discountPrices['Monthly'],
 };
-const promotionQuarterly: Promotion = {
+const promoQuarterly: Promotion = {
 	name: 'QUARTERLY',
 	description: '',
 	promoCode: 'QUARTERLY',
@@ -107,7 +107,7 @@ const promotionQuarterly: Promotion = {
 	numberOfDiscountedPeriods: 2,
 	discountedPrice: discountPrices['QuarterlyPlus'],
 };
-const promotionAnnual: Promotion = {
+const promoAnnual: Promotion = {
 	name: 'ANNUAL',
 	description: '',
 	promoCode: 'ANNUAL',
@@ -116,16 +116,16 @@ const promotionAnnual: Promotion = {
 	discountedPrice: discountPrices['Annual'],
 };
 const promotions: Partial<Record<ActiveRatePlanKey, Promotion>> = {
-	Monthly: promotionMonthly,
-	MonthlyPlus: promotionMonthly,
-	QuarterlyPlus: promotionQuarterly,
-	Annual: promotionAnnual,
-	AnnualPlus: promotionAnnual,
-	EverydayPlus: promotionMonthly,
-	SixdayPlus: promotionMonthly,
-	WeekendPlus: promotionMonthly,
-	SaturdayPlus: promotionMonthly,
-	Sunday: promotionMonthly,
+	Monthly: promoMonthly,
+	MonthlyPlus: promoMonthly,
+	QuarterlyPlus: promoQuarterly,
+	Annual: promoAnnual,
+	AnnualPlus: promoAnnual,
+	EverydayPlus: promoMonthly,
+	SixdayPlus: promoMonthly,
+	WeekendPlus: promoMonthly,
+	SaturdayPlus: promoMonthly,
+	Sunday: promoMonthly,
 };
 
 describe('getRenewalTermPolicyCopy', () => {
@@ -151,7 +151,7 @@ describe('getRenewalTermPolicyCopy', () => {
 		['SubscriptionCard', 'SaturdayPlus', digitalAndPrintMonthly],
 		['SubscriptionCard', 'Sunday', digitalAndPrintMonthly],
 	] as const)(
-		'renewal term for product: %s ratePlan: %s',
+		'renewal term for product:%s ratePlan:%s',
 		(product, ratePlan, policy) => {
 			const fullPrice = fullPrices[ratePlan] ?? 0;
 			const result =
@@ -167,12 +167,12 @@ describe('getRenewalTermPolicyCopy', () => {
 	it.each([
 		['GuardianAdLite', 'Monthly', promoDigitalMonthly],
 		['SupporterPlus', 'Monthly', promoDigitalMonthly],
-		['SupporterPlus', 'Annual', promoAnnual],
+		['SupporterPlus', 'Annual', promotionAnnual],
 		['DigitalSubscription', 'Monthly', promoDigitalMonthly],
-		['DigitalSubscription', 'Annual', promoAnnual],
+		['DigitalSubscription', 'Annual', promotionAnnual],
 		['GuardianWeeklyDomestic', 'MonthlyPlus', promoPrintMonthly],
 		['GuardianWeeklyDomestic', 'QuarterlyPlus', promoPrintQuarterly],
-		['GuardianWeeklyDomestic', 'AnnualPlus', promoAnnual],
+		['GuardianWeeklyDomestic', 'AnnualPlus', promotionAnnual],
 		['HomeDelivery', 'EverydayPlus', promoPrintMonthly],
 		['HomeDelivery', 'SixdayPlus', promoPrintMonthly],
 		['HomeDelivery', 'WeekendPlus', promoPrintMonthly],
@@ -184,7 +184,7 @@ describe('getRenewalTermPolicyCopy', () => {
 		['SubscriptionCard', 'SaturdayPlus', promoPrintMonthly],
 		['SubscriptionCard', 'Sunday', promoPrintMonthly],
 	] as const)(
-		'promotional renewal term for product: %s ratePlan: %s',
+		'promotional renewal term for product:%s ratePlan:%s',
 		(product, ratePlan, policy) => {
 			const fullPrice = fullPrices[ratePlan] ?? 0;
 			const promotion = promotions[ratePlan];
@@ -205,4 +205,62 @@ describe('getRenewalTermPolicyCopy', () => {
 			);
 		},
 	);
+
+	describe('getPromotionExpiryDate', () => {
+		const startDate = new Date(2026, 11, 1);
+		const sixMonths = new Date(2027, 5, 1);
+		const sixMonthsPlus15days = new Date(2027, 5, 16);
+		const oneYear = new Date(2027, 11, 1);
+		const weeklySixMonths = new Date(2027, 5, 11);
+		const weeklyAnnual = new Date(2027, 11, 11);
+		const homeDeliveryMon = new Date(2027, 5, 4);
+		const homeDeliverySat = new Date(2027, 5, 5);
+		const homeDeliverySun = new Date(2027, 5, 6);
+		const subsCardMon = new Date(2027, 5, 10);
+		const subsCardSat = new Date(2027, 5, 12);
+		const subsCardSun = new Date(2027, 5, 13);
+
+		beforeEach(() => {
+			jest.useFakeTimers().setSystemTime(startDate);
+		});
+
+		afterEach(() => {
+			jest.useRealTimers();
+		});
+		it.each([
+			['GuardianAdLite', 'Monthly', promoMonthly, sixMonthsPlus15days],
+			['SupporterPlus', 'Monthly', promoMonthly, sixMonths],
+			['SupporterPlus', 'Annual', promoAnnual, oneYear],
+			['DigitalSubscription', 'Monthly', promoMonthly, sixMonths],
+			['DigitalSubscription', 'Annual', promoAnnual, oneYear],
+			['GuardianWeeklyDomestic', 'MonthlyPlus', promoMonthly, weeklySixMonths],
+			[
+				'GuardianWeeklyDomestic',
+				'QuarterlyPlus',
+				promoQuarterly,
+				weeklySixMonths,
+			],
+			['GuardianWeeklyDomestic', 'AnnualPlus', promoAnnual, weeklyAnnual],
+			['HomeDelivery', 'EverydayPlus', promoMonthly, homeDeliveryMon],
+			['HomeDelivery', 'SixdayPlus', promoMonthly, homeDeliveryMon],
+			['HomeDelivery', 'WeekendPlus', promoMonthly, homeDeliverySat],
+			['HomeDelivery', 'SaturdayPlus', promoMonthly, homeDeliverySat],
+			['HomeDelivery', 'Sunday', promoMonthly, homeDeliverySun],
+			['SubscriptionCard', 'EverydayPlus', promoMonthly, subsCardMon],
+			['SubscriptionCard', 'SixdayPlus', promoMonthly, subsCardMon],
+			['SubscriptionCard', 'WeekendPlus', promoMonthly, subsCardSat],
+			['SubscriptionCard', 'SaturdayPlus', promoMonthly, subsCardSat],
+			['SubscriptionCard', 'Sunday', promoMonthly, subsCardSun],
+		] as const)(
+			`calculate promotion expiry date for product:%s rateplan:%s`,
+			(...[product, ratePlan, promotion, promoExpiryDate]) => {
+				const result = getPromotionExpiryDate(
+					product,
+					ratePlan,
+					promotion.numberOfDiscountedPeriods ?? 0,
+				);
+				expect(result).toEqual(promoExpiryDate);
+			},
+		);
+	});
 });
