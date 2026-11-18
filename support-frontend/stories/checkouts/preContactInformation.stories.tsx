@@ -1,4 +1,4 @@
-import type { Promotion } from 'helpers/productPrice/promotions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type { PreContractInformationProps } from 'pages/supporter-plus-landing/components/preContractInformation';
 import { PreContractInformation } from 'pages/supporter-plus-landing/components/preContractInformation';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -16,31 +16,46 @@ function Template(args: PreContractInformationProps) {
 
 Template.args = {} as Omit<PreContractInformationProps, ''>;
 
-const monthlyPromotion: Promotion = {
+const monthlyPromotion: PromoWithCatalogInformation = {
 	name: '50% off for 6 months',
 	description: 'Monthly subscription promotion',
 	promoCode: 'MONTHLY50',
-	numberOfDiscountedPeriods: 6,
-	discountedPrice: 7,
+	discount: {
+		durationMonths: 6,
+		amount: 7,
+	},
 	isIntroductoryPricing: true,
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2026-01-01T00:00:00.000Z',
 };
 
-const quarterlyPromotion: Promotion = {
+const quarterlyPromotion: PromoWithCatalogInformation = {
 	name: '50% off for 2 quarters',
 	description: 'Quarterly subscription promotion',
 	promoCode: 'QUARTERLY50',
-	numberOfDiscountedPeriods: 2,
-	discountedPrice: 30,
+	discount: {
+		durationMonths: 6,
+		amount: 30,
+	},
 	isIntroductoryPricing: true,
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2026-01-01T00:00:00.000Z',
 };
 
-const annualPromotion: Promotion = {
+const annualPromotion: PromoWithCatalogInformation = {
 	name: 'Discounted first year',
 	description: 'Annual subscription promotion',
 	promoCode: 'ANNUALDISCOUNT',
-	numberOfDiscountedPeriods: 1,
-	discountedPrice: 90,
+	discount: {
+		durationMonths: 12,
+		amount: 90,
+	},
 	isIntroductoryPricing: true,
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2026-01-01T00:00:00.000Z',
 };
 
 export const GuardianAdLiteMonthly = Template.bind({});

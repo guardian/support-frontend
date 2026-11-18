@@ -1,15 +1,15 @@
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { getRenewalTermPolicy } from 'helpers/productPrice/renewalTermPolicies';
 
 interface RenewalTermPolicyProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	amount: number;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 }
 export function RenewalTermPolicy({
 	productKey,

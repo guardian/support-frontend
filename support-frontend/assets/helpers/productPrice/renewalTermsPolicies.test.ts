@@ -1,4 +1,5 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -6,7 +7,6 @@ import type {
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
-import type { Promotion } from './promotions';
 import {
 	getPromotionExpiryDate,
 	getRenewalTermPolicy,
@@ -91,31 +91,48 @@ const discountPrices: Partial<Record<ActiveRatePlanKey, number>> = {
 	SaturdayPlus: 7,
 	Sunday: 7,
 };
-const promoMonthly: Promotion = {
+const promoMonthly: PromoWithCatalogInformation = {
 	name: 'MONTHLY',
 	description: '',
 	promoCode: 'MONTHLY',
 	isIntroductoryPricing: true,
-	numberOfDiscountedPeriods: 6,
-	discountedPrice: discountPrices['Monthly'],
+	discount: {
+		amount: discountPrices['Monthly'] ?? 0,
+		durationMonths: 6,
+	},
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2026-01-01T00:00:00.000Z',
 };
-const promoQuarterly: Promotion = {
+const promoQuarterly: PromoWithCatalogInformation = {
 	name: 'QUARTERLY',
 	description: '',
 	promoCode: 'QUARTERLY',
 	isIntroductoryPricing: true,
-	numberOfDiscountedPeriods: 2,
-	discountedPrice: discountPrices['QuarterlyPlus'],
+	discount: {
+		amount: discountPrices['QuarterlyPlus'] ?? 0,
+		durationMonths: 6,
+	},
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2026-01-01T00:00:00.000Z',
 };
-const promoAnnual: Promotion = {
+const promoAnnual: PromoWithCatalogInformation = {
 	name: 'ANNUAL',
 	description: '',
 	promoCode: 'ANNUAL',
 	isIntroductoryPricing: true,
-	numberOfDiscountedPeriods: 1,
-	discountedPrice: discountPrices['Annual'],
+	discount: {
+		amount: discountPrices['Annual'] ?? 0,
+		durationMonths: 12,
+	},
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2026-01-01T00:00:00.000Z',
 };
-const promotions: Partial<Record<ActiveRatePlanKey, Promotion>> = {
+const promotions: Partial<
+	Record<ActiveRatePlanKey, PromoWithCatalogInformation>
+> = {
 	Monthly: promoMonthly,
 	MonthlyPlus: promoMonthly,
 	QuarterlyPlus: promoQuarterly,
@@ -198,7 +215,7 @@ describe('getRenewalTermPolicyCopy', () => {
 			const expiry = getPromotionExpiryDate(
 				product,
 				ratePlan,
-				promotion?.numberOfDiscountedPeriods ?? 0,
+				promotion?.discount?.durationMonths ?? 0,
 			);
 			expect(result).toBe(
 				policy(fullPrice, discountPrice, formatUserDate(expiry)),
@@ -257,7 +274,7 @@ describe('getRenewalTermPolicyCopy', () => {
 				const result = getPromotionExpiryDate(
 					product,
 					ratePlan,
-					promotion.numberOfDiscountedPeriods ?? 0,
+					promotion.discount?.durationMonths ?? 0,
 				);
 				expect(result).toEqual(promoExpiryDate);
 			},

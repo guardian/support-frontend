@@ -1,4 +1,5 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -7,28 +8,20 @@ import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductO
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import {
-	getNumberOfMonthsInBillingPeriod,
-	ratePlanToBillingPeriod,
-} from './billingPeriods';
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
-import type { Promotion } from './promotions';
 
 export const getPromotionExpiryDate = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	discountPeriods: number,
+	durationMonths: number,
 ): Date => {
 	const startDate =
 		getProductFirstDeliveryDate(
 			productKey,
 			ratePlanKey as ActivePaperProductOptions,
 		) ?? new Date();
-	const monthsInPeriod =
-		discountPeriods *
-		getNumberOfMonthsInBillingPeriod(ratePlanToBillingPeriod(ratePlanKey));
 	const promotionExpiryDate = new Date(
-		startDate.setMonth(startDate.getMonth() + monthsInPeriod),
+		startDate.setMonth(startDate.getMonth() + durationMonths),
 	);
 	return promotionExpiryDate;
 };
@@ -59,62 +52,76 @@ const printQuarterly = (fullPrice: number) => {
 const promotionDigitalMonthly = (
 	fullPrice: number,
 	promotionExpiry: Date,
-	promotion: Promotion,
+	promotion: PromoWithCatalogInformation,
 ): string => {
-	const { discountedPrice, numberOfDiscountedPeriods } = promotion;
-	const periods = numberOfDiscountedPeriods ?? 1;
-	const periodName = periods > 1 ? 'months' : 'month';
+	const { discount } = promotion;
+	if (!discount) {
+		return digitalAndPrintMonthly(fullPrice);
+	}
+	const { amount: discountedPrice, durationMonths } = discount;
+	const periodName = durationMonths > 1 ? 'months' : 'month';
 	const expiry = formatUserDate(promotionExpiry);
-	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${periods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${durationMonths} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionPrintMonthly = (
 	fullPrice: number,
 	promotionExpiry: Date,
-	promotion: Promotion,
+	promotion: PromoWithCatalogInformation,
 ): string => {
-	const { discountedPrice, numberOfDiscountedPeriods } = promotion;
-	const periods = numberOfDiscountedPeriods ?? 1;
-	const periodName = periods > 1 ? 'months' : 'month';
+	const { discount } = promotion;
+	if (!discount) {
+		return digitalAndPrintMonthly(fullPrice);
+	}
+	const { amount: discountedPrice, durationMonths } = discount;
+	const periodName = durationMonths > 1 ? 'months' : 'month';
 	const expiry = formatUserDate(promotionExpiry);
-	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for the first ${periods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for the first ${durationMonths} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionPrintQuarterly = (
 	fullPrice: number,
 	promotionExpiry: Date,
-	promotion: Promotion,
+	promotion: PromoWithCatalogInformation,
 ): string => {
-	const { discountedPrice, numberOfDiscountedPeriods } = promotion;
-	const periods = numberOfDiscountedPeriods ?? 1;
-	const periodName = periods > 1 ? 'quarters' : 'quarter';
+	const { discount } = promotion;
+	if (!discount) {
+		return printQuarterly(fullPrice);
+	}
+	const { amount: discountedPrice, durationMonths } = discount;
+	const durationQuarters = durationMonths / 3;
+	const periodName = durationQuarters > 1 ? 'quarters' : 'quarter';
 	const expiry = formatUserDate(promotionExpiry);
 	const discountMonthlyEquivalent = monthlyEquivalentPrice(
-		discountedPrice ?? 0,
+		discountedPrice,
 		BillingPeriod.Quarterly,
 	);
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Quarterly,
 	);
-	return `Subscription auto-renews quarterly. Pay £${discountedPrice}/quarter for ${periods} ${periodName}, then £${fullPrice}/quarter from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then £${monthlyEquivalent}/month for each quarter after. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews quarterly. Pay £${discountedPrice}/quarter for ${durationQuarters} ${periodName}, then £${fullPrice}/quarter from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${durationQuarters} ${periodName}, then £${monthlyEquivalent}/month for each quarter after. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionAnnual = (
 	fullPrice: number,
 	promotionExpiry: Date,
-	promotion: Promotion,
+	promotion: PromoWithCatalogInformation,
 ): string => {
-	const { discountedPrice, numberOfDiscountedPeriods } = promotion;
-	const periods = numberOfDiscountedPeriods ?? 1;
-	const periodName = periods > 1 ? 'years' : 'year';
+	const { discount } = promotion;
+	if (!discount) {
+		return digitalAndPrintAnnual(fullPrice);
+	}
+	const { amount: discountedPrice, durationMonths } = discount;
+	const durationAnnual = durationMonths / 12;
+	const periodName = durationAnnual > 1 ? 'years' : 'year';
 	const expiry = formatUserDate(promotionExpiry);
 	const discountMonthlyEquivalent = monthlyEquivalentPrice(
-		discountedPrice ?? 0,
+		discountedPrice,
 		BillingPeriod.Annual,
 	);
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Annual,
 	);
-	return `Subscription auto-renews annually. Pay £${discountedPrice}/year for ${periods} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${periods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	return `Subscription auto-renews annually. Pay £${discountedPrice}/year for ${durationAnnual} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${durationAnnual} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 };
 
 type Policy = Partial<
@@ -173,12 +180,12 @@ function getPromotionalRenewalTerm(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
-	promotion: Promotion,
+	promotion: PromoWithCatalogInformation,
 ): Policy {
 	const promotionExpiryDate = getPromotionExpiryDate(
 		productKey,
 		ratePlanKey,
-		promotion.numberOfDiscountedPeriods ?? 0,
+		promotion.discount?.durationMonths ?? 0,
 	);
 	const promotionAnnualTerms = promotionAnnual(
 		fullPrice,
@@ -247,9 +254,9 @@ export function getRenewalTermPolicy(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
-	promotion?: Promotion,
+	promotion?: PromoWithCatalogInformation,
 ) {
-	const isValidPromotion = promotion?.discountedPrice !== undefined;
+	const isValidPromotion = promotion?.discount?.amount !== undefined;
 	return isValidPromotion
 		? getPromotionalRenewalTerm(productKey, ratePlanKey, fullPrice, promotion)[
 				productKey

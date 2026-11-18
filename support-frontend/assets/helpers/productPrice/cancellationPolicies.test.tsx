@@ -1,3 +1,4 @@
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { render, screen } from '@testing-library/react';
 import {
 	digitalPlusTermsLink,
@@ -12,7 +13,6 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { getCancellationPolicy } from './cancellationPolicies';
 
 const digitalMonthly =
@@ -266,14 +266,20 @@ describe('getCancellationPolicy', () => {
 		},
 	);
 
-	const promotion: Promotion = {
+	const promotion: PromoWithCatalogInformation = {
 		name: 'INTRODUCTORY',
 		description: '',
 		promoCode: 'INTRODUCTORY',
 		isIntroductoryPricing: true,
-		numberOfDiscountedPeriods: 6,
-		discountedPrice: 7,
+		discount: {
+			amount: 7,
+			durationMonths: 6,
+		},
+		campaignCode: 'TEST_CAMPAIGN',
+		appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+		startTimestamp: '2026-01-01T00:00:00.000Z',
 	};
+
 	it.each([
 		...policyCases.map(
 			([product, ratePlan, , promotionalCopy, termsLink]) =>
@@ -282,19 +288,19 @@ describe('getCancellationPolicy', () => {
 		[
 			'SupporterPlus',
 			'Monthly',
-			{ ...promotion, discountedPrice: undefined },
+			{ ...promotion, discount: undefined },
 			digitalMonthly, // fallback to non-promotion copy with no discount price
 			supporterPlusTermsLink,
 		],
 		[
 			'SupporterPlus',
 			'Monthly',
-			{ ...promotion, discountedPrice: 0 },
+			{ ...promotion, discount: { amount: 0, durationMonths: 6 } },
 			promotionDigitalMonthly(0),
 			supporterPlusTermsLink,
 		],
 	] as const)(
-		'promotional cancellation policy for product: %s ratePlan: %s promotion: %j',
+		'promotional cancellation policy for product: %s ratePlan: %s',
 		(product, ratePlan, promotion, copy, termsLink) => {
 			const result = getCancellationPolicy(product, ratePlan, promotion);
 			expectPolicy(result[product]?.[ratePlan], copy, termsLink);

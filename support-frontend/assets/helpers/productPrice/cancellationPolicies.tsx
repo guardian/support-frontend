@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import {
 	contributionsTermsLinks,
 	digitalPlusTermsLink,
@@ -15,7 +16,6 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { textLink } from 'helpers/utilities/textLink';
 
 const marginTop = css`
@@ -297,18 +297,18 @@ const promotionalCancellation = (
 function getPromotionalCancellation(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	promotion?: Promotion,
+	promotion?: PromoWithCatalogInformation,
 ): PolicyElement {
-	const firstPayment = promotion?.discountedPrice ?? 0;
+	const firstPayment = promotion?.discount?.amount ?? 0;
 	return promotionalCancellation(productKey, ratePlanKey, firstPayment);
 }
 
 export function getCancellationPolicy(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	promotion?: Promotion,
+	promotion?: PromoWithCatalogInformation,
 ): PolicyElement {
-	const isValidPromotion = promotion?.discountedPrice !== undefined;
+	const isValidPromotion = promotion?.discount?.amount !== undefined;
 	return isValidPromotion
 		? getPromotionalCancellation(productKey, ratePlanKey, promotion)
 		: getCancellation(productKey, ratePlanKey);

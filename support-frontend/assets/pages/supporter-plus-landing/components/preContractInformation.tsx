@@ -5,11 +5,11 @@ import {
 	space,
 	textSans15,
 } from '@guardian/source/foundations';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { CancellationPolicy } from './cancellationPolicy';
 import { PriceRisePolicy } from './priceRisePolicy';
 import { RenewalTermPolicy } from './renewalTermPolicy';
@@ -39,7 +39,7 @@ export interface PreContractInformationProps {
 	ratePlanKey: ActiveRatePlanKey;
 	amount: number;
 	contribution?: number;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 }
 export function PreContractInformation({
 	productKey,
