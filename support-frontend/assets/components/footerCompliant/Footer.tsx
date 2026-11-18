@@ -1,12 +1,13 @@
 // ----- Imports ----- //
 import { cmp } from '@guardian/consent-manager';
+import { getLocale } from '@guardian/libs';
 import {
 	ButtonLink,
 	Link,
 	themeLinkBrand,
 } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
-import { Children } from 'react';
+import { Children, useEffect, useState } from 'react';
 import {
 	copyrightNotice,
 	guardianContactUsLink,
@@ -37,6 +38,15 @@ function Footer({
 	termsConditionsLink,
 	fullWidth,
 }: PropTypes): JSX.Element {
+	const [localeCode, setLocaleCode] = useState<string | null>(null);
+
+	useEffect(() => {
+		const updateLocale = async () => {
+			const locale = await getLocale();
+			setLocaleCode(locale);
+		};
+		void updateLocale();
+	}, []);
 	function showPrivacyManager() {
 		cmp.showPrivacyManager();
 	}
@@ -85,7 +95,9 @@ function Footer({
 					</li>
 					<li css={link}>
 						<ButtonLink onClick={showPrivacyManager} theme={themeLinkBrand}>
-							Privacy Settings
+							{localeCode === 'US'
+								? 'Do not sell or share my personal information'
+								: 'Privacy Settings'}
 						</ButtonLink>
 					</li>
 					{termsConditionsLink && (
