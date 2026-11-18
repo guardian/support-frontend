@@ -1,18 +1,6 @@
-import type { CountryCode } from '@modules/internationalisation/country';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
-import type {
-	FulfilmentOptions,
-	GuardianWeeklyFulfilmentOptions,
-} from '@modules/product/fulfilmentOptions';
-import { Domestic, RestOfWorld } from '@modules/product/fulfilmentOptions';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ActiveProductKey } from './productCatalog';
 
-export const getWeeklyFulfilmentOption = (
-	country: CountryCode,
-): GuardianWeeklyFulfilmentOptions =>
-	countryGroups.International.countries.includes(country)
-		? RestOfWorld
-		: Domestic;
 export const getFulfilmentOptionFromProductKey = (
 	productKey: ActiveProductKey,
 ): FulfilmentOptions => {

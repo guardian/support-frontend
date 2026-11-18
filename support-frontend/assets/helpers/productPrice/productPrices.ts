@@ -15,7 +15,6 @@ import type { ProductOptions } from '@modules/product/productOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { extendedGlyph, glyph } from 'helpers/internationalisation/currency';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
 
 // ----- Types ----- //
@@ -24,7 +23,6 @@ export type ProductPrice = {
 	savingVsRetail?: number;
 	currency: CurrencyCode;
 	fixedTerm: boolean;
-	promotions?: Promotion[];
 };
 
 type BillingPeriods = Partial<
