@@ -308,7 +308,8 @@ export function getCancellationPolicy(
 	ratePlanKey: ActiveRatePlanKey,
 	promotion?: Promotion,
 ): PolicyElement {
-	return promotion
+	const isValidPromotion = promotion?.discountedPrice !== undefined;
+	return isValidPromotion
 		? getPromotionalCancellation(productKey, ratePlanKey, promotion)
 		: getCancellation(productKey, ratePlanKey);
 }

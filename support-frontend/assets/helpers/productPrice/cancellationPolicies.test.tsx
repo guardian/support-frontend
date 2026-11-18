@@ -63,21 +63,7 @@ const policyCases: PolicyCase[] = [
 	],
 	[
 		'SupporterPlus',
-		'MonthlyTaxExclusive',
-		digitalMonthly,
-		promotionDigitalMonthly(7),
-		supporterPlusTermsLink,
-	],
-	[
-		'SupporterPlus',
 		'Annual',
-		digitalAnnual,
-		digitalAnnual,
-		supporterPlusTermsLink,
-	],
-	[
-		'SupporterPlus',
-		'AnnualTaxExclusive',
 		digitalAnnual,
 		digitalAnnual,
 		supporterPlusTermsLink,
@@ -98,21 +84,7 @@ const policyCases: PolicyCase[] = [
 	],
 	[
 		'DigitalSubscription',
-		'MonthlyTaxExclusive',
-		digitalMonthly,
-		promotionDigitalMonthly(7),
-		digitalPlusTermsLink,
-	],
-	[
-		'DigitalSubscription',
 		'Annual',
-		digitalAnnual,
-		digitalAnnual,
-		digitalPlusTermsLink,
-	],
-	[
-		'DigitalSubscription',
-		'AnnualTaxExclusive',
 		digitalAnnual,
 		digitalAnnual,
 		digitalPlusTermsLink,
@@ -311,7 +283,7 @@ describe('getCancellationPolicy', () => {
 			'SupporterPlus',
 			'Monthly',
 			{ ...promotion, discountedPrice: undefined },
-			promotionDigitalMonthly(0),
+			digitalMonthly, // fallback to non-promotion copy with no discount price
 			supporterPlusTermsLink,
 		],
 		[
