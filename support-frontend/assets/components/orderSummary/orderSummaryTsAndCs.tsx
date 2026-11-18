@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, space } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { productLegal } from 'helpers/legalCopy';
 import {
 	type ActiveProductKey,
@@ -11,7 +12,6 @@ import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import {
@@ -32,7 +32,7 @@ export interface OrderSummaryTsAndCsProps {
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
 	ratePlanDescription?: string;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 	thresholdAmount?: number;
 	deliveryDate?: Date;
 }

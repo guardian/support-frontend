@@ -514,6 +514,38 @@ class StripeBackendSpec
         stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight mustBe
           StripePaymentIntentsApiResponse.RequiresAction("a_secret")
       }
+
+      // Helper for recordFailedPayment tests below
+      def failWithDeclineCode(fixture: StripeBackendFixture, declineCode: Option[String]): StripeApiError = {
+        val error =
+          StripeApiError(Some("SomeException"), Some(402), declineCode, "An error message", None)
+        when(fixture.mockRecaptchaService.verify(fixture.recaptchaToken)).thenReturn(fixture.recaptchaServiceSuccess)
+        when(fixture.mockStripeService.createPaymentIntent(fixture.createPaymentIntent))
+          .thenReturn(EitherT.leftT[Future, PaymentIntent](error))
+
+        fixture.stripeBackend
+          .createPaymentIntent(fixture.createPaymentIntent, clientBrowserInfo)
+          .futureLeft mustBe error
+        error
+      }
+
+      "not record a failed payment metric if the decline code is email_invalid" in new StripeBackendFixture {
+        failWithDeclineCode(this, Some("email_invalid"))
+
+        verify(mockCloudWatchService, never()).recordFailedPayment(any(), any())
+      }
+
+      "record a failed payment metric if the decline code is not ignored" in new StripeBackendFixture {
+        val error = failWithDeclineCode(this, Some("ignore_this_decline_code"))
+
+        verify(mockCloudWatchService, times(1)).recordFailedPayment(error, PaymentProvider.Stripe)
+      }
+
+      "record a failed payment metric if there is no decline code" in new StripeBackendFixture {
+        val error = failWithDeclineCode(this, None)
+
+        verify(mockCloudWatchService, times(1)).recordFailedPayment(error, PaymentProvider.Stripe)
+      }
     }
 
     "a request is made to create a Payment Intent with a recaptcha token" should {

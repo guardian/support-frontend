@@ -14,14 +14,14 @@ const promotionWithoutDiscount: PromoWithCatalogInformation = {
 };
 
 describe('promotion pricing without a discount', () => {
-	it('has no discounted price', () => {
+	it('leaves the price unchanged', () => {
 		expect(
 			getPromotionDiscountedPrice(
 				promotionWithoutDiscount,
 				10,
 				BillingPeriod.Monthly,
 			),
-		).toBeUndefined();
+		).toBe(10);
 	});
 
 	it('has no discounted periods', () => {
@@ -30,6 +30,6 @@ describe('promotion pricing without a discount', () => {
 				promotionWithoutDiscount,
 				BillingPeriod.Monthly,
 			),
-		).toBeUndefined();
+		).toBe(0);
 	});
 });

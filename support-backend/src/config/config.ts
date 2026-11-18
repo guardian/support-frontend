@@ -12,6 +12,10 @@ const configSchema = z.object({
 		key: z.string(),
 		url: z.string(),
 	}),
+	multipleAccountApi: z.object({
+		key: z.string(),
+		url: z.string(),
+	}),
 });
 
 export type Config = z.infer<typeof configSchema>;

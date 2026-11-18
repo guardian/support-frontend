@@ -4,7 +4,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.{CountryGroup, Title}
 import com.gu.monitoring.SafeLogging
-import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
+import com.gu.support.acquisitions.{AbTest, AcquisitionData, CmpConsentSnapshot, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
@@ -61,6 +61,7 @@ case class CreateSupportWorkersRequest(
     deliveryInstructions: Option[String],
     debugInfo: Option[String],
     similarProductsConsent: Option[Boolean],
+    cmpConsentSnapshot: Option[CmpConsentSnapshot] = None,
 )
 
 object SupportWorkersClient {
@@ -164,6 +165,7 @@ class SupportWorkersClient(
         ipAddress =
           request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
         similarProductsConsent = request.body.similarProductsConsent,
+        cmpConsentSnapshot = request.body.cmpConsentSnapshot,
       )
       name = SupportWorkersUtils.buildExecutionName(createPaymentMethodState)
       executionResult <- underlying
@@ -182,7 +184,7 @@ class SupportWorkersClient(
               )
             } getOrElse {
               logger.error(
-                scrub"[$requestId] Failed to parse ${success.arn} to a jobId after triggering Step Function execution for ${user.id} $request",
+                scrub"[$requestId] Failed to parse ${success.arn} to a jobId after triggering Step Function execution for ${user.id}",
               )
               StatusResponse(
                 status = Status.Failure,
@@ -250,7 +252,7 @@ object StepFunctionExecutionStatus extends SafeLogging {
       stateWrapper: StateWrapper,
       eventDetails: StateExitedEventDetails,
   ): Option[CheckoutFailureReason] = {
-    logger.info(s"Event details are: $eventDetails")
+    logger.info(s"Received ${eventDetails.name()} event details for checkout failure")
     stateWrapper.unWrap[CheckoutFailureState](eventDetails.output()) match {
       case Success(checkoutFailureState) =>
         Some(checkoutFailureState.checkoutFailureReason)

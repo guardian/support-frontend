@@ -9,7 +9,7 @@ test.describe('One-Time Checkout', () => {
 		{
 			paymentType: 'Credit/Debit card',
 			internationalisationId: 'uk',
-			maxAmount: 2000,
+			maxAmount: 20000,
 		},
 	].forEach((testDetails) => {
 		testOneTimeCheckout(testDetails);

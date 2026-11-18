@@ -11,6 +11,14 @@ describe('parseConfig', () => {
 				Name: `${basePath}/paper-round-api/url`,
 				Value: 'https://paper.example',
 			},
+			{
+				Name: `${basePath}/multiple-account-api/key`,
+				Value: 'multiple-account-key',
+			},
+			{
+				Name: `${basePath}/multiple-account-api/url`,
+				Value: 'https://multiple.example',
+			},
 		];
 
 		const config = parseConfig(basePath, params);
@@ -18,6 +26,10 @@ describe('parseConfig', () => {
 		expect(config).toEqual({
 			idealPostcodesApi: { key: 'ideal-key' },
 			paperRoundApi: { key: 'paper-key', url: 'https://paper.example' },
+			multipleAccountApi: {
+				key: 'multiple-account-key',
+				url: 'https://multiple.example',
+			},
 		});
 	});
 
@@ -28,6 +40,14 @@ describe('parseConfig', () => {
 			{
 				Name: `${basePath}/paper-round-api/url`,
 				Value: 'https://paper.example',
+			},
+			{
+				Name: `${basePath}/multiple-account-api/key`,
+				Value: 'multiple-account-key',
+			},
+			{
+				Name: `${basePath}/multiple-account-api/url`,
+				Value: 'https://multiple.example',
 			},
 			{ Name: `${basePath}/something-else/value`, Value: 'x' },
 			{ Name: `${basePath}/legacy.key`, Value: 'x' },

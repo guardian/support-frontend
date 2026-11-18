@@ -32,6 +32,7 @@ import {
 } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { getStripeConfig, StripeService } from '../services/stripe';
+import { stringifyWithCmpConsentRedacted } from '../util/logging';
 import { getIfDefined } from '../util/nullAndUndefined';
 import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
@@ -45,7 +46,7 @@ export const handler = async (
 	state: WrappedState<CreatePaymentMethodState>,
 ) => {
 	try {
-		console.info(`Input is ${JSON.stringify(state)}`);
+		console.info(`Input is ${stringifyWithCmpConsentRedacted(state)}`);
 		const createPaymentMethodState = wrapperSchemaForState(
 			createPaymentMethodStateSchema,
 		).parse(state).state;

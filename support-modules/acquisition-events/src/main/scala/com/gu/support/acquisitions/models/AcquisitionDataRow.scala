@@ -1,7 +1,7 @@
 package com.gu.support.acquisitions.models
 
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.acquisitions.{AbTest, QueryParameter}
+import com.gu.support.acquisitions.{AbTest, CmpConsentSnapshot, QueryParameter}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.CustomCodecs._
@@ -46,6 +46,7 @@ case class AcquisitionDataRow(
     email: Option[String],
     similarProductsConsent: Option[Boolean],
     paypalTransactionId: Option[String],
+    cmpConsentSnapshot: Option[CmpConsentSnapshot] = None,
 )
 
 object AcquisitionDataRow {

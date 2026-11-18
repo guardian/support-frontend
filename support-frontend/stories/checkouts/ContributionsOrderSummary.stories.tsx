@@ -9,7 +9,6 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import {
 	getProductLabel,
@@ -132,7 +131,7 @@ Default.args = {
 			</p>
 		</>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -169,7 +168,7 @@ RecurringContribution.args = {
 			countryGroupId={GBPCountries}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -207,7 +206,7 @@ SupporterPlus.args = {
 			thresholdAmount={12}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -245,7 +244,7 @@ SupporterPlusWithTax.args = {
 			thresholdAmount={15}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -273,7 +272,14 @@ DigitalPlusWithTaxAndDiscount.args = {
 		name: 'Digital Plus Promo',
 		description: '50% off for six months',
 		promoCode: 'TEST_PROMO',
-		discountedPrice: 15,
+		campaignCode: 'TEST_CAMPAIGN',
+		appliesTo: {
+			productRatePlanIds: [],
+			countries: ['GB'],
+			catalogRatePlans: [],
+		},
+		startTimestamp: '2025-01-01T00:00:00.000Z',
+		endTimestamp: '2026-01-01T00:00:00.000Z',
 		discount: {
 			amount: 50,
 			durationMonths: 6,
@@ -295,7 +301,7 @@ DigitalPlusWithTaxAndDiscount.args = {
 			countryGroupId={Canada}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -335,13 +341,7 @@ DigitalSubscription.args = {
 			thresholdAmount={27}
 		/>
 	),
-	startDate: (
-		<OrderSummaryStartDate
-			productKey="DigitalSubscription"
-			ratePlanKey={'Monthly'}
-			startDate={'Friday, April 11, 2025'}
-		/>
-	),
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -379,7 +379,7 @@ StudentOneYear.args = {
 			thresholdAmount={9}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -418,7 +418,7 @@ WeeklyPricing.args = {
 			thresholdAmount={12}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -452,7 +452,14 @@ WeeklyPricingWithPromotion.args = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: 'TEST_PROMO',
-		discountedPrice: 8,
+		campaignCode: 'TEST_CAMPAIGN',
+		appliesTo: {
+			productRatePlanIds: [],
+			countries: ['GB'],
+			catalogRatePlans: [],
+		},
+		startTimestamp: '2025-01-01T00:00:00.000Z',
+		endTimestamp: '2026-01-01T00:00:00.000Z',
 		discount: {
 			amount: 33,
 			durationMonths: 6,
@@ -467,7 +474,7 @@ WeeklyPricingWithPromotion.args = {
 			thresholdAmount={12}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -505,7 +512,7 @@ WeeklyPricingWithTax.args = {
 			thresholdAmount={15}
 		/>
 	),
-	startDate: null,
+	startDate: undefined,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change

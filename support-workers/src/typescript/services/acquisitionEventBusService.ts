@@ -26,7 +26,7 @@ export class AcquisitionEventBusService {
 			],
 		});
 
-		console.log(`EventBridge PutEventsCommand: ${JSON.stringify(command)}`);
+		console.log('EventBridge PutEventsCommand created');
 
 		const result = await this.eventBridgeClient.send(command);
 		console.log(`EventBridge response: ${JSON.stringify(result)}`);

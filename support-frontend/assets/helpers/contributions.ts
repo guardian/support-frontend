@@ -65,7 +65,7 @@ const defaultConfig: Config = {
 	},
 	ONE_OFF: {
 		min: 1,
-		max: 2000,
+		max: 20000,
 	},
 };
 
@@ -101,10 +101,7 @@ const config: Record<CountryGroupId, Config> = {
 			min: 2,
 			max: 800,
 		},
-		ONE_OFF: {
-			...defaultConfig.ONE_OFF,
-			max: 10000,
-		},
+		ONE_OFF: defaultConfig.ONE_OFF,
 	},
 	International: {
 		ANNUAL: defaultConfig.ANNUAL,

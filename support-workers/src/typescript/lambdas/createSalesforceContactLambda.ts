@@ -14,6 +14,7 @@ import type { SalesforceContactRecord } from '../services/salesforce';
 import { SalesforceService } from '../services/salesforce';
 import { getSalesforceConfig } from '../services/salesforceClient';
 import { user } from '../test/fixtures/salesforce/integrationTests';
+import { stringifyWithCmpConsentRedacted } from '../util/logging';
 import { getIfDefined } from '../util/nullAndUndefined';
 import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
@@ -27,7 +28,7 @@ export const handler = async (
 	state: WrappedState<CreateSalesforceContactState>,
 ) => {
 	try {
-		console.info(`Input is ${JSON.stringify(state)}`);
+		console.info(`Input is ${stringifyWithCmpConsentRedacted(state)}`);
 		const createSalesforceContactState = wrapperSchemaForState(
 			createSalesforceContactStateSchema,
 		).parse(state).state;
@@ -48,7 +49,7 @@ export const handler = async (
 	}
 };
 
-const createNextState = (
+export const createNextState = (
 	state: CreateSalesforceContactState,
 	contactRecord: SalesforceContactRecord,
 ): CreateZuoraSubscriptionState => {

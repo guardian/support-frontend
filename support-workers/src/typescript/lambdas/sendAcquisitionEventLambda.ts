@@ -7,6 +7,7 @@ import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { AcquisitionEventBusService } from '../services/acquisitionEventBusService';
 import { ServiceProvider } from '../services/config';
+import { stringifyWithCmpConsentRedacted } from '../util/logging';
 
 const stage = stageFromEnvironment();
 const acquisitionEventBusServiceServiceProvider = new ServiceProvider(
@@ -36,14 +37,18 @@ async function sendPaymentSuccessMetric(
 export const handler = async (
 	state: WrappedState<SendAcquisitionEventState>,
 ) => {
-	console.info(`Input is ${JSON.stringify(state)}`);
+	console.info(`Input is ${stringifyWithCmpConsentRedacted(state)}`);
 
 	await sendPaymentSuccessMetric(stage, state.state);
 
 	console.log('Sent payment success metric');
 	const acquisitionEvent = buildFromState(state.state);
 
-	console.log(`Acquisition event built: ${JSON.stringify(acquisitionEvent)}`);
+	console.log(
+		`Acquisition event built: ${stringifyWithCmpConsentRedacted(
+			acquisitionEvent,
+		)}`,
+	);
 
 	const service =
 		await acquisitionEventBusServiceServiceProvider.getServiceForUser(

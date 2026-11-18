@@ -1,7 +1,8 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
+import { readCmpConsentSnapshot } from 'helpers/tracking/cmpConsentSnapshot';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import type { Participations } from '../../../helpers/abTests/models';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
@@ -77,7 +78,7 @@ export const submitForm = async ({
 	productFields: ProductFields;
 	hasDeliveryAddress: boolean;
 	abParticipations: Participations;
-	promotion: Promotion | undefined;
+	promotion: PromoWithCatalogInformation | undefined;
 	contributionAmount: number | undefined;
 	taxRateConfig: TaxRateConfig;
 	weeklyGiftDeliveryDate?: Date;
@@ -142,6 +143,7 @@ export const submitForm = async ({
 		deliveryInstructions,
 		debugInfo: '',
 		similarProductsConsent,
+		cmpConsentSnapshot: null,
 		giftRecipient,
 	};
 	if (
@@ -170,6 +172,10 @@ export const submitForm = async ({
 
 		return checkoutSession.url;
 	} else {
+		const conversionPaymentRequest: RegularPaymentRequest = {
+			...paymentRequest,
+			cmpConsentSnapshot: await readCmpConsentSnapshot(),
+		};
 		const thankYouUrl = await processSubscription({
 			personalData,
 			appliedPromotion,
@@ -178,7 +184,7 @@ export const submitForm = async ({
 			contributionAmount,
 			paymentMethod,
 			supportRegionId,
-			paymentRequest,
+			paymentRequest: conversionPaymentRequest,
 			accountNumber: redactedAccountNumber,
 			weeklyGiftDeliveryDate,
 			taxRateConfig,

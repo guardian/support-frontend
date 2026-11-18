@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { cmp } from '@guardian/consent-manager';
+import { getLocale } from '@guardian/libs';
 import {
 	from,
 	headlineBold24,
@@ -14,7 +15,7 @@ import {
 } from '@guardian/source-development-kitchen/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -106,36 +107,48 @@ const disclaimerContainer = css`
 	}
 `;
 
-const links = [
-	{
-		href: 'https://www.theguardian.com/info/privacy',
-		text: 'Privacy policy',
-		isExternal: true,
-	},
-	{
-		text: 'Privacy settings',
-		onClick: () => {
-			cmp.showPrivacyManager();
-		},
-	},
-	{
-		href: guardianContactUsLink,
-		text: 'Contact us',
-		isExternal: true,
-	},
-	{
-		href: guardianHelpCentreLink,
-		text: 'Help centre',
-		isExternal: true,
-	},
-];
-
 type ContributionsOnlyLandingProps = {
 	supportRegionId: SupportRegionId;
 };
 export function ContributionsOnlyLanding({
 	supportRegionId,
 }: ContributionsOnlyLandingProps): JSX.Element {
+	const [localeCode, setLocaleCode] = useState<string | null>(null);
+
+	useEffect(() => {
+		const updateLocale = async () => {
+			const locale = await getLocale();
+			setLocaleCode(locale);
+		};
+		void updateLocale();
+	}, []);
+
+	const links = [
+		{
+			href: 'https://www.theguardian.com/info/privacy',
+			text: 'Privacy policy',
+			isExternal: true,
+		},
+		{
+			text:
+				localeCode === 'US'
+					? 'Do not sell or share my personal information'
+					: 'Privacy settings',
+			onClick: () => {
+				cmp.showPrivacyManager();
+			},
+		},
+		{
+			href: guardianContactUsLink,
+			text: 'Contact us',
+			isExternal: true,
+		},
+		{
+			href: guardianHelpCentreLink,
+			text: 'Help centre',
+			isExternal: true,
+		},
+	];
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const ratePlanParam = urlSearchParams.get('ratePlan') ?? '';
 

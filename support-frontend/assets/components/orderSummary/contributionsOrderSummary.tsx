@@ -16,6 +16,7 @@ import {
 import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -28,7 +29,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
@@ -144,19 +145,6 @@ const startDateWeeklyDigitalList = css`
 	margin-top: ${space[3]}px;
 `;
 
-const startDateList = css`
-	display: block;
-	${textSans14};
-	color: #606060;
-	background-color: ${palette.neutral[97]};
-	border-radius: ${space[3]}px;
-	padding: ${space[3]}px;
-	margin-top: ${space[2]}px;
-	${from.desktop} {
-		margin-top: ${space[4]}px;
-	}
-`;
-
 export type ContributionsOrderSummaryProps = {
 	productKey: ActiveProductKey;
 	productLabel: string;
@@ -165,11 +153,11 @@ export type ContributionsOrderSummaryProps = {
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
-	startDate: React.ReactNode;
+	startDate: JSX.Element | undefined;
 	landingPageSettings: LandingPageVariant;
 	taxRateConfig: TaxRateConfig;
 	ratePlanLabel?: string;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 	billingPeriod: BillingPeriod;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
@@ -218,9 +206,12 @@ export function ContributionsOrderSummary({
 	const fullPrice =
 		studentDiscount?.fullPriceWithCurrency ??
 		simpleFormatAmount(currency, originalAmount);
+	const billingPeriodObj = ratePlanToBillingPeriod(ratePlanKey);
+	const promotionPrice = promotion
+		? getPromotionDiscountedPrice(promotion, originalAmount, billingPeriodObj)
+		: originalAmount;
 	const promoDiscountPrice =
-		promotion &&
-		simpleFormatAmount(currency, promotion.discountedPrice ?? originalAmount);
+		promotion && simpleFormatAmount(currency, promotionPrice);
 	const discountPrice =
 		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
 	const title = `Your ${
@@ -252,19 +243,14 @@ export function ContributionsOrderSummary({
 	const savingText = promotion?.discount
 		? `You're saving ${
 				promotion.discount.amount
-		  }% for ${getDiscountDurationText(promotion.discount.durationMonths ?? 0)}`
+		  }% for ${getDiscountDurationText(promotion.discount.durationMonths)}`
 		: null;
-
-	const billingPeriodObj = ratePlanToBillingPeriod(ratePlanKey);
 
 	const weeklyPrice =
 		isWeeklyPricing && !isWeeklyGift && !isWeeklyDigital && !isWeekly
 			? simpleFormatAmount(
 					currency,
-					calculateWeeklyPrice(
-						promotion?.discountedPrice ?? originalAmount,
-						billingPeriodObj,
-					),
+					calculateWeeklyPrice(promotionPrice, billingPeriodObj),
 			  )
 			: undefined;
 
@@ -305,7 +291,6 @@ export function ContributionsOrderSummary({
 				{hasCheckList && showCheckList && (
 					<>
 						<div css={checklistContainer}>{checkList}</div>
-						{!isWeekly && <div css={startDateList}>{startDate}</div>}
 					</>
 				)}
 			</div>
@@ -325,9 +310,7 @@ export function ContributionsOrderSummary({
 				isIntroductoryPricing={promotion?.isIntroductoryPricing ?? false}
 			/>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
-			{isWeeklyDigital && (
-				<div css={startDateWeeklyDigitalList}>{startDate}</div>
-			)}
+			{startDate && <div css={startDateWeeklyDigitalList}>{startDate}</div>}
 			{nudgeSettings && (
 				<CheckoutNudgeSelector
 					nudgeSettings={nudgeSettings}

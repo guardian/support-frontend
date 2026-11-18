@@ -110,6 +110,7 @@ function buildDigialPlusBenefits(): ProductBenefit[] {
 		'Unlimited access to the <strong>Guardian app</strong> and <strong>Guardian Feast app</strong>',
 		'Digital access to the Guardian’s 200 year <strong>newspaper archive</strong>',
 		'<strong>Ad-free reading</strong> on all your devices',
+		'<strong>Share your benefits and access with up to three extra people</strong>',
 	];
 	return benefits.map((benefit) => ({ copy: benefit }));
 }
@@ -163,12 +164,12 @@ function digitalPlus(
 	)?.description;
 
 	return {
-		title: 'Enjoy our suite of editions with&nbsp;<mark>Digital Plus</mark>',
+		title: 'Enjoy our suite of editions with&nbsp;<mark>Digital plus</mark>',
 		subtitle: getDigitalPlusSubtitleForBillingPeriods(countryGroupId, [
 			BillingPeriod.Monthly,
 			BillingPeriod.Annual,
 		]),
-		description: 'Enjoy our suite of editions with Digital Plus',
+		description: 'Enjoy our suite of editions with Digital plus',
 		buttons: getDigitalPlusButtonsForBillingPeriods(countryGroupId, [
 			BillingPeriod.Monthly,
 			BillingPeriod.Annual,

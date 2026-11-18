@@ -5,6 +5,7 @@ import com.gu.monitoring.SafeLogging
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.CODE
+import io.circe.Json
 import io.circe.syntax.EncoderOps
 import software.amazon.awssdk.core.exception.SdkException
 import software.amazon.awssdk.regions.Region
@@ -20,7 +21,8 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: EventBri
   val detailType = "AcquisitionsEvent"
   def putAcquisitionEvent(acquisition: AcquisitionDataRow) = {
     val acquisitionJson = acquisition.asJson
-    logger.info(s"Attempting to send event ${acquisitionJson.spaces2}")
+    val redactedAcquisitionJson = acquisitionJson.mapObject(_.add("cmpConsentSnapshot", Json.fromString("[redacted]")))
+    logger.info(s"Attempting to send event ${redactedAcquisitionJson.spaces2}")
     val entry = PutEventsRequestEntry
       .builder()
       .eventBusName(eventBusName)
@@ -41,7 +43,8 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: EventBri
       if (result.failedEntryCount > 0) {
         // We only ever send one event at a time
         val failureMessage = result.entries.get(0).errorMessage
-        val errorMessage = s"There was failure writing ${acquisitionJson.spaces2} to Eventbridge: $failureMessage"
+        val errorMessage =
+          s"There was failure writing ${redactedAcquisitionJson.spaces2} to Eventbridge: $failureMessage"
         logger.warn(s"$errorMessage")
         promise.success(Left(errorMessage))
       } else {
@@ -49,7 +52,8 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: EventBri
       }
     } catch {
       case e: SdkException =>
-        val errorMessage = s"There was an exception writing ${acquisitionJson.spaces2} to Eventbridge: ${e.getMessage}"
+        val errorMessage =
+          s"There was an exception writing ${redactedAcquisitionJson.spaces2} to Eventbridge: ${e.getMessage}"
         logger.error(scrub"$errorMessage", e)
         promise.success(Left(errorMessage))
     }
