@@ -17,8 +17,7 @@ import { getCancellationPolicy } from './cancellationPolicies';
 
 const digitalMonthly =
 	'Cancel anytime, via your account. Cancel within 14 days of sign-up and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
-const digitalAnnual =
-	'Cancel anytime, via your account. Cancel within 14 days of sign-up or each renewal and receive a full refund of your pre-contract information here.';
+const digitalAnnual = `Cancel anytime, via your account. Cancel within 14 days of sign-up or each renewal and receive a full refund of your last payment. See more about your cooling-off rights in your full pre-contract information here.`;
 const studentAnnual =
 	"You may cancel your All-access digital subscription within 14 days of taking out the subscription. If you do, you'll receive a full refund and your subscription will stop immediately. To cancel, go to Manage My Account or see our terms. This subscription does not auto-renew.";
 const printDelivery =

@@ -69,6 +69,7 @@ const digitalAnnual = (
 	<p css={marginTop}>
 		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
 		within 14 days of sign-up or each renewal and receive a full refund of your
+		last payment. See more about your cooling-off rights in your full
 		pre-contract information {getTerms('here', productKey, ratePlanKey)}.
 	</p>
 );
