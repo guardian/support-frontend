@@ -30,11 +30,6 @@ export const getPromotionExpiryDate = (
 	const promotionExpiryDate = new Date(
 		startDate.setMonth(startDate.getMonth() + monthsInPeriod),
 	);
-	console.log(
-		`*** promotionExpiryDate [${productKey}/${ratePlanKey}]:${formatUserDate(
-			promotionExpiryDate,
-		)}`,
-	);
 	return promotionExpiryDate;
 };
 
