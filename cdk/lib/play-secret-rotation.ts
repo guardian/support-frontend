@@ -25,8 +25,9 @@ export class PlaySecretRotation extends GuStack {
 			},
 			rules: [
 				{
-					schedule: Schedule.rate(Duration.days(1)),
-					description: 'Rotate the support-frontend Play secret once a day',
+					schedule: Schedule.cron({ minute: '11', hour: '10' }),
+					description:
+						'Rotate the support-frontend Play secret daily at 10:11 UTC',
 				},
 			],
 			monitoringConfiguration: { noMonitoring: true },
