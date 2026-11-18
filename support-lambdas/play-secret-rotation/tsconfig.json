@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "es2022",
+		"lib": ["ES2022"],
+		"module": "NodeNext",
+		"types": ["node"],
+		"resolveJsonModule": true,
+		"outDir": "target/typescript",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"noUnusedLocals": true,
+		"noImplicitReturns": true,
+		"noUncheckedIndexedAccess": true,
+		"skipLibCheck": true
+	}
+}

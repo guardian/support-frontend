@@ -1,0 +1,36 @@
+stacks: [support]
+regions: [eu-west-1]
+allowedStages:
+  - CODE
+
+deployments:
+  # The lambda code must be in S3 before CloudFormation can create the function
+  play-secret-rotation-upload:
+    type: aws-lambda
+    app: play-secret-rotation
+    contentDirectory: play-secret-rotation
+    actions: [uploadLambda]
+    parameters:
+      bucket: membership-dist
+      functionNames: [play-secret-rotation-]
+      fileName: index.zip
+      prefixStack: false
+  cfn:
+    type: cloud-formation
+    app: play-secret-rotation
+    dependencies: [play-secret-rotation-upload]
+    parameters:
+      templateStagePaths:
+        CODE: PlaySecretRotation-CODE.template.json
+      prependStackToCloudFormationStackName: false
+  play-secret-rotation-update:
+    type: aws-lambda
+    app: play-secret-rotation
+    contentDirectory: play-secret-rotation
+    actions: [updateLambda]
+    dependencies: [cfn]
+    parameters:
+      bucket: membership-dist
+      functionNames: [play-secret-rotation-]
+      fileName: index.zip
+      prefixStack: false
