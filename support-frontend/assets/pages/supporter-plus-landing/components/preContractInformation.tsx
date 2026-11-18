@@ -34,7 +34,7 @@ const containerSummaryTsCs = css`
 	}
 `;
 
-interface PreContractInformationProps {
+export interface PreContractInformationProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	amount: number;
