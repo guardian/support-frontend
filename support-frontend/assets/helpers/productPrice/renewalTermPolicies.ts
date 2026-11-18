@@ -3,6 +3,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
@@ -18,18 +19,18 @@ export const getPromotionExpiryDate = (
 	ratePlanKey: ActiveRatePlanKey,
 	discountPeriods: number,
 ): Date => {
-	const startDate = getProductFirstDeliveryDate(productKey) ?? new Date();
+	const startDate =
+		getProductFirstDeliveryDate(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		) ?? new Date();
 	const monthsInPeriod =
 		discountPeriods *
 		getNumberOfMonthsInBillingPeriod(ratePlanToBillingPeriod(ratePlanKey));
-	console.log(
-		`*** getPromotionExpiryDate [${productKey}][${ratePlanKey}/${ratePlanToBillingPeriod(
-			ratePlanKey,
-		)}][periods:${discountPeriods}] monthsInPeriod:${monthsInPeriod} promotionExpiryDate:${formatUserDate(
-			new Date(startDate.setMonth(startDate.getMonth() + monthsInPeriod)),
-		)}`,
+	const promotionExpiryDate = new Date(
+		startDate.setMonth(startDate.getMonth() + monthsInPeriod),
 	);
-	return new Date(startDate.setMonth(startDate.getMonth() + monthsInPeriod));
+	return promotionExpiryDate;
 };
 
 const contributionMonthly = (fullPrice: number): string => {
