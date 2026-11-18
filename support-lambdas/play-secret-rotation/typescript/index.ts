@@ -32,7 +32,7 @@ export const handler = async (): Promise<void> => {
 
 	if (Date.now() - lastModifiedDate.getTime() < MIN_ROTATION_INTERVAL_MS) {
 		console.log(
-			`Parameter ${parameterName} was last modified at ${lastModifiedDate.toISOString()}, which is within the last two hours. Skipping rotation.`,
+			`Secret was last modified at ${lastModifiedDate.toISOString()}, which is within the configured threshold. Skipping rotation.`,
 		);
 		return;
 	}
@@ -46,5 +46,5 @@ export const handler = async (): Promise<void> => {
 		}),
 	);
 
-	console.log(`Rotated parameter ${parameterName}`);
+	console.log('Successfully rotated secret');
 };
