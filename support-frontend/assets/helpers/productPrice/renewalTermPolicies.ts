@@ -14,6 +14,7 @@ import {
 } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import {
 	getBillingPeriodNoun,
+	getNumberOfMonthsInPeriod,
 	ratePlanToBillingPeriod,
 } from './billingPeriods';
 import type { PromoDiscount } from './discountedPrice';
@@ -111,7 +112,11 @@ const renewalTermDetail = (
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const periodName = durationPeriods > 1 ? `${periodNoun}s` : periodNoun;
 	const expiry = formatUserDate(
-		getPromotionExpiryDate(productKey, ratePlanKey, durationMonths),
+		getPromotionExpiryDate(
+			productKey,
+			ratePlanKey,
+			getNumberOfMonthsInPeriod(billingPeriod),
+		),
 	);
 	const discountedPrice = getDiscountedPrice(
 		fullPrice,
