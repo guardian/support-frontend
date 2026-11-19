@@ -146,7 +146,6 @@ export type AppliedPromotion = {
 };
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {
-	clientTransactionId?: string;
 	title?: Title;
 	firstName: string;
 	lastName: string;
@@ -182,12 +181,14 @@ export type StripePaymentResult = {
 	subscriptionCreationPending?: true;
 	error?: ErrorReason;
 	userType?: UserType;
+	transactionId?: string | null;
 };
 
 export type StatusResponse = {
 	status: Status;
 	trackingUri: string;
 	failureReason?: ErrorReason;
+	transactionId?: string | null;
 };
 
 // ----- Setup ----- //

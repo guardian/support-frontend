@@ -1,11 +1,6 @@
 // ----- Imports ----- //
 import { DirectDebit } from '../../forms/paymentMethods';
-import {
-	_,
-	getOrderId,
-	init,
-	successfulContributionConversion,
-} from '../googleTagManager';
+import { _, init, successfulContributionConversion } from '../googleTagManager';
 import { onConsentChangeEvent } from '../thirdPartyTrackingConsent';
 
 jest.mock('../thirdPartyTrackingConsent', () => ({
@@ -90,7 +85,6 @@ describe('googleTagManager', () => {
 				googleAdsConversionSource: 'gtm',
 			}),
 		);
-		expect(typeof conversion?.orderId).toBe('string');
 		expect(Object.keys(conversion ?? {}).sort()).toEqual(
 			[
 				'event',
@@ -100,7 +94,6 @@ describe('googleTagManager', () => {
 				'contributionType',
 				'productType',
 				'googleAdsConversionSource',
-				'orderId',
 				'thirdPartyTrackingConsent',
 				'campaignCodeBusinessUnit',
 				'campaignCodeTeam',
@@ -114,10 +107,7 @@ describe('googleTagManager', () => {
 			),
 		).toHaveLength(1);
 
-		const clientTransactionId = 'checkout-123';
-		const purchaseOrderId = getOrderId(clientTransactionId);
-		expect(purchaseOrderId).not.toBe(conversion?.orderId);
-		expect(getOrderId('checkout-456')).not.toBe(purchaseOrderId);
+		const transactionId = 'ch_123';
 
 		successfulContributionConversion(
 			6,
@@ -126,14 +116,13 @@ describe('googleTagManager', () => {
 			DirectDebit,
 			'SupporterPlus',
 			'mparticle',
-			clientTransactionId,
+			transactionId,
 		);
 		expect(window.googleTagManagerDataLayer?.at(-1)).toEqual(
 			expect.objectContaining({
 				event: 'SuccessfulConversion',
 				googleAdsConversionSource: 'mparticle',
-				orderId: purchaseOrderId,
-				clientTransactionId,
+				orderId: transactionId,
 			}),
 		);
 		successfulContributionConversion(
@@ -143,14 +132,13 @@ describe('googleTagManager', () => {
 			DirectDebit,
 			'SupporterPlus',
 			'gtm',
-			clientTransactionId,
+			transactionId,
 		);
 		expect(window.googleTagManagerDataLayer?.at(-1)).toEqual(
 			expect.objectContaining({
 				event: 'SuccessfulConversion',
 				googleAdsConversionSource: 'gtm',
-				orderId: purchaseOrderId,
-				clientTransactionId,
+				orderId: transactionId,
 			}),
 		);
 	});

@@ -2,7 +2,6 @@
 
 import { getViewId } from '@guardian/ophan-tracker-js';
 import type { CountryCode } from '@modules/internationalisation/country';
-import { v4 as uuidv4 } from 'uuid';
 import * as z from 'zod/mini';
 import { testIsActive } from 'helpers/abTests/abtest';
 import { type Participations } from 'helpers/abTests/models';
@@ -51,7 +50,6 @@ export type ReferrerAcquisitionData = {
 };
 
 export type PaymentAPIAcquisitionData = {
-	clientTransactionId?: string;
 	pageviewId: string;
 	browserId?: string | null;
 	platform?: string;
@@ -73,17 +71,6 @@ export type PaymentAPIAcquisitionData = {
 
 const ACQUISITIONS_PARAM = 'acquisitionData';
 const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
-const CLIENT_TRANSACTION_ID_STORAGE_KEY = 'clientTransactionId';
-
-function createClientTransactionId(): string {
-	const clientTransactionId = uuidv4();
-	setSession(CLIENT_TRANSACTION_ID_STORAGE_KEY, clientTransactionId);
-	return clientTransactionId;
-}
-
-function getClientTransactionId(): string | null {
-	return getSession(CLIENT_TRANSACTION_ID_STORAGE_KEY, z.string());
-}
 
 export const referrerAcquisitionDataSchema: z.ZodMiniType<ReferrerAcquisitionData> =
 	z.object({
@@ -220,7 +207,6 @@ function derivePaymentApiAcquisitionData(
 	nativeAbParticipations: Participations,
 	postalCode: string | null,
 	countryId: CountryCode,
-	clientTransactionId?: string,
 ): PaymentAPIAcquisitionData {
 	const ophanIds: OphanIds = getOphanIds();
 	const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations);
@@ -229,7 +215,6 @@ function derivePaymentApiAcquisitionData(
 		: [];
 
 	return {
-		...(clientTransactionId ? { clientTransactionId } : {}),
 		platform: 'SUPPORT',
 		browserId: ophanIds.browserId,
 		pageviewId: ophanIds.pageviewId,
@@ -343,6 +328,4 @@ export {
 	participationsToAcquisitionABTest,
 	derivePaymentApiAcquisitionData,
 	getSupportAbTests,
-	createClientTransactionId,
-	getClientTransactionId,
 };

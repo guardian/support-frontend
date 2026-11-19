@@ -66,7 +66,6 @@ object AcquisitionDataRowBuilder {
       email = Some(contributionData.email),
       similarProductsConsent = acquisition.stripeChargeData.similarProductsConsent,
       paypalTransactionId = None,
-      clientTransactionId = acquisitionData.clientTransactionId,
     )
   }
 
@@ -122,7 +121,6 @@ object AcquisitionDataRowBuilder {
       email = Some(contributionData.email),
       similarProductsConsent = similarProductsConsent,
       paypalTransactionId = maybeTransactionId,
-      clientTransactionId = acquisitionData.clientTransactionId,
     )
   }
 

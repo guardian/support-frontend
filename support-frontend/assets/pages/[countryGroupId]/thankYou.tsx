@@ -19,11 +19,7 @@ import {
 	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
-import { getClientTransactionId } from 'helpers/tracking/acquisitions';
-import {
-	getOrderId,
-	successfulContributionConversion,
-} from 'helpers/tracking/googleTagManager';
+import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import {
 	canUseMParticleConversions,
 	trackMParticleConversion,
@@ -62,8 +58,8 @@ function ThankYouConversionTracking({
 	const order = getThankYouOrder();
 	const hasSuccessfulOrder = order?.status === 'success';
 	const email = order?.email;
-	const clientTransactionId =
-		order?.clientTransactionId ?? getClientTransactionId() ?? undefined;
+	const transactionId =
+		order?.transactionId ?? getQueryParameter('transactionId');
 	const conversionValue = order?.finalAmount ?? payment.finalAmount;
 	const paymentMethod =
 		order?.paymentMethod === 'StripeExpressCheckoutElement'
@@ -75,7 +71,7 @@ function ThankYouConversionTracking({
 		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY';
 
 	useEffect(() => {
-		if (!hasSuccessfulOrder) {
+		if (!hasSuccessfulOrder || !transactionId) {
 			return undefined;
 		}
 		const sendSuccessfulConversionToGtm = (source?: 'gtm' | 'mparticle') => {
@@ -87,17 +83,11 @@ function ThankYouConversionTracking({
 				conversionProductKey,
 			] as const;
 
-			if (clientTransactionId) {
-				successfulContributionConversion(
-					...conversionData,
-					source,
-					clientTransactionId,
-				);
-			} else if (source) {
-				successfulContributionConversion(...conversionData, source);
-			} else {
-				successfulContributionConversion(...conversionData);
-			}
+			successfulContributionConversion(
+				...conversionData,
+				source ?? 'gtm',
+				transactionId,
+			);
 		};
 
 		if (
@@ -107,8 +97,7 @@ function ThankYouConversionTracking({
 			return trackMParticleConversion(
 				mParticleConfig,
 				() => ({
-					orderId: getOrderId(clientTransactionId),
-					clientTransactionId,
+					orderId: transactionId,
 					email,
 					value: conversionValue,
 					currency: currencyKey,
@@ -135,7 +124,7 @@ function ThankYouConversionTracking({
 		currencyKey,
 		hasSuccessfulOrder,
 		conversionValue,
-		clientTransactionId,
+		transactionId,
 		email,
 		paymentMethod,
 		ratePlanKey,

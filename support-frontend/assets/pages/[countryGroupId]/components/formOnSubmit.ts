@@ -16,8 +16,6 @@ import type {
 	ActiveRatePlanKey,
 } from '../../../helpers/productCatalog';
 import {
-	createClientTransactionId,
-	getClientTransactionId,
 	getOphanIds,
 	getReferrerAcquisitionData,
 	getSupportAbTests,
@@ -84,12 +82,6 @@ export const submitForm = async ({
 	taxRateConfig: TaxRateConfig;
 	weeklyGiftDeliveryDate?: Date;
 }): Promise<string> => {
-	const isReturningFromStripeHostedCheckout =
-		paymentFields.paymentType === 'StripeHostedCheckout' &&
-		Boolean(paymentFields.checkoutSessionId);
-	const clientTransactionId = isReturningFromStripeHostedCheckout
-		? getClientTransactionId() ?? createClientTransactionId()
-		: createClientTransactionId();
 	const personalData = extractPersonalDataFromForm(formData);
 	const giftRecipient = extractGiftRecipientDataFromForm(formData);
 	const { billingAddress, deliveryAddress } = hasDeliveryAddress
@@ -136,7 +128,6 @@ export const submitForm = async ({
 	});
 
 	const paymentRequest: RegularPaymentRequest = {
-		clientTransactionId,
 		...personalData,
 		billingAddress,
 		deliveryAddress,
@@ -261,7 +252,7 @@ const processSubscription = async ({
 			taxRateConfig,
 			personalData,
 			paymentMethod,
-			paymentRequest.clientTransactionId,
+			createSubscriptionResult.transactionId ?? undefined,
 			createSubscriptionResult.status,
 			supportRegionId,
 			accountNumber,
@@ -290,7 +281,7 @@ const buildThankYouPageUrl = (
 	taxRateConfig: TaxRateConfig,
 	personalData: FormPersonalFields,
 	paymentMethod: PaymentMethod,
-	clientTransactionId: string | undefined,
+	transactionId: string | undefined,
 	status: 'success' | 'pending',
 	supportRegionId: SupportRegionId,
 	accountNumber?: string,
@@ -301,7 +292,7 @@ const buildThankYouPageUrl = (
 		email: personalData.email,
 		accountNumber,
 		paymentMethod,
-		clientTransactionId,
+		transactionId,
 		status,
 		deliveryDate: weeklyGiftDeliveryDate,
 		taxConfig: taxRateConfig,

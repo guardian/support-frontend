@@ -75,7 +75,6 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
-	createClientTransactionId,
 	derivePaymentApiAcquisitionData,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
@@ -269,7 +268,6 @@ function getAcquisitionData(
 	billingPostcode: string,
 	coverTransactionCost: boolean,
 	countryId: CountryCode,
-	clientTransactionId: string,
 ): PaymentAPIAcquisitionData {
 	const referrerAcquisitionData = getReferrerAcquisitionData();
 	return derivePaymentApiAcquisitionData(
@@ -284,7 +282,6 @@ function getAcquisitionData(
 		abParticipations,
 		billingPostcode,
 		countryId,
-		clientTransactionId,
 	);
 }
 
@@ -565,7 +562,6 @@ export function OneTimeCheckoutComponent({
 				}
 			}
 			setIsProcessingPayment(true);
-			const clientTransactionId = createClientTransactionId();
 
 			let paymentResult: PaymentResult | undefined;
 			if (paymentMethod === 'PayPal') {
@@ -584,7 +580,6 @@ export function OneTimeCheckoutComponent({
 					billingPostcode,
 					coverTransactionCost,
 					countryId,
-					clientTransactionId,
 				);
 				// We've only created a payment at this point, and the user has to get through
 				// the PayPal flow on their site before we can actually try and execute the payment.
@@ -721,7 +716,6 @@ export function OneTimeCheckoutComponent({
 							billingPostcode,
 							coverTransactionCost,
 							countryId,
-							clientTransactionId,
 						),
 
 						publicKey: stripePublicKey,
@@ -735,7 +729,6 @@ export function OneTimeCheckoutComponent({
 							encodeURIComponent(JSON.stringify(stripeData.acquisitionData)),
 						);
 						setThankYouOrder({
-							clientTransactionId,
 							firstName: '',
 							email: email,
 							paymentMethod: paymentMethod,
@@ -760,7 +753,10 @@ export function OneTimeCheckoutComponent({
 
 			if (paymentResult) {
 				setThankYouOrder({
-					clientTransactionId,
+					transactionId:
+						paymentResult.type === 'stripe'
+							? paymentResult.result.transactionId ?? undefined
+							: undefined,
 					firstName: '',
 					email: email,
 					paymentMethod: paymentMethod,

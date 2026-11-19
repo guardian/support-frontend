@@ -7,10 +7,7 @@ import type * as ProductCatalogFixture from 'fixtures/productCatalogFixture';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { productCatalog } from 'helpers/productCatalog';
-import {
-	getOrderId,
-	successfulContributionConversion,
-} from 'helpers/tracking/googleTagManager';
+import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import { trackMParticleConversion } from 'helpers/tracking/mparticleConversions';
 import type * as MParticleConversions from 'helpers/tracking/mparticleConversions';
 import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
@@ -59,7 +56,6 @@ jest.mock('helpers/productCatalog', () => {
 
 jest.mock('helpers/tracking/googleTagManager', () => ({
 	successfulContributionConversion: jest.fn(),
-	getOrderId: jest.fn(() => 'session-order-123'),
 }));
 
 jest.mock('helpers/tracking/mparticleConversions', () => ({
@@ -135,6 +131,7 @@ const catalogConversions = recurringProducts.flatMap((productType) => {
 });
 
 const successfulOrder = {
+	transactionId: 'server-transaction-123',
 	firstName: 'Example Supporter',
 	email: 'supporter@example.com',
 	status: 'success',
@@ -186,6 +183,8 @@ describe('ThankYou conversion tracking', () => {
 				'GBP',
 				'Stripe',
 				'SupporterPlus',
+				'gtm',
+				'server-transaction-123',
 			);
 		});
 		expect(jest.mocked(OnboardingComponent)).toHaveBeenCalledTimes(1);
@@ -207,6 +206,8 @@ describe('ThankYou conversion tracking', () => {
 				'GBP',
 				'Stripe',
 				'SupporterPlus',
+				'gtm',
+				'server-transaction-123',
 			);
 		});
 		expect(jest.mocked(ThankYouComponent)).toHaveBeenCalledTimes(1);
@@ -285,17 +286,13 @@ describe('ThankYou conversion tracking', () => {
 			'Stripe',
 			'SupporterPlus',
 			'gtm',
+			'server-transaction-123',
 		);
 	});
 
 	it.each([true, false])(
 		'uses mParticle on the enabled route (onboarding: %s) and cancels on unmount',
 		(onboarding) => {
-			const clientTransactionId = 'checkout-123';
-			jest.mocked(getThankYouOrder).mockReturnValue({
-				...successfulOrder,
-				clientTransactionId,
-			});
 			const cancel = jest.fn();
 			jest
 				.mocked(trackMParticleConversion)
@@ -322,14 +319,13 @@ describe('ThankYou conversion tracking', () => {
 				'Stripe',
 				'SupporterPlus',
 				'mparticle',
-				clientTransactionId,
+				'server-transaction-123',
 			);
 			const conversionCall = jest.mocked(trackMParticleConversion).mock
 				.calls[0];
 			expect(conversionCall?.[0]).toBe(config);
 			expect(conversionCall?.[1]?.()).toEqual({
-				orderId: 'session-order-123',
-				clientTransactionId,
+				orderId: 'server-transaction-123',
 				email: 'supporter@example.com',
 				value: 20,
 				currency: 'GBP',
@@ -339,7 +335,6 @@ describe('ThankYou conversion tracking', () => {
 				ratePlan: 'Monthly',
 				billingPeriod: 'Monthly',
 			});
-			expect(getOrderId).toHaveBeenCalledWith(clientTransactionId);
 			expect(conversionCall?.[2]).toEqual(expect.any(Function));
 			rerender(
 				<ThankYou
@@ -377,8 +372,7 @@ describe('ThankYou conversion tracking', () => {
 			const createPurchase = jest.mocked(trackMParticleConversion).mock
 				.calls[0]?.[1];
 			expect(createPurchase?.()).toEqual({
-				orderId: 'session-order-123',
-				clientTransactionId: undefined,
+				orderId: 'server-transaction-123',
 				email: 'supporter@example.com',
 				value: productType === 'SupporterPlus' ? (value ?? 0) + 7 : value,
 				currency: 'GBP',
@@ -395,6 +389,7 @@ describe('ThankYou conversion tracking', () => {
 				'Stripe',
 				productType,
 				'mparticle',
+				'server-transaction-123',
 			);
 		},
 	);
@@ -414,8 +409,7 @@ describe('ThankYou conversion tracking', () => {
 		const createPurchase = jest.mocked(trackMParticleConversion).mock
 			.calls[0]?.[1];
 		expect(createPurchase?.()).toEqual({
-			orderId: 'session-order-123',
-			clientTransactionId: undefined,
+			orderId: 'server-transaction-123',
 			email: 'supporter@example.com',
 			value: 7.5,
 			currency: 'EUR',
@@ -468,8 +462,7 @@ describe('ThankYou conversion tracking', () => {
 		const createPurchase = jest.mocked(trackMParticleConversion).mock
 			.calls[0]?.[1];
 		expect(createPurchase?.()).toEqual({
-			orderId: 'session-order-123',
-			clientTransactionId: undefined,
+			orderId: 'server-transaction-123',
 			email: 'supporter@example.com',
 			value: 9,
 			currency: 'USD',
@@ -499,6 +492,8 @@ describe('ThankYou conversion tracking', () => {
 			'GBP',
 			'Stripe',
 			'SupporterPlus',
+			'gtm',
+			'server-transaction-123',
 		);
 	});
 
@@ -515,6 +510,8 @@ describe('ThankYou conversion tracking', () => {
 			'GBP',
 			'Stripe',
 			'SupporterPlus',
+			'gtm',
+			'server-transaction-123',
 		);
 		expect(trackMParticleConversion).not.toHaveBeenCalled();
 	});

@@ -1,9 +1,6 @@
 import type { CurrencyCode } from '@modules/internationalisation/currency';
-import { v4 as uuidv4 } from 'uuid';
-import * as z from 'zod/mini';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import { getSession, setSession } from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
 import { DirectDebit, PayPal } from '../forms/paymentMethods';
@@ -19,7 +16,7 @@ type ConversionData = {
 	contributionType: ContributionType;
 	productType: ActiveProductKey;
 	googleAdsConversionSource: 'gtm' | 'mparticle';
-	clientTransactionId?: string;
+	orderId?: string;
 };
 
 // these values match the keys used by @guardian/consent-management-platform
@@ -57,20 +54,6 @@ const googleTagManagerDataQueue: Array<() => void> = [];
 const googleAnalyticsEventQueue: Array<() => void> = [];
 
 // ----- Functions ----- //
-export function getOrderId(clientTransactionId?: string) {
-	const key = clientTransactionId
-		? `orderId:${clientTransactionId}`
-		: 'orderId';
-	let orderId = getSession(key, z.string());
-
-	if (orderId === null) {
-		orderId = uuidv4();
-		setSession(key, orderId);
-	}
-
-	return orderId;
-}
-
 function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
 	switch (paymentMethod) {
 		case DirectDebit:
@@ -110,11 +93,6 @@ function getData(
 ): Record<string, unknown> {
 	const commonData = {
 		event,
-		/**
-		 * Keep the same order ID when the confirmation reloads. Checkouts
-		 * with a client transaction ID get a separate order ID per purchase.
-		 * */
-		orderId: getOrderId(conversionData?.clientTransactionId),
 		/**
 		 * getData is only executed via runWithConsentCheck when user has
 		 * Opted In to tracking, so we can hardcode thirdPartyTrackingConsent
@@ -251,7 +229,7 @@ function successfulContributionConversion(
 	paymentMethod: PaymentMethod,
 	productKey: ActiveProductKey,
 	googleAdsConversionSource: 'gtm' | 'mparticle' = 'gtm',
-	clientTransactionId?: string,
+	orderId?: string,
 ): void {
 	const contributionConversionData: ConversionData = {
 		value: amount,
@@ -260,7 +238,7 @@ function successfulContributionConversion(
 		contributionType,
 		productType: productKey,
 		googleAdsConversionSource,
-		...(clientTransactionId ? { clientTransactionId } : {}),
+		...(orderId ? { orderId } : {}),
 	};
 
 	sendData('SuccessfulConversion', contributionConversionData);

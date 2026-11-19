@@ -60,6 +60,7 @@ case class CreateSubscriptionResponse(
     userType: String,
     trackingUri: String,
     failureReason: Option[CheckoutFailureReason] = None,
+    transactionId: Option[String] = None,
 ) extends CreateResponse
 
 case class CreateStripeCheckoutSessionResponse(
@@ -365,6 +366,7 @@ class CreateSubscriptionController(
       userDetails.userDetails.userType,
       statusResponse.trackingUri,
       statusResponse.failureReason,
+      statusResponse.transactionId,
     )
   }
 
