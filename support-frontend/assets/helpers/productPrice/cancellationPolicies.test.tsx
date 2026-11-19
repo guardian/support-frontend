@@ -12,12 +12,11 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import {
-	getDiscountPrice,
-	getFullPrices,
-	getPromotions,
-} from '../../../stories/checkouts/preContactInformation.stories';
 import { getCancellationPolicy } from './cancellationPolicies';
+import {
+	getTestDiscountPrice,
+	getTestPricesAndPromotion,
+} from './preContractInformationTestData';
 
 const digitalMonthly =
 	'Cancel anytime, via your account. Cancel within 14 days of sign-up and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
@@ -54,7 +53,7 @@ const policyCases: PolicyCase[] = [
 		'GuardianAdLite',
 		'Monthly',
 		digitalMonthly,
-		promotionDigitalMonthly(getDiscountPrice('GuardianAdLite', 'Monthly')),
+		promotionDigitalMonthly(getTestDiscountPrice('GuardianAdLite', 'Monthly')),
 		guardianAdLiteTermsLink,
 	],
 	['GuardianAdLite', 'Annual', undefined, undefined, undefined],
@@ -62,7 +61,7 @@ const policyCases: PolicyCase[] = [
 		'SupporterPlus',
 		'Monthly',
 		digitalMonthly,
-		promotionDigitalMonthly(getDiscountPrice('SupporterPlus', 'Monthly')),
+		promotionDigitalMonthly(getTestDiscountPrice('SupporterPlus', 'Monthly')),
 		supporterPlusTermsLink,
 	],
 	[
@@ -83,7 +82,9 @@ const policyCases: PolicyCase[] = [
 		'DigitalSubscription',
 		'Monthly',
 		digitalMonthly,
-		promotionDigitalMonthly(getDiscountPrice('DigitalSubscription', 'Monthly')),
+		promotionDigitalMonthly(
+			getTestDiscountPrice('DigitalSubscription', 'Monthly'),
+		),
 		digitalPlusTermsLink,
 	],
 	[
@@ -100,7 +101,7 @@ const policyCases: PolicyCase[] = [
 		'MonthlyPlus',
 		printDelivery,
 		promotionPrintDelivery(
-			getDiscountPrice('GuardianWeeklyDomestic', 'MonthlyPlus'),
+			getTestDiscountPrice('GuardianWeeklyDomestic', 'MonthlyPlus'),
 		),
 		guardianWeeklyTermsLink,
 	],
@@ -109,7 +110,7 @@ const policyCases: PolicyCase[] = [
 		'QuarterlyPlus',
 		printDelivery,
 		promotionPrintDelivery(
-			getDiscountPrice('GuardianWeeklyDomestic', 'QuarterlyPlus'),
+			getTestDiscountPrice('GuardianWeeklyDomestic', 'QuarterlyPlus'),
 		),
 		guardianWeeklyTermsLink,
 	],
@@ -118,7 +119,7 @@ const policyCases: PolicyCase[] = [
 		'AnnualPlus',
 		printDelivery,
 		promotionPrintDelivery(
-			getDiscountPrice('GuardianWeeklyDomestic', 'AnnualPlus'),
+			getTestDiscountPrice('GuardianWeeklyDomestic', 'AnnualPlus'),
 		),
 		guardianWeeklyTermsLink,
 	],
@@ -140,28 +141,32 @@ const policyCases: PolicyCase[] = [
 		'HomeDelivery',
 		'EverydayPlus',
 		printDelivery,
-		promotionPrintDelivery(getDiscountPrice('HomeDelivery', 'EverydayPlus')),
+		promotionPrintDelivery(
+			getTestDiscountPrice('HomeDelivery', 'EverydayPlus'),
+		),
 		paperTermsLink,
 	],
 	[
 		'HomeDelivery',
 		'SixdayPlus',
 		printDelivery,
-		promotionPrintDelivery(getDiscountPrice('HomeDelivery', 'SixdayPlus')),
+		promotionPrintDelivery(getTestDiscountPrice('HomeDelivery', 'SixdayPlus')),
 		paperTermsLink,
 	],
 	[
 		'HomeDelivery',
 		'WeekendPlus',
 		printDelivery,
-		promotionPrintDelivery(getDiscountPrice('HomeDelivery', 'WeekendPlus')),
+		promotionPrintDelivery(getTestDiscountPrice('HomeDelivery', 'WeekendPlus')),
 		paperTermsLink,
 	],
 	[
 		'HomeDelivery',
 		'SaturdayPlus',
 		printDelivery,
-		promotionPrintDelivery(getDiscountPrice('HomeDelivery', 'SaturdayPlus')),
+		promotionPrintDelivery(
+			getTestDiscountPrice('HomeDelivery', 'SaturdayPlus'),
+		),
 		paperTermsLink,
 	],
 	['HomeDelivery', 'Sunday', printDelivery, printDelivery, observerLinks.TERMS],
@@ -170,7 +175,7 @@ const policyCases: PolicyCase[] = [
 		'EverydayPlus',
 		printSubscription,
 		promotionPrintSubscription(
-			getDiscountPrice('SubscriptionCard', 'EverydayPlus'),
+			getTestDiscountPrice('SubscriptionCard', 'EverydayPlus'),
 		),
 		paperTermsLink,
 	],
@@ -179,7 +184,7 @@ const policyCases: PolicyCase[] = [
 		'SixdayPlus',
 		printSubscription,
 		promotionPrintSubscription(
-			getDiscountPrice('SubscriptionCard', 'SixdayPlus'),
+			getTestDiscountPrice('SubscriptionCard', 'SixdayPlus'),
 		),
 		paperTermsLink,
 	],
@@ -188,7 +193,7 @@ const policyCases: PolicyCase[] = [
 		'WeekendPlus',
 		printSubscription,
 		promotionPrintSubscription(
-			getDiscountPrice('SubscriptionCard', 'WeekendPlus'),
+			getTestDiscountPrice('SubscriptionCard', 'WeekendPlus'),
 		),
 		paperTermsLink,
 	],
@@ -197,7 +202,7 @@ const policyCases: PolicyCase[] = [
 		'SaturdayPlus',
 		printSubscription,
 		promotionPrintSubscription(
-			getDiscountPrice('SubscriptionCard', 'SaturdayPlus'),
+			getTestDiscountPrice('SubscriptionCard', 'SaturdayPlus'),
 		),
 		paperTermsLink,
 	],
@@ -236,11 +241,8 @@ describe('getCancellationPolicy', () => {
 	it.each(policyCases)(
 		'cancellation policy for product: %s ratePlan: %s',
 		(product, ratePlan, copy, _promotionalCopy, termsLink) => {
-			const result = getCancellationPolicy(
-				product,
-				ratePlan,
-				getFullPrices(product, ratePlan),
-			);
+			const { fullPrice } = getTestPricesAndPromotion(product, ratePlan);
+			const result = getCancellationPolicy(product, ratePlan, fullPrice);
 			expectPolicy(result[product]?.[ratePlan], copy, termsLink);
 		},
 	);
@@ -248,11 +250,15 @@ describe('getCancellationPolicy', () => {
 	it.each(policyCases)(
 		'promotional cancellation policy for product: %s ratePlan: %s',
 		(product, ratePlan, _copy, promotionalCopy, termsLink) => {
+			const { fullPrice, promotion } = getTestPricesAndPromotion(
+				product,
+				ratePlan,
+			);
 			const result = getCancellationPolicy(
 				product,
 				ratePlan,
-				getFullPrices(product, ratePlan),
-				getPromotions(product, ratePlan),
+				fullPrice,
+				promotion,
 			);
 			expectPolicy(result[product]?.[ratePlan], promotionalCopy, termsLink);
 		},

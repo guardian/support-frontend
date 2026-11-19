@@ -13,6 +13,7 @@ import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from './billingPeriods';
+import type { PromoDiscount } from './discountedPrice';
 import {
 	getDiscountedPrice,
 	getNumberOfDiscountedPeriods,
@@ -70,7 +71,7 @@ const renewalTermDetail = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
-	discount: NonNullable<PromoWithCatalogInformation['discount']>,
+	discount: PromoDiscount,
 ): RenewalTermDetailProps => {
 	const billingPeriod = ratePlanToBillingPeriod(
 		ratePlanKey,

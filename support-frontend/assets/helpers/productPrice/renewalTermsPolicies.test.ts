@@ -5,18 +5,8 @@ import type {
 } from 'helpers/productCatalog';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
-import {
-	getFullPrices,
-	getPromotions,
-	promoCatalogDigitalAnnual,
-	promoCatalogDigitalMonthly,
-	promoCatalogPrintMonthly,
-	promoCatalogWeeklyAnnual,
-	promoCatalogWeeklyQuarterly,
-} from '../../../stories/checkouts/preContactInformation.stories';
-import { ratePlanToBillingPeriod } from './billingPeriods';
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
-import { getPromotionDiscountedPrice } from './promotionPricing';
+import { getTestPricesAndPromotion } from './preContractInformationTestData';
 import {
 	getPromotionExpiryDate,
 	getRenewalTermPolicy,
@@ -102,7 +92,7 @@ describe('getRenewalTermPolicyCopy', () => {
 	] as const)(
 		'renewal term for product:%s ratePlan:%s',
 		(product, ratePlan, policy) => {
-			const fullPrice = getFullPrices(product, ratePlan);
+			const { fullPrice } = getTestPricesAndPromotion(product, ratePlan);
 			const result =
 				getRenewalTermPolicy(
 					product as ActiveProductKey,
@@ -135,21 +125,18 @@ describe('getRenewalTermPolicyCopy', () => {
 	] as const)(
 		'promotional renewal term for product:%s ratePlan:%s',
 		(product, ratePlan, policy) => {
-			const fullPrice = getFullPrices(product, ratePlan);
-			const promotion = getPromotions(product, ratePlan);
+			const { fullPrice, discountedPrice, promotion } =
+				getTestPricesAndPromotion(product, ratePlan);
 			if (!promotion) {
-				throw new Error(`Missing promotion for rate plan: ${ratePlan}`);
+				throw new Error(
+					`Missing promotion for product ${product} rate plan: ${ratePlan}`,
+				);
 			}
 			const result = getRenewalTermPolicy(
 				product,
 				ratePlan,
 				fullPrice,
 				promotion,
-			);
-			const discountedPrice = getPromotionDiscountedPrice(
-				promotion,
-				fullPrice,
-				ratePlanToBillingPeriod(ratePlan),
 			);
 			const expiry = getPromotionExpiryDate(
 				product,
@@ -184,77 +171,33 @@ describe('getRenewalTermPolicyCopy', () => {
 			jest.useRealTimers();
 		});
 		it.each([
-			[
-				'GuardianAdLite',
-				'Monthly',
-				promoCatalogDigitalMonthly,
-				sixMonthsPlus15days,
-			],
-			['SupporterPlus', 'Monthly', promoCatalogDigitalMonthly, sixMonths],
-			['SupporterPlus', 'Annual', promoCatalogDigitalAnnual, oneYear],
-			['DigitalSubscription', 'Monthly', promoCatalogDigitalMonthly, sixMonths],
-			['DigitalSubscription', 'Annual', promoCatalogDigitalAnnual, oneYear],
-			[
-				'GuardianWeeklyDomestic',
-				'MonthlyPlus',
-				promoCatalogPrintMonthly,
-				weeklySixMonths,
-			],
-			[
-				'GuardianWeeklyDomestic',
-				'QuarterlyPlus',
-				promoCatalogWeeklyQuarterly,
-				weeklySixMonths,
-			],
-			[
-				'GuardianWeeklyDomestic',
-				'AnnualPlus',
-				promoCatalogWeeklyAnnual,
-				weeklyAnnual,
-			],
-			[
-				'HomeDelivery',
-				'EverydayPlus',
-				promoCatalogPrintMonthly,
-				homeDeliveryMon,
-			],
-			['HomeDelivery', 'SixdayPlus', promoCatalogPrintMonthly, homeDeliveryMon],
-			[
-				'HomeDelivery',
-				'WeekendPlus',
-				promoCatalogPrintMonthly,
-				homeDeliverySat,
-			],
-			[
-				'HomeDelivery',
-				'SaturdayPlus',
-				promoCatalogPrintMonthly,
-				homeDeliverySat,
-			],
-			['HomeDelivery', 'Sunday', promoCatalogPrintMonthly, homeDeliverySun],
-			[
-				'SubscriptionCard',
-				'EverydayPlus',
-				promoCatalogPrintMonthly,
-				subsCardMon,
-			],
-			['SubscriptionCard', 'SixdayPlus', promoCatalogPrintMonthly, subsCardMon],
-			[
-				'SubscriptionCard',
-				'WeekendPlus',
-				promoCatalogPrintMonthly,
-				subsCardSat,
-			],
-			[
-				'SubscriptionCard',
-				'SaturdayPlus',
-				promoCatalogPrintMonthly,
-				subsCardSat,
-			],
-			['SubscriptionCard', 'Sunday', promoCatalogPrintMonthly, subsCardSun],
+			['GuardianAdLite', 'Monthly', sixMonthsPlus15days],
+			['SupporterPlus', 'Monthly', sixMonths],
+			['SupporterPlus', 'Annual', oneYear],
+			['DigitalSubscription', 'Monthly', sixMonths],
+			['DigitalSubscription', 'Annual', oneYear],
+			['GuardianWeeklyDomestic', 'MonthlyPlus', weeklySixMonths],
+			['GuardianWeeklyDomestic', 'QuarterlyPlus', weeklySixMonths],
+			['GuardianWeeklyDomestic', 'AnnualPlus', weeklyAnnual],
+			['HomeDelivery', 'EverydayPlus', homeDeliveryMon],
+			['HomeDelivery', 'SixdayPlus', homeDeliveryMon],
+			['HomeDelivery', 'WeekendPlus', homeDeliverySat],
+			['HomeDelivery', 'SaturdayPlus', homeDeliverySat],
+			['HomeDelivery', 'Sunday', homeDeliverySun],
+			['SubscriptionCard', 'EverydayPlus', subsCardMon],
+			['SubscriptionCard', 'SixdayPlus', subsCardMon],
+			['SubscriptionCard', 'WeekendPlus', subsCardSat],
+			['SubscriptionCard', 'SaturdayPlus', subsCardSat],
+			['SubscriptionCard', 'Sunday', subsCardSun],
 		] as const)(
 			`calculate promotion expiry date for product:%s rateplan:%s`,
-			(...[product, ratePlan, promotion, promoExpiryDate]) => {
+			(...[product, ratePlan, promoExpiryDate]) => {
+				const { promotion } = getTestPricesAndPromotion(product, ratePlan);
+				if (!promotion) {
+					throw new Error(
+						`Missing promotion for product ${product} rate plan: ${ratePlan}`,
+					);
+				}
 				const result = getPromotionExpiryDate(
 					product,
 					ratePlan,
