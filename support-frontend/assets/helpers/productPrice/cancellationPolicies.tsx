@@ -299,12 +299,12 @@ const promotionalCancellation = (
 function getPromotionalCancellation(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	fullPrice: number,
+	amount: number,
 	promotion: PromoWithCatalogInformation,
 ): PolicyElement {
 	const discountedPrice = getPromotionDiscountedPrice(
 		promotion,
-		fullPrice,
+		amount,
 		ratePlanToBillingPeriod(ratePlanKey),
 	);
 	return promotionalCancellation(productKey, ratePlanKey, discountedPrice);

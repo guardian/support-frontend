@@ -98,7 +98,7 @@ type RenewalTermDetailProps = {
 const renewalTermDetail = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	fullPrice: number,
+	amount: number,
 	discount: PromoDiscount,
 ): RenewalTermDetailProps => {
 	const billingPeriod = ratePlanToBillingPeriod(
@@ -118,16 +118,12 @@ const renewalTermDetail = (
 			durationPeriods * getNumberOfMonthsInPeriod(billingPeriod),
 		),
 	);
-	const discountedPrice = getDiscountedPrice(
-		fullPrice,
-		discount,
-		billingPeriod,
-	);
+	const discountedPrice = getDiscountedPrice(amount, discount, billingPeriod);
 	const discountMonthlyEquivalent = monthlyEquivalentPrice(
 		discountedPrice,
 		billingPeriod,
 	);
-	const monthlyEquivalent = monthlyEquivalentPrice(fullPrice, billingPeriod);
+	const monthlyEquivalent = monthlyEquivalentPrice(amount, billingPeriod);
 	return {
 		discountedPrice,
 		durationPeriods,
@@ -141,16 +137,19 @@ const renewalTermDetail = (
 const promotionDigitalMonthly = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	fullPrice: number,
+	amount: number,
 	promotion: PromoWithCatalogInformation,
+	contribution?: number,
 ): string => {
 	const { discount } = promotion;
 	if (!discount) {
-		return digitalAndPrintMonthly(fullPrice);
+		const totalAmount =
+			productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount;
+		return digitalAndPrintMonthly(totalAmount);
 	}
 	const { discountedPrice, durationPeriods, periodName, expiry } =
-		renewalTermDetail(productKey, ratePlanKey, fullPrice, discount);
-	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${durationPeriods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+		renewalTermDetail(productKey, ratePlanKey, amount, discount);
+	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${durationPeriods} ${periodName}, then £${amount}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionPrintMonthly = (
 	productKey: ActiveProductKey,
@@ -190,12 +189,15 @@ const promotionPrintQuarterly = (
 const promotionAnnual = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	fullPrice: number,
+	amount: number,
 	promotion: PromoWithCatalogInformation,
+	contribution?: number,
 ): string => {
 	const { discount } = promotion;
 	if (!discount) {
-		return digitalAndPrintAnnual(fullPrice);
+		const totalAmount =
+			productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount;
+		return digitalAndPrintAnnual(totalAmount);
 	}
 	const {
 		discountedPrice,
@@ -204,8 +206,8 @@ const promotionAnnual = (
 		expiry,
 		discountMonthlyEquivalent,
 		monthlyEquivalent,
-	} = renewalTermDetail(productKey, ratePlanKey, fullPrice, discount);
-	return `Subscription auto-renews annually. Pay £${discountedPrice}/year for ${durationPeriods} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${durationPeriods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	} = renewalTermDetail(productKey, ratePlanKey, amount, discount);
+	return `Subscription auto-renews annually. Pay £${discountedPrice}/year for ${durationPeriods} ${periodName}, then £${amount}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${durationPeriods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 };
 
 type Policy = Partial<
@@ -263,32 +265,34 @@ function getRenewalTerm(fullPrice: number): Policy {
 function getPromotionalRenewalTerm(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	fullPrice: number,
+	amount: number,
 	promotion: PromoWithCatalogInformation,
+	contribution?: number,
 ): Policy {
 	const promotionAnnualTerms = promotionAnnual(
 		productKey,
 		ratePlanKey,
-		fullPrice,
+		amount,
 		promotion,
+		contribution,
 	);
 	const promotionDigitalMonthlyTerms = promotionDigitalMonthly(
 		productKey,
 		ratePlanKey,
-		fullPrice,
+		amount,
 		promotion,
 	);
 	const promotionPrintMonthlyTerms = promotionPrintMonthly(
 		productKey,
 		ratePlanKey,
-		fullPrice,
+		amount,
 
 		promotion,
 	);
 	const promotionPrintQuarterlyTerms = promotionPrintQuarterly(
 		productKey,
 		ratePlanKey,
-		fullPrice,
+		amount,
 		promotion,
 	);
 	return {
@@ -337,13 +341,18 @@ function getPromotionalRenewalTerm(
 export function getRenewalTermPolicy(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	fullPrice: number,
+	amount: number,
 	promotion?: PromoWithCatalogInformation,
+	contribution?: number,
 ) {
 	const isValidPromotion = promotion?.discount?.amount !== undefined;
 	return isValidPromotion
-		? getPromotionalRenewalTerm(productKey, ratePlanKey, fullPrice, promotion)[
-				productKey
-		  ]?.[ratePlanKey]
-		: getRenewalTerm(fullPrice)[productKey]?.[ratePlanKey];
+		? getPromotionalRenewalTerm(
+				productKey,
+				ratePlanKey,
+				amount,
+				promotion,
+				contribution,
+		  )[productKey]?.[ratePlanKey]
+		: getRenewalTerm(amount + (contribution ?? 0))[productKey]?.[ratePlanKey];
 }

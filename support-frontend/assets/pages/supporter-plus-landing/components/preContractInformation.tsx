@@ -48,21 +48,19 @@ export function PreContractInformation({
 	promotion,
 	contribution,
 }: PreContractInformationProps): JSX.Element {
-	// Include SupporterPlus extra contribution
-	const fullAmount =
-		productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount;
 	return (
 		<div css={containerSummaryTsCs}>
 			<RenewalTermPolicy
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				amount={fullAmount}
+				amount={amount}
+				contribution={contribution}
 				promotion={promotion}
 			/>
 			<CancellationPolicy
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				amount={fullAmount}
+				amount={amount}
 				promotion={promotion}
 			/>
 			<PriceRisePolicy productKey={productKey} ratePlanKey={ratePlanKey} />
