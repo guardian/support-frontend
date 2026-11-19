@@ -48,7 +48,7 @@ const getTerms = (
 				copy,
 				ratePlanKey.startsWith('Sunday') ? observerLinks.TERMS : paperTermsLink,
 			);
-		default:
+		case 'OneTimeContribution':
 			return textLink(copy, guardianHelpCentreLink); // default to help centre for oneTime
 	}
 };
