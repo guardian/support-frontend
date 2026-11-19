@@ -6,7 +6,9 @@ import type {
 } from 'helpers/productCatalog';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
+import { ratePlanToBillingPeriod } from './billingPeriods';
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
+import { getPromotionDiscountedPrice } from './promotionPricing';
 import {
 	getPromotionExpiryDate,
 	getRenewalTermPolicy,
@@ -79,17 +81,17 @@ const fullPrices: Partial<Record<ActiveRatePlanKey, number>> = {
 	SaturdayPlus: 14,
 	Sunday: 14,
 };
-const discountPrices: Partial<Record<ActiveRatePlanKey, number>> = {
-	Monthly: 7,
-	MonthlyPlus: 7,
-	QuarterlyPlus: 30,
-	Annual: 90,
-	AnnualPlus: 90,
-	EverydayPlus: 7,
-	SixdayPlus: 7,
-	WeekendPlus: 7,
-	SaturdayPlus: 7,
-	Sunday: 7,
+const discountPecentages: Partial<Record<ActiveRatePlanKey, number>> = {
+	Monthly: 57.12,
+	MonthlyPlus: 57.12,
+	QuarterlyPlus: 25,
+	Annual: 14.285714,
+	AnnualPlus: 14.285714,
+	EverydayPlus: 57.12,
+	SixdayPlus: 57.12,
+	WeekendPlus: 57.12,
+	SaturdayPlus: 57.12,
+	Sunday: 57.12,
 };
 const promoMonthly: PromoWithCatalogInformation = {
 	name: 'MONTHLY',
@@ -97,7 +99,7 @@ const promoMonthly: PromoWithCatalogInformation = {
 	promoCode: 'MONTHLY',
 	isIntroductoryPricing: true,
 	discount: {
-		amount: discountPrices['Monthly'] ?? 0,
+		amount: discountPecentages['Monthly'] ?? 0,
 		durationMonths: 6,
 	},
 	campaignCode: 'TEST_CAMPAIGN',
@@ -110,7 +112,7 @@ const promoQuarterly: PromoWithCatalogInformation = {
 	promoCode: 'QUARTERLY',
 	isIntroductoryPricing: true,
 	discount: {
-		amount: discountPrices['QuarterlyPlus'] ?? 0,
+		amount: discountPecentages['QuarterlyPlus'] ?? 0,
 		durationMonths: 6,
 	},
 	campaignCode: 'TEST_CAMPAIGN',
@@ -123,7 +125,7 @@ const promoAnnual: PromoWithCatalogInformation = {
 	promoCode: 'ANNUAL',
 	isIntroductoryPricing: true,
 	discount: {
-		amount: discountPrices['Annual'] ?? 0,
+		amount: discountPecentages['Annual'] ?? 0,
 		durationMonths: 12,
 	},
 	campaignCode: 'TEST_CAMPAIGN',
@@ -205,20 +207,27 @@ describe('getRenewalTermPolicyCopy', () => {
 		(product, ratePlan, policy) => {
 			const fullPrice = fullPrices[ratePlan] ?? 0;
 			const promotion = promotions[ratePlan];
+			if (!promotion) {
+				throw new Error(`Missing promotion for rate plan: ${ratePlan}`);
+			}
 			const result = getRenewalTermPolicy(
 				product,
 				ratePlan,
 				fullPrice,
 				promotion,
 			);
-			const discountPrice = discountPrices[ratePlan] ?? 0;
+			const discountedPrice = getPromotionDiscountedPrice(
+				promotion,
+				fullPrice,
+				ratePlanToBillingPeriod(ratePlan),
+			);
 			const expiry = getPromotionExpiryDate(
 				product,
 				ratePlan,
-				promotion?.discount?.durationMonths ?? 0,
+				promotion.discount?.durationMonths ?? 0,
 			);
 			expect(result).toBe(
-				policy(fullPrice, discountPrice, formatUserDate(expiry)),
+				policy(fullPrice, discountedPrice, formatUserDate(expiry)),
 			);
 		},
 	);
