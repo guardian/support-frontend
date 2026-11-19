@@ -1,5 +1,4 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -7,6 +6,8 @@ import type {
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 import {
+	getFullPrices,
+	getPromotions,
 	promoCatalogDigitalAnnual,
 	promoCatalogDigitalMonthly,
 	promoCatalogPrintMonthly,
@@ -76,34 +77,6 @@ const promotionAnnual = (
 		BillingPeriod.Annual,
 	)}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 
-const fullPrices: Partial<Record<ActiveRatePlanKey, number>> = {
-	Monthly: 14,
-	MonthlyPlus: 19,
-	QuarterlyPlus: 57,
-	Annual: 140,
-	AnnualPlus: 228,
-	EverydayPlus: 14,
-	SixdayPlus: 14,
-	WeekendPlus: 14,
-	SaturdayPlus: 14,
-	Sunday: 14,
-};
-
-const promotions: Partial<
-	Record<ActiveRatePlanKey, PromoWithCatalogInformation>
-> = {
-	Monthly: promoCatalogDigitalMonthly,
-	MonthlyPlus: promoCatalogPrintMonthly,
-	QuarterlyPlus: promoCatalogWeeklyQuarterly,
-	Annual: promoCatalogDigitalAnnual,
-	AnnualPlus: promoCatalogWeeklyAnnual,
-	EverydayPlus: promoCatalogPrintMonthly,
-	SixdayPlus: promoCatalogPrintMonthly,
-	WeekendPlus: promoCatalogPrintMonthly,
-	SaturdayPlus: promoCatalogPrintMonthly,
-	Sunday: promoCatalogPrintMonthly,
-};
-
 describe('getRenewalTermPolicyCopy', () => {
 	it.each([
 		['Contribution', 'Monthly', contributionMonthly],
@@ -129,7 +102,7 @@ describe('getRenewalTermPolicyCopy', () => {
 	] as const)(
 		'renewal term for product:%s ratePlan:%s',
 		(product, ratePlan, policy) => {
-			const fullPrice = fullPrices[ratePlan] ?? 0;
+			const fullPrice = getFullPrices(product, ratePlan);
 			const result =
 				getRenewalTermPolicy(
 					product as ActiveProductKey,
@@ -162,8 +135,8 @@ describe('getRenewalTermPolicyCopy', () => {
 	] as const)(
 		'promotional renewal term for product:%s ratePlan:%s',
 		(product, ratePlan, policy) => {
-			const fullPrice = fullPrices[ratePlan] ?? 0;
-			const promotion = promotions[ratePlan];
+			const fullPrice = getFullPrices(product, ratePlan);
+			const promotion = getPromotions(product, ratePlan);
 			if (!promotion) {
 				throw new Error(`Missing promotion for rate plan: ${ratePlan}`);
 			}
