@@ -125,9 +125,9 @@ export const getProductFields = ({
 				deliveryAgent,
 			};
 		}
-		case 'PatronMembership':
+		case 'Patron':
 			return {
-				productType: 'PatronMembership',
+				productType: 'Patron',
 				currency: currencyKey,
 				billingPeriod: billingPeriod,
 			};

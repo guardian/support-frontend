@@ -223,7 +223,7 @@ export const createBuyerRecordRequest = (
 		case 'SupporterPlus':
 		case 'DigitalPack':
 		case 'GuardianAdLite':
-		case 'PatronMembership':
+		case 'Patron':
 			return createDigitalOnlyContactRecordRequest(user);
 	}
 };

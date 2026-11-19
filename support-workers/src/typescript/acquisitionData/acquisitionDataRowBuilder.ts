@@ -228,7 +228,7 @@ function productTypeAndAmount(product: ProductType): {
 			return { product: 'PRINT_SUBSCRIPTION' };
 		case 'GuardianAdLite':
 			return { product: 'GUARDIAN_AD_LITE' };
-		case 'PatronMembership':
+		case 'Patron':
 			return { product: 'PATRON_MEMBERSHIP' };
 	}
 }

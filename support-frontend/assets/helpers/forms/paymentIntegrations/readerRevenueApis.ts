@@ -83,8 +83,8 @@ type GuardianWeeklySubscription = {
 	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
 };
-type PatronMembership = {
-	productType: 'PatronMembership';
+type Patron = {
+	productType: 'Patron';
 	currency: string;
 	billingPeriod: BillingPeriod;
 };
@@ -94,7 +94,7 @@ type SubscriptionProductFields =
 	| PaperSubscription
 	| GuardianWeeklySubscription
 	| GuardianAdLite
-	| PatronMembership;
+	| Patron;
 export type ProductFields = RegularContribution | SubscriptionProductFields;
 type RegularPayPalPaymentFields = {
 	paymentType: typeof PayPal;

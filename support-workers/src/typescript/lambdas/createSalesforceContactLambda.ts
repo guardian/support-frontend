@@ -109,10 +109,10 @@ export const createNextState = (
 				},
 				...state,
 			};
-		case 'PatronMembership':
+		case 'Patron':
 			return {
 				productSpecificState: {
-					productType: 'PatronMembership',
+					productType: 'Patron',
 					product: state.product,
 					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
