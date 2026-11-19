@@ -25,14 +25,26 @@ export const getPromotionExpiryDate = (
 	ratePlanKey: ActiveRatePlanKey,
 	durationMonths: number,
 ): Date => {
-	const startDate =
+	const promotionExpiryDate =
 		getProductFirstDeliveryDate(
 			productKey,
 			ratePlanKey as ActivePaperProductOptions,
 		) ?? new Date();
-	const promotionExpiryDate = new Date(
-		startDate.setMonth(startDate.getMonth() + durationMonths),
-	);
+
+	// current day of this month
+	const dayOfMonth = promotionExpiryDate.getDate();
+
+	// last day of proposed month
+	promotionExpiryDate.setDate(1);
+	promotionExpiryDate.setMonth(promotionExpiryDate.getMonth() + durationMonths);
+	const lastDayOfMonth = new Date(
+		promotionExpiryDate.getFullYear(),
+		promotionExpiryDate.getMonth() + 1,
+		0,
+	).getDate();
+
+	// accept lower of last day or current day
+	promotionExpiryDate.setDate(Math.min(lastDayOfMonth, dayOfMonth));
 	return promotionExpiryDate;
 };
 

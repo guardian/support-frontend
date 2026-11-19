@@ -207,4 +207,33 @@ describe('getRenewalTermPolicyCopy', () => {
 			},
 		);
 	});
+	describe('getPromotionExpiryDate (month end)', () => {
+		const monthEndDate = new Date(2026, 7, 31);
+		const sixMonths = new Date(2027, 1, 28);
+
+		beforeEach(() => {
+			jest.useFakeTimers().setSystemTime(monthEndDate);
+		});
+
+		afterEach(() => {
+			jest.useRealTimers();
+		});
+		it.each([['SupporterPlus', 'Monthly', sixMonths]] as const)(
+			`calculate promotion expiry date for product:%s rateplan:%s`,
+			(...[product, ratePlan, promoExpiryDate]) => {
+				const { promotion } = getTestPricesAndPromotion(product, ratePlan);
+				if (!promotion) {
+					throw new Error(
+						`Missing promotion for product ${product} rate plan: ${ratePlan}`,
+					);
+				}
+				const result = getPromotionExpiryDate(
+					product,
+					ratePlan,
+					promotion.discount?.durationMonths ?? 0,
+				);
+				expect(result).toEqual(promoExpiryDate);
+			},
+		);
+	});
 });
