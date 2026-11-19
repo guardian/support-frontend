@@ -17,6 +17,8 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { textLink } from 'helpers/utilities/textLink';
+import { ratePlanToBillingPeriod } from './billingPeriods';
+import { getPromotionDiscountedPrice } from './promotionPricing';
 
 const marginTop = css`
 	margin-top: ${space[2]}px;
@@ -297,19 +299,25 @@ const promotionalCancellation = (
 function getPromotionalCancellation(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	promotion?: PromoWithCatalogInformation,
+	fullPrice: number,
+	promotion: PromoWithCatalogInformation,
 ): PolicyElement {
-	const firstPayment = promotion?.discount?.amount ?? 0;
-	return promotionalCancellation(productKey, ratePlanKey, firstPayment);
+	const discountedPrice = getPromotionDiscountedPrice(
+		promotion,
+		fullPrice,
+		ratePlanToBillingPeriod(ratePlanKey),
+	);
+	return promotionalCancellation(productKey, ratePlanKey, discountedPrice);
 }
 
 export function getCancellationPolicy(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
+	fullPrice: number,
 	promotion?: PromoWithCatalogInformation,
 ): PolicyElement {
 	const isValidPromotion = promotion?.discount?.amount !== undefined;
 	return isValidPromotion
-		? getPromotionalCancellation(productKey, ratePlanKey, promotion)
+		? getPromotionalCancellation(productKey, ratePlanKey, fullPrice, promotion)
 		: getCancellation(productKey, ratePlanKey);
 }

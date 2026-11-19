@@ -8,16 +8,18 @@ import { getCancellationPolicy } from 'helpers/productPrice/cancellationPolicies
 interface CancellationPolicyProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
+	amount: number;
 	promotion?: PromoWithCatalogInformation;
 }
 export function CancellationPolicy({
 	productKey,
 	ratePlanKey,
+	amount,
 	promotion,
 }: CancellationPolicyProps): JSX.Element | null {
 	return (
-		getCancellationPolicy(productKey, ratePlanKey, promotion)[productKey]?.[
-			ratePlanKey
-		] ?? null
+		getCancellationPolicy(productKey, ratePlanKey, amount, promotion)[
+			productKey
+		]?.[ratePlanKey] ?? null
 	);
 }

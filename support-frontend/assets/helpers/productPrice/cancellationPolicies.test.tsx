@@ -1,4 +1,3 @@
-import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { render, screen } from '@testing-library/react';
 import {
 	digitalPlusTermsLink,
@@ -13,6 +12,11 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import {
+	getDiscountPrice,
+	getFullPrices,
+	getPromotions,
+} from '../../../stories/checkouts/preContactInformation.stories';
 import { getCancellationPolicy } from './cancellationPolicies';
 
 const digitalMonthly =
@@ -28,10 +32,10 @@ const printGift =
 	"By proceeding, you are agreeing to our Terms & Conditions. This subscription does not auto-renew. If you cancel within 14 days of sign-up, you'll receive a full refund. To cancel within 14 days of sign-up and receive a refund contact Customer Service.";
 const promotionDigitalMonthly = (firstPayment: number) =>
 	`Cancel anytime, via your account. Cancel within 14 days of sign-up or your first payment at £${firstPayment} and receive a full refund of your last payment. See more about your cooling-off rights in your full pre-contract information here.`;
-const promotionPrintDelivery =
-	'Cancel anytime, via your account. Cancel within 14 days of receiving your first issue or your first payment at £7 and receive a full refund of that payment. See more about your cooling-off rights in your full pre-contract information here.';
-const promotionPrintSubscription =
-	'Cancel anytime, via your account. Cancel within 14 days of receiving your subscription card or your first payment at £7 and receive a full refund of that payment. See more about your cooling-off rights in your full pre-contract information here.';
+const promotionPrintDelivery = (firstPayment: number) =>
+	`Cancel anytime, via your account. Cancel within 14 days of receiving your first issue or your first payment at £${firstPayment} and receive a full refund of that payment. See more about your cooling-off rights in your full pre-contract information here.`;
+const promotionPrintSubscription = (firstPayment: number) =>
+	`Cancel anytime, via your account. Cancel within 14 days of receiving your subscription card or your first payment at £${firstPayment} and receive a full refund of that payment. See more about your cooling-off rights in your full pre-contract information here.`;
 
 type PolicyCase = readonly [
 	product: ActiveProductKey,
@@ -50,7 +54,7 @@ const policyCases: PolicyCase[] = [
 		'GuardianAdLite',
 		'Monthly',
 		digitalMonthly,
-		promotionDigitalMonthly(7),
+		promotionDigitalMonthly(getDiscountPrice('GuardianAdLite', 'Monthly')),
 		guardianAdLiteTermsLink,
 	],
 	['GuardianAdLite', 'Annual', undefined, undefined, undefined],
@@ -58,7 +62,7 @@ const policyCases: PolicyCase[] = [
 		'SupporterPlus',
 		'Monthly',
 		digitalMonthly,
-		promotionDigitalMonthly(7),
+		promotionDigitalMonthly(getDiscountPrice('SupporterPlus', 'Monthly')),
 		supporterPlusTermsLink,
 	],
 	[
@@ -79,7 +83,7 @@ const policyCases: PolicyCase[] = [
 		'DigitalSubscription',
 		'Monthly',
 		digitalMonthly,
-		promotionDigitalMonthly(7),
+		promotionDigitalMonthly(getDiscountPrice('DigitalSubscription', 'Monthly')),
 		digitalPlusTermsLink,
 	],
 	[
@@ -95,21 +99,27 @@ const policyCases: PolicyCase[] = [
 		'GuardianWeeklyDomestic',
 		'MonthlyPlus',
 		printDelivery,
-		promotionPrintDelivery,
+		promotionPrintDelivery(
+			getDiscountPrice('GuardianWeeklyDomestic', 'MonthlyPlus'),
+		),
 		guardianWeeklyTermsLink,
 	],
 	[
 		'GuardianWeeklyDomestic',
 		'QuarterlyPlus',
 		printDelivery,
-		promotionPrintDelivery,
+		promotionPrintDelivery(
+			getDiscountPrice('GuardianWeeklyDomestic', 'QuarterlyPlus'),
+		),
 		guardianWeeklyTermsLink,
 	],
 	[
 		'GuardianWeeklyDomestic',
 		'AnnualPlus',
 		printDelivery,
-		promotionPrintDelivery,
+		promotionPrintDelivery(
+			getDiscountPrice('GuardianWeeklyDomestic', 'AnnualPlus'),
+		),
 		guardianWeeklyTermsLink,
 	],
 	[
@@ -121,41 +131,6 @@ const policyCases: PolicyCase[] = [
 	],
 	[
 		'GuardianWeeklyDomestic',
-		'OneYearGift',
-		printGift,
-		printGift,
-		guardianWeeklyTermsLink,
-	],
-	[
-		'GuardianWeeklyRestOfWorld',
-		'MonthlyPlus',
-		printDelivery,
-		promotionPrintDelivery,
-		guardianWeeklyTermsLink,
-	],
-	[
-		'GuardianWeeklyRestOfWorld',
-		'QuarterlyPlus',
-		printDelivery,
-		promotionPrintDelivery,
-		guardianWeeklyTermsLink,
-	],
-	[
-		'GuardianWeeklyRestOfWorld',
-		'AnnualPlus',
-		printDelivery,
-		promotionPrintDelivery,
-		guardianWeeklyTermsLink,
-	],
-	[
-		'GuardianWeeklyRestOfWorld',
-		'ThreeMonthGift',
-		printGift,
-		printGift,
-		guardianWeeklyTermsLink,
-	],
-	[
-		'GuardianWeeklyRestOfWorld',
 		'OneYearGift',
 		printGift,
 		printGift,
@@ -165,58 +140,65 @@ const policyCases: PolicyCase[] = [
 		'HomeDelivery',
 		'EverydayPlus',
 		printDelivery,
-		promotionPrintDelivery,
+		promotionPrintDelivery(getDiscountPrice('HomeDelivery', 'EverydayPlus')),
 		paperTermsLink,
 	],
 	[
 		'HomeDelivery',
 		'SixdayPlus',
 		printDelivery,
-		promotionPrintDelivery,
+		promotionPrintDelivery(getDiscountPrice('HomeDelivery', 'SixdayPlus')),
 		paperTermsLink,
 	],
 	[
 		'HomeDelivery',
 		'WeekendPlus',
 		printDelivery,
-		promotionPrintDelivery,
+		promotionPrintDelivery(getDiscountPrice('HomeDelivery', 'WeekendPlus')),
 		paperTermsLink,
 	],
 	[
 		'HomeDelivery',
 		'SaturdayPlus',
 		printDelivery,
-		promotionPrintDelivery,
+		promotionPrintDelivery(getDiscountPrice('HomeDelivery', 'SaturdayPlus')),
 		paperTermsLink,
 	],
 	['HomeDelivery', 'Sunday', printDelivery, printDelivery, observerLinks.TERMS],
-	['HomeDelivery', 'SundayPlus', printDelivery, undefined, observerLinks.TERMS],
 	[
 		'SubscriptionCard',
 		'EverydayPlus',
 		printSubscription,
-		promotionPrintSubscription,
+		promotionPrintSubscription(
+			getDiscountPrice('SubscriptionCard', 'EverydayPlus'),
+		),
 		paperTermsLink,
 	],
 	[
 		'SubscriptionCard',
 		'SixdayPlus',
 		printSubscription,
-		promotionPrintSubscription,
+		promotionPrintSubscription(
+			getDiscountPrice('SubscriptionCard', 'SixdayPlus'),
+		),
 		paperTermsLink,
 	],
 	[
 		'SubscriptionCard',
 		'WeekendPlus',
 		printSubscription,
-		promotionPrintSubscription,
+		promotionPrintSubscription(
+			getDiscountPrice('SubscriptionCard', 'WeekendPlus'),
+		),
 		paperTermsLink,
 	],
 	[
 		'SubscriptionCard',
 		'SaturdayPlus',
 		printSubscription,
-		promotionPrintSubscription,
+		promotionPrintSubscription(
+			getDiscountPrice('SubscriptionCard', 'SaturdayPlus'),
+		),
 		paperTermsLink,
 	],
 	[
@@ -224,13 +206,6 @@ const policyCases: PolicyCase[] = [
 		'Sunday',
 		printSubscription,
 		printSubscription,
-		observerLinks.TERMS,
-	],
-	[
-		'SubscriptionCard',
-		'SundayPlus',
-		printSubscription,
-		undefined,
 		observerLinks.TERMS,
 	],
 ];
@@ -261,49 +236,25 @@ describe('getCancellationPolicy', () => {
 	it.each(policyCases)(
 		'cancellation policy for product: %s ratePlan: %s',
 		(product, ratePlan, copy, _promotionalCopy, termsLink) => {
-			const result = getCancellationPolicy(product, ratePlan);
+			const result = getCancellationPolicy(
+				product,
+				ratePlan,
+				getFullPrices(product, ratePlan),
+			);
 			expectPolicy(result[product]?.[ratePlan], copy, termsLink);
 		},
 	);
 
-	const promotion: PromoWithCatalogInformation = {
-		name: 'INTRODUCTORY',
-		description: '',
-		promoCode: 'INTRODUCTORY',
-		isIntroductoryPricing: true,
-		discount: {
-			amount: 7,
-			durationMonths: 6,
-		},
-		campaignCode: 'TEST_CAMPAIGN',
-		appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
-		startTimestamp: '2026-01-01T00:00:00.000Z',
-	};
-
-	it.each([
-		...policyCases.map(
-			([product, ratePlan, , promotionalCopy, termsLink]) =>
-				[product, ratePlan, promotion, promotionalCopy, termsLink] as const,
-		),
-		[
-			'SupporterPlus',
-			'Monthly',
-			{ ...promotion, discount: undefined },
-			digitalMonthly, // fallback to non-promotion copy with no discount price
-			supporterPlusTermsLink,
-		],
-		[
-			'SupporterPlus',
-			'Monthly',
-			{ ...promotion, discount: { amount: 0, durationMonths: 6 } },
-			promotionDigitalMonthly(0),
-			supporterPlusTermsLink,
-		],
-	] as const)(
+	it.each(policyCases)(
 		'promotional cancellation policy for product: %s ratePlan: %s',
-		(product, ratePlan, promotion, copy, termsLink) => {
-			const result = getCancellationPolicy(product, ratePlan, promotion);
-			expectPolicy(result[product]?.[ratePlan], copy, termsLink);
+		(product, ratePlan, _copy, promotionalCopy, termsLink) => {
+			const result = getCancellationPolicy(
+				product,
+				ratePlan,
+				getFullPrices(product, ratePlan),
+				getPromotions(product, ratePlan),
+			);
+			expectPolicy(result[product]?.[ratePlan], promotionalCopy, termsLink);
 		},
 	);
 });

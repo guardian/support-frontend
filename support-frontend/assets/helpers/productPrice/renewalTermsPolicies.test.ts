@@ -78,10 +78,10 @@ const promotionAnnual = (
 
 const fullPrices: Partial<Record<ActiveRatePlanKey, number>> = {
 	Monthly: 14,
-	MonthlyPlus: 14,
-	QuarterlyPlus: 60,
+	MonthlyPlus: 19,
+	QuarterlyPlus: 57,
 	Annual: 140,
-	AnnualPlus: 140,
+	AnnualPlus: 228,
 	EverydayPlus: 14,
 	SixdayPlus: 14,
 	WeekendPlus: 14,
@@ -93,10 +93,10 @@ const promotions: Partial<
 	Record<ActiveRatePlanKey, PromoWithCatalogInformation>
 > = {
 	Monthly: promoCatalogDigitalMonthly,
-	MonthlyPlus: promoCatalogDigitalMonthly,
+	MonthlyPlus: promoCatalogPrintMonthly,
 	QuarterlyPlus: promoCatalogWeeklyQuarterly,
 	Annual: promoCatalogDigitalAnnual,
-	AnnualPlus: promoCatalogDigitalAnnual,
+	AnnualPlus: promoCatalogWeeklyAnnual,
 	EverydayPlus: promoCatalogPrintMonthly,
 	SixdayPlus: promoCatalogPrintMonthly,
 	WeekendPlus: promoCatalogPrintMonthly,
