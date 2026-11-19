@@ -43,7 +43,7 @@ export const sendThankYouEmailStateSchema = z.union([
 		productType: z.literal('GuardianAdLite'),
 	}),
 	commonSchema.extend({
-		productType: z.literal('PatronMembership'),
+		productType: z.literal('Patron'),
 	}),
 	commonSchemaWithPromo.extend({
 		productType: z.literal('DigitalSubscription'),

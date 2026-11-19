@@ -30,7 +30,7 @@ const activeProductKeys = [
 	'SubscriptionCard',
 	'Contribution',
 	'OneTimeContribution',
-	'PatronMembership',
+	'Patron',
 ] as const;
 
 export type ActiveProductKey = Extract<
@@ -53,7 +53,7 @@ type GuardianWeeklyDomesticRatePlanKey =
 	ProductRatePlanKey<'GuardianWeeklyDomestic'>;
 type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
 type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
-type PatronMembershipRatePlanKey = ProductRatePlanKey<'PatronMembership'>;
+type PatronRatePlanKey = ProductRatePlanKey<'Patron'>;
 
 export type ActiveRatePlanKey = keyof Record<
 	| OneTimeContributionRatePlanKey
@@ -68,7 +68,7 @@ export type ActiveRatePlanKey = keyof Record<
 	// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents -- we need to investigate how to avoid this duplication, but for now it's easier to maintain the types separately across products
 	| SubscriptionCardRatePlanKey
 	| ContributionRatePlanKey
-	| PatronMembershipRatePlanKey,
+	| PatronRatePlanKey,
 	true
 >;
 
@@ -516,7 +516,7 @@ export const productCatalogDescription: Record<
 		// can't handle a billingPeriod of OneTime.
 		ratePlans: {},
 	},
-	PatronMembership: {
+	Patron: {
 		label: 'Patrons',
 		landingPagePath: '/contribute',
 		benefits: [
