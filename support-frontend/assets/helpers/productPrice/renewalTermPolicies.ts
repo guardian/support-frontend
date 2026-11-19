@@ -115,7 +115,7 @@ const renewalTermDetail = (
 		getPromotionExpiryDate(
 			productKey,
 			ratePlanKey,
-			getNumberOfMonthsInPeriod(billingPeriod),
+			durationPeriods * getNumberOfMonthsInPeriod(billingPeriod),
 		),
 	);
 	const discountedPrice = getDiscountedPrice(
