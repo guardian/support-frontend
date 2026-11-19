@@ -16,48 +16,71 @@ function Template(args: PreContractInformationProps) {
 
 Template.args = {} as Omit<PreContractInformationProps, ''>;
 
-const monthlyPromotion: PromoWithCatalogInformation = {
-	name: '50% off for 6 months',
-	description: 'Monthly subscription promotion',
-	promoCode: 'MONTHLY50',
-	discount: {
-		durationMonths: 6,
-		amount: 7,
-	},
+export const promoCatalogDigitalMonthly: PromoWithCatalogInformation = {
+	name: 'MONTHLY DIGITAL',
+	description: '',
+	promoCode: 'MONTHLY DIGITAL',
 	isIntroductoryPricing: true,
+	discount: {
+		amount: 57.12,
+		durationMonths: 6,
+	},
 	campaignCode: 'TEST_CAMPAIGN',
 	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
 	startTimestamp: '2026-01-01T00:00:00.000Z',
 };
-
-const quarterlyPromotion: PromoWithCatalogInformation = {
-	name: '50% off for 2 quarters',
-	description: 'Quarterly subscription promotion',
-	promoCode: 'QUARTERLY50',
-	discount: {
-		durationMonths: 6,
-		amount: 30,
-	},
+export const promoCatalogPrintMonthly: PromoWithCatalogInformation = {
+	name: 'MONTHLY PRINT 50%',
+	description: '',
+	promoCode: 'MONTHLY PRINT',
 	isIntroductoryPricing: true,
+	discount: {
+		amount: 50,
+		durationMonths: 6,
+	},
 	campaignCode: 'TEST_CAMPAIGN',
 	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
 	startTimestamp: '2026-01-01T00:00:00.000Z',
 };
-
-const annualPromotion: PromoWithCatalogInformation = {
-	name: 'Discounted first year',
-	description: 'Annual subscription promotion',
-	promoCode: 'ANNUALDISCOUNT',
+export const promoCatalogWeeklyQuarterly: PromoWithCatalogInformation = {
+	name: 'QUARTERLY 25%',
+	description: '',
+	promoCode: 'QUARTERLY',
+	isIntroductoryPricing: true,
 	discount: {
+		amount: 25,
+		durationMonths: 6,
+	},
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2026-01-01T00:00:00.000Z',
+};
+export const promoCatalogDigitalAnnual: PromoWithCatalogInformation = {
+	name: 'ANNUAL',
+	description: '',
+	promoCode: 'ANNUAL',
+	isIntroductoryPricing: true,
+	discount: {
+		amount: 14.285714,
 		durationMonths: 12,
-		amount: 90,
 	},
-	isIntroductoryPricing: true,
 	campaignCode: 'TEST_CAMPAIGN',
 	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
 	startTimestamp: '2026-01-01T00:00:00.000Z',
 };
-
+export const promoCatalogWeeklyAnnual: PromoWithCatalogInformation = {
+	name: 'ANNUAL WEEKLY 25%',
+	description: '',
+	promoCode: 'ANNUAL WEEKLY',
+	isIntroductoryPricing: true,
+	discount: {
+		amount: 25,
+		durationMonths: 12,
+	},
+	campaignCode: 'TEST_CAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2026-01-01T00:00:00.000Z',
+};
 export const GuardianAdLiteMonthly = Template.bind({});
 GuardianAdLiteMonthly.args = {
 	productKey: 'GuardianAdLite',
@@ -70,7 +93,7 @@ GuardianAdLiteMonthlyWithPromotion.args = {
 	productKey: 'GuardianAdLite',
 	ratePlanKey: 'Monthly',
 	amount: 14,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogDigitalMonthly,
 };
 
 export const ContributionMonthly = Template.bind({});
@@ -99,7 +122,7 @@ SupporterPlusMonthlyWithPromotion.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
 	amount: 14,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogDigitalMonthly,
 };
 
 export const SupporterPlusMonthlyWithContribution = Template.bind({});
@@ -122,7 +145,7 @@ SupporterPlusAnnualWithPromotion.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Annual',
 	amount: 140,
-	promotion: annualPromotion,
+	promotion: promoCatalogDigitalAnnual,
 };
 
 export const SupporterPlusOneYearStudent = Template.bind({});
@@ -144,7 +167,7 @@ DigitalSubscriptionMonthlyWithPromotion.args = {
 	productKey: 'DigitalSubscription',
 	ratePlanKey: 'Monthly',
 	amount: 14,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogDigitalMonthly,
 };
 
 export const DigitalSubscriptionAnnual = Template.bind({});
@@ -159,7 +182,7 @@ DigitalSubscriptionAnnualWithPromotion.args = {
 	productKey: 'DigitalSubscription',
 	ratePlanKey: 'Annual',
 	amount: 140,
-	promotion: annualPromotion,
+	promotion: promoCatalogDigitalAnnual,
 };
 
 export const GuardianWeeklyDomesticMonthly = Template.bind({});
@@ -174,7 +197,7 @@ GuardianWeeklyDomesticMonthlyWithPromotion.args = {
 	productKey: 'GuardianWeeklyDomestic',
 	ratePlanKey: 'MonthlyPlus',
 	amount: 19,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const GuardianWeeklyDomesticQuarterly = Template.bind({});
@@ -189,7 +212,7 @@ GuardianWeeklyDomesticQuarterlyWithPromotion.args = {
 	productKey: 'GuardianWeeklyDomestic',
 	ratePlanKey: 'QuarterlyPlus',
 	amount: 57,
-	promotion: quarterlyPromotion,
+	promotion: promoCatalogWeeklyQuarterly,
 };
 
 export const GuardianWeeklyDomesticAnnual = Template.bind({});
@@ -204,7 +227,7 @@ GuardianWeeklyDomesticAnnualWithPromotion.args = {
 	productKey: 'GuardianWeeklyDomestic',
 	ratePlanKey: 'AnnualPlus',
 	amount: 228,
-	promotion: annualPromotion,
+	promotion: promoCatalogWeeklyAnnual,
 };
 
 export const GuardianWeeklyDomesticThreeMonthGift = Template.bind({});
@@ -233,7 +256,7 @@ HomeDeliveryEverydayPlusWithPromotion.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'EverydayPlus',
 	amount: 88.99,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const HomeDeliverySixdayPlus = Template.bind({});
@@ -248,7 +271,7 @@ HomeDeliverySixdayPlusWithPromotion.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'SixdayPlus',
 	amount: 77.99,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const HomeDeliveryWeekendPlus = Template.bind({});
@@ -263,7 +286,7 @@ HomeDeliveryWeekendPlusWithPromotion.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'WeekendPlus',
 	amount: 36.99,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const HomeDeliverySaturdayPlus = Template.bind({});
@@ -278,7 +301,7 @@ HomeDeliverySaturdayPlusWithPromotion.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'SaturdayPlus',
 	amount: 21.99,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const HomeDeliverySunday = Template.bind({});
@@ -293,7 +316,7 @@ HomeDeliverySundayWithPromotion.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'Sunday',
 	amount: 23,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const SubscriptionCardEverydayPlus = Template.bind({});
@@ -308,7 +331,7 @@ SubscriptionCardEverydayPlusWithPromotion.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'EverydayPlus',
 	amount: 72.99,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const SubscriptionCardSixdayPlus = Template.bind({});
@@ -323,7 +346,7 @@ SubscriptionCardSixdayPlusWithPromotion.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'SixdayPlus',
 	amount: 64.99,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const SubscriptionCardWeekendPlus = Template.bind({});
@@ -338,7 +361,7 @@ SubscriptionCardWeekendPlusWithPromotion.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'WeekendPlus',
 	amount: 29.99,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const SubscriptionCardSaturdayPlus = Template.bind({});
@@ -353,7 +376,7 @@ SubscriptionCardSaturdayPlusWithPromotion.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'SaturdayPlus',
 	amount: 16.99,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };
 
 export const SubscriptionCardSunday = Template.bind({});
@@ -368,5 +391,5 @@ SubscriptionCardSundayWithPromotion.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'Sunday',
 	amount: 18,
-	promotion: monthlyPromotion,
+	promotion: promoCatalogPrintMonthly,
 };

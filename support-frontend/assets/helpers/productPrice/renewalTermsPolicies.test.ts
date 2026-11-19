@@ -6,6 +6,13 @@ import type {
 } from 'helpers/productCatalog';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
+import {
+	promoCatalogDigitalAnnual,
+	promoCatalogDigitalMonthly,
+	promoCatalogPrintMonthly,
+	promoCatalogWeeklyAnnual,
+	promoCatalogWeeklyQuarterly,
+} from '../../../stories/checkouts/preContactInformation.stories';
 import { ratePlanToBillingPeriod } from './billingPeriods';
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 import { getPromotionDiscountedPrice } from './promotionPricing';
@@ -81,70 +88,20 @@ const fullPrices: Partial<Record<ActiveRatePlanKey, number>> = {
 	SaturdayPlus: 14,
 	Sunday: 14,
 };
-const discountPecentages: Partial<Record<ActiveRatePlanKey, number>> = {
-	Monthly: 57.12,
-	MonthlyPlus: 57.12,
-	QuarterlyPlus: 25,
-	Annual: 14.285714,
-	AnnualPlus: 14.285714,
-	EverydayPlus: 57.12,
-	SixdayPlus: 57.12,
-	WeekendPlus: 57.12,
-	SaturdayPlus: 57.12,
-	Sunday: 57.12,
-};
-const promoMonthly: PromoWithCatalogInformation = {
-	name: 'MONTHLY',
-	description: '',
-	promoCode: 'MONTHLY',
-	isIntroductoryPricing: true,
-	discount: {
-		amount: discountPecentages['Monthly'] ?? 0,
-		durationMonths: 6,
-	},
-	campaignCode: 'TEST_CAMPAIGN',
-	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
-	startTimestamp: '2026-01-01T00:00:00.000Z',
-};
-const promoQuarterly: PromoWithCatalogInformation = {
-	name: 'QUARTERLY',
-	description: '',
-	promoCode: 'QUARTERLY',
-	isIntroductoryPricing: true,
-	discount: {
-		amount: discountPecentages['QuarterlyPlus'] ?? 0,
-		durationMonths: 6,
-	},
-	campaignCode: 'TEST_CAMPAIGN',
-	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
-	startTimestamp: '2026-01-01T00:00:00.000Z',
-};
-const promoAnnual: PromoWithCatalogInformation = {
-	name: 'ANNUAL',
-	description: '',
-	promoCode: 'ANNUAL',
-	isIntroductoryPricing: true,
-	discount: {
-		amount: discountPecentages['Annual'] ?? 0,
-		durationMonths: 12,
-	},
-	campaignCode: 'TEST_CAMPAIGN',
-	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
-	startTimestamp: '2026-01-01T00:00:00.000Z',
-};
+
 const promotions: Partial<
 	Record<ActiveRatePlanKey, PromoWithCatalogInformation>
 > = {
-	Monthly: promoMonthly,
-	MonthlyPlus: promoMonthly,
-	QuarterlyPlus: promoQuarterly,
-	Annual: promoAnnual,
-	AnnualPlus: promoAnnual,
-	EverydayPlus: promoMonthly,
-	SixdayPlus: promoMonthly,
-	WeekendPlus: promoMonthly,
-	SaturdayPlus: promoMonthly,
-	Sunday: promoMonthly,
+	Monthly: promoCatalogDigitalMonthly,
+	MonthlyPlus: promoCatalogDigitalMonthly,
+	QuarterlyPlus: promoCatalogWeeklyQuarterly,
+	Annual: promoCatalogDigitalAnnual,
+	AnnualPlus: promoCatalogDigitalAnnual,
+	EverydayPlus: promoCatalogPrintMonthly,
+	SixdayPlus: promoCatalogPrintMonthly,
+	WeekendPlus: promoCatalogPrintMonthly,
+	SaturdayPlus: promoCatalogPrintMonthly,
+	Sunday: promoCatalogPrintMonthly,
 };
 
 describe('getRenewalTermPolicyCopy', () => {
@@ -254,29 +211,74 @@ describe('getRenewalTermPolicyCopy', () => {
 			jest.useRealTimers();
 		});
 		it.each([
-			['GuardianAdLite', 'Monthly', promoMonthly, sixMonthsPlus15days],
-			['SupporterPlus', 'Monthly', promoMonthly, sixMonths],
-			['SupporterPlus', 'Annual', promoAnnual, oneYear],
-			['DigitalSubscription', 'Monthly', promoMonthly, sixMonths],
-			['DigitalSubscription', 'Annual', promoAnnual, oneYear],
-			['GuardianWeeklyDomestic', 'MonthlyPlus', promoMonthly, weeklySixMonths],
+			[
+				'GuardianAdLite',
+				'Monthly',
+				promoCatalogDigitalMonthly,
+				sixMonthsPlus15days,
+			],
+			['SupporterPlus', 'Monthly', promoCatalogDigitalMonthly, sixMonths],
+			['SupporterPlus', 'Annual', promoCatalogDigitalAnnual, oneYear],
+			['DigitalSubscription', 'Monthly', promoCatalogDigitalMonthly, sixMonths],
+			['DigitalSubscription', 'Annual', promoCatalogDigitalAnnual, oneYear],
+			[
+				'GuardianWeeklyDomestic',
+				'MonthlyPlus',
+				promoCatalogPrintMonthly,
+				weeklySixMonths,
+			],
 			[
 				'GuardianWeeklyDomestic',
 				'QuarterlyPlus',
-				promoQuarterly,
+				promoCatalogWeeklyQuarterly,
 				weeklySixMonths,
 			],
-			['GuardianWeeklyDomestic', 'AnnualPlus', promoAnnual, weeklyAnnual],
-			['HomeDelivery', 'EverydayPlus', promoMonthly, homeDeliveryMon],
-			['HomeDelivery', 'SixdayPlus', promoMonthly, homeDeliveryMon],
-			['HomeDelivery', 'WeekendPlus', promoMonthly, homeDeliverySat],
-			['HomeDelivery', 'SaturdayPlus', promoMonthly, homeDeliverySat],
-			['HomeDelivery', 'Sunday', promoMonthly, homeDeliverySun],
-			['SubscriptionCard', 'EverydayPlus', promoMonthly, subsCardMon],
-			['SubscriptionCard', 'SixdayPlus', promoMonthly, subsCardMon],
-			['SubscriptionCard', 'WeekendPlus', promoMonthly, subsCardSat],
-			['SubscriptionCard', 'SaturdayPlus', promoMonthly, subsCardSat],
-			['SubscriptionCard', 'Sunday', promoMonthly, subsCardSun],
+			[
+				'GuardianWeeklyDomestic',
+				'AnnualPlus',
+				promoCatalogWeeklyAnnual,
+				weeklyAnnual,
+			],
+			[
+				'HomeDelivery',
+				'EverydayPlus',
+				promoCatalogPrintMonthly,
+				homeDeliveryMon,
+			],
+			['HomeDelivery', 'SixdayPlus', promoCatalogPrintMonthly, homeDeliveryMon],
+			[
+				'HomeDelivery',
+				'WeekendPlus',
+				promoCatalogPrintMonthly,
+				homeDeliverySat,
+			],
+			[
+				'HomeDelivery',
+				'SaturdayPlus',
+				promoCatalogPrintMonthly,
+				homeDeliverySat,
+			],
+			['HomeDelivery', 'Sunday', promoCatalogPrintMonthly, homeDeliverySun],
+			[
+				'SubscriptionCard',
+				'EverydayPlus',
+				promoCatalogPrintMonthly,
+				subsCardMon,
+			],
+			['SubscriptionCard', 'SixdayPlus', promoCatalogPrintMonthly, subsCardMon],
+			[
+				'SubscriptionCard',
+				'WeekendPlus',
+				promoCatalogPrintMonthly,
+				subsCardSat,
+			],
+			[
+				'SubscriptionCard',
+				'SaturdayPlus',
+				promoCatalogPrintMonthly,
+				subsCardSat,
+			],
+			['SubscriptionCard', 'Sunday', promoCatalogPrintMonthly, subsCardSun],
 		] as const)(
 			`calculate promotion expiry date for product:%s rateplan:%s`,
 			(...[product, ratePlan, promotion, promoExpiryDate]) => {
