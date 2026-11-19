@@ -8,7 +8,10 @@ import type {
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
-import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import {
+	addDays,
+	getProductFirstDeliveryDate,
+} from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
@@ -20,13 +23,25 @@ import {
 } from './discountedPrice';
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 
+// PaymentTsAndCs implies a 15day wait for digitalSubscriptions alongside GuardianAdLite
+const getFirstDeliveryDateInclDigitalSubscription = (
+	productKey: ActiveProductKey,
+	paperProductOptions?: ActivePaperProductOptions,
+): Date | undefined => {
+	if (productKey === 'DigitalSubscription') {
+		return addDays(new Date(), 15);
+	} else {
+		return getProductFirstDeliveryDate(productKey, paperProductOptions);
+	}
+};
+
 export const getPromotionExpiryDate = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	durationMonths: number,
 ): Date => {
 	const promotionExpiryDate =
-		getProductFirstDeliveryDate(
+		getFirstDeliveryDateInclDigitalSubscription(
 			productKey,
 			ratePlanKey as ActivePaperProductOptions,
 		) ?? new Date();

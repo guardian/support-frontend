@@ -154,6 +154,7 @@ describe('getRenewalTermPolicyCopy', () => {
 		const sixMonths = new Date(2027, 5, 1);
 		const sixMonthsPlus15days = new Date(2027, 5, 16);
 		const oneYear = new Date(2027, 11, 1);
+		const oneYearPlus15days = new Date(2027, 11, 16);
 		const weeklySixMonths = new Date(2027, 5, 11);
 		const weeklyAnnual = new Date(2027, 11, 11);
 		const homeDeliveryMon = new Date(2027, 5, 4);
@@ -174,8 +175,8 @@ describe('getRenewalTermPolicyCopy', () => {
 			['GuardianAdLite', 'Monthly', sixMonthsPlus15days],
 			['SupporterPlus', 'Monthly', sixMonths],
 			['SupporterPlus', 'Annual', oneYear],
-			['DigitalSubscription', 'Monthly', sixMonths],
-			['DigitalSubscription', 'Annual', oneYear],
+			['DigitalSubscription', 'Monthly', sixMonthsPlus15days],
+			['DigitalSubscription', 'Annual', oneYearPlus15days],
 			['GuardianWeeklyDomestic', 'MonthlyPlus', weeklySixMonths],
 			['GuardianWeeklyDomestic', 'QuarterlyPlus', weeklySixMonths],
 			['GuardianWeeklyDomestic', 'AnnualPlus', weeklyAnnual],
