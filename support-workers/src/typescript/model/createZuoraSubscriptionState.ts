@@ -11,6 +11,7 @@ import {
 	guardianAdLiteProductSchema,
 	guardianWeeklyProductSchema,
 	paperProductSchema,
+	patronProductSchema,
 	supporterPlusProductSchema,
 	tierThreeProductSchema,
 } from './productType';
@@ -68,6 +69,14 @@ export const guardianAdLiteStateSchema = z
 	.merge(baseProductStateSchema);
 export type GuardianAdLiteState = z.infer<typeof guardianAdLiteStateSchema>;
 
+export const patronStateSchema = z
+	.object({
+		productType: z.literal('Patron'),
+		product: patronProductSchema,
+	})
+	.merge(baseProductStateSchema);
+export type PatronState = z.infer<typeof patronStateSchema>;
+
 export const digitalSubscriptionStateSchema = z
 	.object({
 		productType: z.literal('DigitalSubscription'),
@@ -116,6 +125,7 @@ export const createZuoraSubscriptionProductStateSchema = z.discriminatedUnion(
 		digitalSubscriptionStateSchema,
 		paperStateSchema,
 		guardianWeeklyStateSchema,
+		patronStateSchema,
 	],
 );
 

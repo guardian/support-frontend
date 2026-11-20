@@ -45,6 +45,11 @@ export const digitalPackProductSchema = z.object({
 	billingPeriod: recurringBillingPeriodSchema,
 	productType: z.literal('DigitalPack'),
 });
+export const patronProductSchema = z.object({
+	currency: currencyCodeSchema,
+	billingPeriod: recurringBillingPeriodSchema,
+	productType: z.literal('Patron'),
+});
 export const guardianAdLiteProductSchema = z.object({
 	currency: currencyCodeSchema,
 	productType: z.literal('GuardianAdLite'),
@@ -57,6 +62,7 @@ export const productTypeSchema = z.discriminatedUnion('productType', [
 	paperProductSchema,
 	digitalPackProductSchema,
 	guardianAdLiteProductSchema,
+	patronProductSchema,
 ]);
 export type ProductType = z.infer<typeof productTypeSchema>;
 export type ProductTypeName = ProductType['productType'];
