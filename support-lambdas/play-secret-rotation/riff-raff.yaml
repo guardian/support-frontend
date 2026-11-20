@@ -2,6 +2,7 @@ stacks: [support]
 regions: [eu-west-1]
 allowedStages:
   - CODE
+  - PROD
 
 deployments:
   # The lambda code must be in S3 before CloudFormation can create the function
@@ -22,6 +23,7 @@ deployments:
     parameters:
       templateStagePaths:
         CODE: PlaySecretRotation-CODE.template.json
+        PROD: PlaySecretRotation-PROD.template.json
       prependStackToCloudFormationStackName: false
   play-secret-rotation-update:
     type: aws-lambda
