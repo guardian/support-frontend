@@ -128,8 +128,12 @@ const printGift = (
 const promotionDigitalMonthly = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	firstPayment: number,
+	amount: number,
+	contribution?: number,
 ): JSX.Element => {
+	const validContribution =
+		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
+	const firstPayment = amount + validContribution;
 	return (
 		<p css={marginTop}>
 			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
@@ -143,8 +147,12 @@ const promotionDigitalMonthly = (
 const promotionPrintAnnual = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	firstPayment: number,
+	amount: number,
+	contribution?: number,
 ): JSX.Element => {
+	const validContribution =
+		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
+	const firstPayment = amount + validContribution;
 	return (
 		<p css={marginTop}>
 			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
@@ -233,11 +241,13 @@ const promotionalCancellation = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	firstPayment: number,
+	contribution?: number,
 ): PolicyElement => {
 	const promoDigitalMonthly = promotionDigitalMonthly(
 		productKey,
 		ratePlanKey,
 		firstPayment,
+		contribution,
 	);
 	const promoPrintAnnual = promotionPrintAnnual(
 		productKey,
@@ -301,13 +311,19 @@ function getPromotionalCancellation(
 	ratePlanKey: ActiveRatePlanKey,
 	amount: number,
 	promotion: PromoWithCatalogInformation,
+	contribution?: number,
 ): PolicyElement {
 	const discountedPrice = getPromotionDiscountedPrice(
 		promotion,
 		amount,
 		ratePlanToBillingPeriod(ratePlanKey),
 	);
-	return promotionalCancellation(productKey, ratePlanKey, discountedPrice);
+	return promotionalCancellation(
+		productKey,
+		ratePlanKey,
+		discountedPrice,
+		contribution,
+	);
 }
 
 export function getCancellationPolicy(
@@ -315,9 +331,16 @@ export function getCancellationPolicy(
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
 	promotion?: PromoWithCatalogInformation,
+	contribution?: number,
 ): PolicyElement {
 	const isValidPromotion = promotion?.discount?.amount !== undefined;
 	return isValidPromotion
-		? getPromotionalCancellation(productKey, ratePlanKey, fullPrice, promotion)
+		? getPromotionalCancellation(
+				productKey,
+				ratePlanKey,
+				fullPrice,
+				promotion,
+				contribution,
+		  )
 		: getCancellation(productKey, ratePlanKey);
 }

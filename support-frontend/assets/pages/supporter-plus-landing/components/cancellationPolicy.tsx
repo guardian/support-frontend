@@ -9,6 +9,7 @@ interface CancellationPolicyProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	amount: number;
+	contribution?: number;
 	promotion?: PromoWithCatalogInformation;
 }
 export function CancellationPolicy({
@@ -16,10 +17,15 @@ export function CancellationPolicy({
 	ratePlanKey,
 	amount,
 	promotion,
+	contribution,
 }: CancellationPolicyProps): JSX.Element | null {
 	return (
-		getCancellationPolicy(productKey, ratePlanKey, amount, promotion)[
-			productKey
-		]?.[ratePlanKey] ?? null
+		getCancellationPolicy(
+			productKey,
+			ratePlanKey,
+			amount,
+			promotion,
+			contribution,
+		)[productKey]?.[ratePlanKey] ?? null
 	);
 }

@@ -61,6 +61,7 @@ export function PreContractInformation({
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				amount={amount}
+				contribution={contribution}
 				promotion={promotion}
 			/>
 			<PriceRisePolicy productKey={productKey} ratePlanKey={ratePlanKey} />

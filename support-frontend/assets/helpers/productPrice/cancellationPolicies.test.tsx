@@ -263,4 +263,33 @@ describe('getCancellationPolicy', () => {
 			expectPolicy(result[product]?.[ratePlan], promotionalCopy, termsLink);
 		},
 	);
+
+	it.each([
+		[
+			'SupporterPlus',
+			'Monthly',
+			digitalMonthly,
+			promotionDigitalMonthly(
+				getTestDiscountPrice('SupporterPlus', 'Monthly') + 5,
+			),
+			supporterPlusTermsLink,
+		],
+	] as const)(
+		'adds contribution to discounted SupporterPlus %s renewal terms after discounting',
+		(product, ratePlan, _copy, promotionalCopy, termsLink) => {
+			const contribution = 5;
+			const { fullPrice, promotion } = getTestPricesAndPromotion(
+				product,
+				ratePlan,
+			);
+			const result = getCancellationPolicy(
+				product,
+				ratePlan,
+				fullPrice,
+				promotion,
+				contribution,
+			);
+			expectPolicy(result[product]?.[ratePlan], promotionalCopy, termsLink);
+		},
+	);
 });
