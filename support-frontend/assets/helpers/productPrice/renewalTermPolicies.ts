@@ -354,5 +354,7 @@ export function getRenewalTermPolicy(
 				promotion,
 				contribution,
 		  )[productKey]?.[ratePlanKey]
-		: getRenewalTerm(amount + (contribution ?? 0))[productKey]?.[ratePlanKey];
+		: getRenewalTerm(
+				productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount,
+		  )[productKey]?.[ratePlanKey];
 }
