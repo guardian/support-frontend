@@ -33,6 +33,8 @@ case class FeatureSwitches(
     enableDeepDiscount: Option[SwitchState],
     enableStudentBeansEuropeAustralia: Option[SwitchState],
     enableDMCCLayout: Option[SwitchState],
+    enableDMCCLayoutDigital: Option[SwitchState],
+    enableDMCCLayoutPrint: Option[SwitchState],
 )
 
 object FeatureSwitches {
