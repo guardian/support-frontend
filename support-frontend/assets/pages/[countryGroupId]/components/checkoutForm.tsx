@@ -66,6 +66,7 @@ import { getWeeklyDays } from 'pages/[countryGroupId]/checkout/helpers/deliveryD
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { PreContractInformation } from 'pages/supporter-plus-landing/components/preContractInformation';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { postcodeIsWithinM25 } from '../../../helpers/forms/deliveryCheck';
@@ -88,6 +89,7 @@ import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheck
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
+import { useDMCCLayout } from '../helpers/useDMCCLayout';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
@@ -187,6 +189,7 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+	const isDMCCA = useDMCCLayout();
 	const abParticipations = useAbParticipations();
 
 	const productCatalog = appConfig.productCatalog;
@@ -681,6 +684,21 @@ export default function CheckoutForm({
 
 	const automaticSimilarProductsConsent = countryId === 'US';
 
+	const spacingSubmit = isDMCCA ? 6 : 8;
+	const marginMarketingConsent = isDMCCA
+		? css`
+				margin-top: ${space[6]}px;
+		  `
+		: css`
+				margin: ${space[6]}px 0;
+		  `;
+	const paddingSimilarProductConsent = isDMCCA
+		? css`
+				> div {
+					padding: 10px 0 0 0;
+				}
+		  `
+		: css``;
 	return (
 		<>
 			<form
@@ -1221,11 +1239,7 @@ export default function CheckoutForm({
 								})}
 							</RadioGroup>
 						</FormSection>
-						<div
-							css={css`
-								margin: ${space[6]}px 0;
-							`}
-						>
+						<div css={marginMarketingConsent}>
 							{!isMarketingEmailSession &&
 								showSimilarProductsConsentForRatePlan(
 									productDescription,
@@ -1233,18 +1247,29 @@ export default function CheckoutForm({
 								) && (
 									<SimilarProductsConsent
 										showCheckbox={!automaticSimilarProductsConsent}
+										cssOverrides={paddingSimilarProductConsent}
 									/>
 								)}
 						</div>
-						<SummaryTsAndCs
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							countryGroupId={countryGroupId}
-							ratePlanDescription={ratePlanDescription.label}
-							currency={currencyKey}
-							amount={originalAmount}
-							promotion={promotion}
-						/>
+						{isDMCCA ? (
+							<PreContractInformation
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								amount={originalAmount}
+								contribution={contributionAmount}
+								promotion={promotion}
+							/>
+						) : (
+							<SummaryTsAndCs
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								countryGroupId={countryGroupId}
+								ratePlanDescription={ratePlanDescription.label}
+								currency={currencyKey}
+								amount={originalAmount}
+								promotion={promotion}
+							/>
+						)}
 						<MaybeEstimatedTaxSummary
 							payment={payment}
 							taxRateConfig={taxRateConfig}
@@ -1259,7 +1284,8 @@ export default function CheckoutForm({
 						/>
 						<div
 							css={css`
-								margin: ${space[taxExclusive ? 0 : 8]}px 0 ${space[8]}px;
+								margin: ${space[taxExclusive ? 0 : spacingSubmit]}px 0
+									${space[spacingSubmit]}px;
 							`}
 						>
 							<SubmitButton
