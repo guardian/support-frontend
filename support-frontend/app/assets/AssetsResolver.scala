@@ -8,7 +8,21 @@ import views.{EmptyDiv, ReactDiv, SSRContent}
 case class RefPath(value: String)
 case class StyleContent(value: Html) extends AnyVal
 
-class AssetsResolver(base: String, mapResource: String, env: Environment) {
+class AssetsResolver(
+    base: String,
+    mapResource: String,
+    env: Environment,
+    integrityResource: String = "assets-integrity.json",
+) {
+
+  // Subresource Integrity hash for a script, if one was generated (production builds only)
+  def integrity(path: RefPath): Option[String] =
+    lookup.get(path).flatMap(integrityLookup.get)
+
+  private lazy val integrityLookup: Map[String, String] =
+    loadResource(integrityResource)
+      .flatMap(raw => Json.parse(raw).validate[Map[String, String]].asOpt)
+      .getOrElse(Map.empty)
 
   // better to use the typed one below
   def apply(path: String): String =
