@@ -118,7 +118,8 @@ const renewalTermDetail = (
 			durationPeriods * getNumberOfMonthsInPeriod(billingPeriod),
 		),
 	);
-	const discountedPrice = getDiscountedPrice(amount, discount, billingPeriod);
+	const discountedPrice =
+		Math.round(getDiscountedPrice(amount, discount, billingPeriod) * 100) / 100;
 	const discountMonthlyEquivalent = monthlyEquivalentPrice(
 		discountedPrice,
 		billingPeriod,
