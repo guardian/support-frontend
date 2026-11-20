@@ -149,9 +149,11 @@ const promotionDigitalMonthly = (
 	}
 	const { discountedPrice, durationPeriods, periodName, expiry } =
 		renewalTermDetail(productKey, ratePlanKey, amount, discount);
-	const totalContribution =
-		productKey === 'SupporterPlus' ? (contribution ?? 0) : 0;
-	return `Subscription auto-renews monthly. Pay £${discountedPrice + totalContribution}/month for ${durationPeriods} ${periodName}, then £${amount + totalContribution}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	const validContribution =
+		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
+	const fullPrice = amount + validContribution;
+	const discountPrice = discountedPrice + validContribution;
+	return `Subscription auto-renews monthly. Pay £${discountPrice}/month for ${durationPeriods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionPrintMonthly = (
 	productKey: ActiveProductKey,
@@ -201,25 +203,24 @@ const promotionAnnual = (
 			productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount;
 		return digitalAndPrintAnnual(totalAmount);
 	}
-	const {
-		discountedPrice,
-		periodName,
-		durationPeriods,
-		expiry,
-	} = renewalTermDetail(productKey, ratePlanKey, amount, discount);
+	const { discountedPrice, periodName, durationPeriods, expiry } =
+		renewalTermDetail(productKey, ratePlanKey, amount, discount);
 	const billingPeriod = ratePlanToBillingPeriod(
 		ratePlanKey,
 	) as RecurringBillingPeriod;
-	const totalContribution =
-		productKey === 'SupporterPlus' ? (contribution ?? 0) : 0;
-	const totalDiscountedPrice = discountedPrice + totalContribution;
-	const totalAmount = amount + totalContribution;
-	const discountMonthlyEquivalent = monthlyEquivalentPrice(
-		totalDiscountedPrice,
+	const validContribution =
+		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
+	const fullPrice = amount + validContribution;
+	const fullPriceMonthlyEquivalent = monthlyEquivalentPrice(
+		fullPrice,
 		billingPeriod,
 	);
-	const monthlyEquivalent = monthlyEquivalentPrice(totalAmount, billingPeriod);
-	return `Subscription auto-renews annually. Pay £${totalDiscountedPrice}/year for ${durationPeriods} ${periodName}, then £${totalAmount}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${durationPeriods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	const discountPrice = discountedPrice + validContribution;
+	const discountPriceMonthlyEquivalent = monthlyEquivalentPrice(
+		discountPrice,
+		billingPeriod,
+	);
+	return `Subscription auto-renews annually. Pay £${discountPrice}/year for ${durationPeriods} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountPriceMonthlyEquivalent}/month for ${durationPeriods} ${periodName}, then £${fullPriceMonthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 };
 
 type Policy = Partial<

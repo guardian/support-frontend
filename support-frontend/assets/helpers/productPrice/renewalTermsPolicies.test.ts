@@ -176,7 +176,11 @@ describe('getRenewalTermPolicyCopy', () => {
 				contribution,
 			);
 			expect(result).toBe(
-				policy(fullPrice + contribution, discountedPrice + contribution, expiry),
+				policy(
+					fullPrice + contribution,
+					discountedPrice + contribution,
+					expiry,
+				),
 			);
 		},
 	);
