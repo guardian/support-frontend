@@ -149,6 +149,38 @@ describe('getRenewalTermPolicyCopy', () => {
 		},
 	);
 
+	it.each([
+		['Monthly', promoDigitalMonthly],
+		['Annual', promotionAnnual],
+	] as const)(
+		'adds contribution to discounted SupporterPlus %s renewal terms after discounting',
+		(ratePlan, policy) => {
+			const contribution = 5;
+			const { fullPrice, discountedPrice, promotion } =
+				getTestPricesAndPromotion('SupporterPlus', ratePlan);
+			if (!promotion) {
+				throw new Error(`Missing promotion for SupporterPlus ${ratePlan}`);
+			}
+			const expiry = formatUserDate(
+				getPromotionExpiryDate(
+					'SupporterPlus',
+					ratePlan,
+					promotion.discount?.durationMonths ?? 0,
+				),
+			);
+			const result = getRenewalTermPolicy(
+				'SupporterPlus',
+				ratePlan,
+				fullPrice,
+				promotion,
+				contribution,
+			);
+			expect(result).toBe(
+				policy(fullPrice + contribution, discountedPrice + contribution, expiry),
+			);
+		},
+	);
+
 	describe('getPromotionExpiryDate', () => {
 		const startDate = new Date(2026, 11, 1);
 		const sixMonths = new Date(2027, 5, 1);

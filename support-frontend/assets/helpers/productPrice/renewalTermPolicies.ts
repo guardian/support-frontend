@@ -149,7 +149,9 @@ const promotionDigitalMonthly = (
 	}
 	const { discountedPrice, durationPeriods, periodName, expiry } =
 		renewalTermDetail(productKey, ratePlanKey, amount, discount);
-	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for ${durationPeriods} ${periodName}, then £${amount}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	const totalContribution =
+		productKey === 'SupporterPlus' ? (contribution ?? 0) : 0;
+	return `Subscription auto-renews monthly. Pay £${discountedPrice + totalContribution}/month for ${durationPeriods} ${periodName}, then £${amount + totalContribution}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
 };
 const promotionPrintMonthly = (
 	productKey: ActiveProductKey,
@@ -204,10 +206,20 @@ const promotionAnnual = (
 		periodName,
 		durationPeriods,
 		expiry,
-		discountMonthlyEquivalent,
-		monthlyEquivalent,
 	} = renewalTermDetail(productKey, ratePlanKey, amount, discount);
-	return `Subscription auto-renews annually. Pay £${discountedPrice}/year for ${durationPeriods} ${periodName}, then £${amount}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${durationPeriods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	const billingPeriod = ratePlanToBillingPeriod(
+		ratePlanKey,
+	) as RecurringBillingPeriod;
+	const totalContribution =
+		productKey === 'SupporterPlus' ? (contribution ?? 0) : 0;
+	const totalDiscountedPrice = discountedPrice + totalContribution;
+	const totalAmount = amount + totalContribution;
+	const discountMonthlyEquivalent = monthlyEquivalentPrice(
+		totalDiscountedPrice,
+		billingPeriod,
+	);
+	const monthlyEquivalent = monthlyEquivalentPrice(totalAmount, billingPeriod);
+	return `Subscription auto-renews annually. Pay £${totalDiscountedPrice}/year for ${durationPeriods} ${periodName}, then £${totalAmount}/year from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${durationPeriods} ${periodName}, then £${monthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 };
 
 type Policy = Partial<
@@ -281,6 +293,7 @@ function getPromotionalRenewalTerm(
 		ratePlanKey,
 		amount,
 		promotion,
+		contribution,
 	);
 	const promotionPrintMonthlyTerms = promotionPrintMonthly(
 		productKey,
