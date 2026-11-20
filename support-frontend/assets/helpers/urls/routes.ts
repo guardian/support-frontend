@@ -51,9 +51,9 @@ const routes = {
 	supporterPlusStudentBeansCa:
 		'https://www.studentbeans.com/en-ca/ca/beansid-connect/hosted/the-guardian-digital/student/362bcbd6-b491-4adf-8ca1-9f0c9f69c3b7',
 	supporterPlusStudentBeansEu:
-		'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
+		'https://www.studentbeans.com/en-ie/ie/beansid-connect/hosted/the-guardian',
 	supporterPlusStudentBeansAu:
-		'/au/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
+		'https://www.studentbeans.com/en-au/au/beansid-connect/hosted/the-guardian',
 	postcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
