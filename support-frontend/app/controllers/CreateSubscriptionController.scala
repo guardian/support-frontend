@@ -158,6 +158,8 @@ class CreateSubscriptionController(
       referer: Option[String],
       requestBody: CreateSupportWorkersRequest,
   ): EitherT[Future, CreateSubscriptionError, CreateStripeCheckoutSessionResponse] = {
+    logger.info(s"Attempting to create checkout session with referer: ${referer.getOrElse("none")}")
+
     val urls = for {
       referer <- referer
       successUrl <- StripeCheckoutSessionService.buildSuccessUrl(referer)
