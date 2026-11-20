@@ -61,6 +61,11 @@ const guardianDigitalRewards = [
 
 const weeklyDigitalRewards = [
 	<>
+		<strong>
+			Share your digital benefits and access with up to three extra people
+		</strong>
+	</>,
+	<>
 		Uninterrupted <strong>ad-free reading</strong> on the Guardian app and
 		website, with fewer asks for support
 	</>,
