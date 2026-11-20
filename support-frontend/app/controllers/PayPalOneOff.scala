@@ -68,7 +68,10 @@ class PayPalOneOff(
       request: RequestHeader,
   ): Result = {
     logger.info(s"One-off contribution for Paypal payment is successful")
-    val redirect = Redirect(s"/$country/$thankyou")
+    val transactionIdQuery = success.transactionId
+      .map(id => s"?transactionId=${java.net.URLEncoder.encode(id, "UTF-8")}")
+      .getOrElse("")
+    val redirect = Redirect(s"/$country/$thankyou$transactionIdQuery")
     success.guestAccountCreationToken.fold {
       logger.info("Redirecting to thank you page without guestAccountCreationToken")
       redirect

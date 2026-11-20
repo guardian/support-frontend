@@ -22,6 +22,7 @@ type CreateSubscriptionResult = {
 	userType: UserType | undefined;
 	status: Status;
 	failureReason?: ErrorReason;
+	transactionId?: string | null;
 };
 
 // The response returned from the server when we start the subscription creation process.

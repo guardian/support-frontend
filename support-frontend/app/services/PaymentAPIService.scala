@@ -12,7 +12,10 @@ import services.ExecutePaymentBody._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class PayPalSuccess(guestAccountCreationToken: Option[String])
+case class PayPalSuccess(
+    guestAccountCreationToken: Option[String],
+    transactionId: Option[String] = None,
+)
 
 object PayPalSuccess {
   implicit val payPalSuccessDecoder: Decoder[PayPalSuccess] = deriveDecoder

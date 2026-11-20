@@ -7,7 +7,8 @@ import model.UserType.UserType
 sealed trait StripePaymentIntentsApiResponse
 
 object StripePaymentIntentsApiResponse {
-  case class Success(userType: Option[UserType]) extends StripePaymentIntentsApiResponse
+  case class Success(userType: Option[UserType], transactionId: Option[String] = None)
+      extends StripePaymentIntentsApiResponse
 
   case class RequiresAction(clientSecret: String) extends StripePaymentIntentsApiResponse
 

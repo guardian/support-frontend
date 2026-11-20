@@ -10,9 +10,13 @@ const FeatureSwitchesContext = createContext<FeatureFlags | undefined>(
 
 export function FeatureSwitchesProvider({ children }: { children: ReactNode }) {
 	const value = useMemo(() => {
-		const featureSwitches =
-			getGlobal<Record<string, unknown>>('settings.switches.featureSwitches') ??
-			{};
+		const featureSwitches = {
+			// Allow local overrides before this switch is added to remote settings.
+			enableMParticleConversions: 'Off',
+			...(getGlobal<Record<string, unknown>>(
+				'settings.switches.featureSwitches',
+			) ?? {}),
+		};
 
 		return Object.fromEntries(
 			Object.keys(featureSwitches).map((flag) => [

@@ -11,7 +11,7 @@ import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers._
 import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
 import org.apache.pekko.actor.ActorSystem
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, Json}
 import org.joda.time.LocalDate
 import play.api.mvc.{Call, Request}
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
@@ -83,6 +83,7 @@ case class StatusResponse(
     status: Status,
     trackingUri: String,
     failureReason: Option[CheckoutFailureReason] = None,
+    transactionId: Option[String] = None,
 )
 
 object StatusResponse {
@@ -239,7 +240,18 @@ object StepFunctionExecutionStatus extends SafeLogging {
 
     val searchForFinishedCheckout: Option[StatusResponse] = detailedHistory.collectFirst {
       case detailsAttempt if detailsAttempt.map(_.name()) == Success("CheckoutSuccess") =>
-        StatusResponse(Status.Success, trackingUri, None)
+        val transactionId = detailsAttempt.toOption.flatMap { details =>
+          stateWrapper
+            .unWrap[Json](details.output())
+            .toOption
+            .flatMap(
+              _.hcursor
+                .downField("sendThankYouEmailState")
+                .get[String]("subscriptionNumber")
+                .toOption,
+            )
+        }
+        StatusResponse(Status.Success, trackingUri, None, transactionId)
       case detailsAttempt if detailsAttempt.map(_.name()) == Success("SucceedOrFailChoice") =>
         StatusResponse(Status.Failure, trackingUri, getFailureDetails(stateWrapper, detailsAttempt.get))
     }

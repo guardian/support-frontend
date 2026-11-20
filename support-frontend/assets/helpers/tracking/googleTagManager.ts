@@ -1,11 +1,6 @@
 import type { CurrencyCode } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
-import { v4 as uuidv4 } from 'uuid';
-import * as z from 'zod/mini';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { getSession, setSession } from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
 import { DirectDebit, PayPal } from '../forms/paymentMethods';
@@ -14,22 +9,14 @@ import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion';
 
-type ConversionData = ContributionConversionData | SubscriptionConversionData;
-
-type ContributionConversionData = {
+type ConversionData = {
 	value: number;
 	currency: CurrencyCode;
 	paymentMethod: PaymentMethod;
 	contributionType: ContributionType;
 	productType: ActiveProductKey;
-};
-
-type SubscriptionConversionData = {
-	value: number;
-	currency: CurrencyCode;
-	paymentMethod: PaymentMethod;
-	billingPeriod: BillingPeriod;
-	productType: SubscriptionProduct;
+	googleAdsConversionSource: 'gtm' | 'mparticle';
+	orderId?: string;
 };
 
 // these values match the keys used by @guardian/consent-management-platform
@@ -67,17 +54,6 @@ const googleTagManagerDataQueue: Array<() => void> = [];
 const googleAnalyticsEventQueue: Array<() => void> = [];
 
 // ----- Functions ----- //
-function getOrderId() {
-	let orderId = getSession('orderId', z.string());
-
-	if (orderId === null) {
-		orderId = uuidv4();
-		setSession('orderId', orderId);
-	}
-
-	return orderId;
-}
-
 function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
 	switch (paymentMethod) {
 		case DirectDebit:
@@ -117,12 +93,6 @@ function getData(
 ): Record<string, unknown> {
 	const commonData = {
 		event,
-		/**
-		 * orderId anonymously identifies this user in this session.
-		 * We need this to prevent page refreshes on conversion pages being
-		 * treated as new conversions
-		 * */
-		orderId: getOrderId(),
 		/**
 		 * getData is only executed via runWithConsentCheck when user has
 		 * Opted In to tracking, so we can hardcode thirdPartyTrackingConsent
@@ -258,13 +228,17 @@ function successfulContributionConversion(
 	sourceCurrency: CurrencyCode,
 	paymentMethod: PaymentMethod,
 	productKey: ActiveProductKey,
+	googleAdsConversionSource: 'gtm' | 'mparticle' = 'gtm',
+	orderId?: string,
 ): void {
-	const contributionConversionData: ContributionConversionData = {
+	const contributionConversionData: ConversionData = {
 		value: amount,
 		currency: sourceCurrency,
 		paymentMethod,
 		contributionType,
 		productType: productKey,
+		googleAdsConversionSource,
+		...(orderId ? { orderId } : {}),
 	};
 
 	sendData('SuccessfulConversion', contributionConversionData);

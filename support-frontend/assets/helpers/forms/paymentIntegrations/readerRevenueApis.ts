@@ -216,12 +216,14 @@ export type StripePaymentResult = {
 	subscriptionCreationPending?: true;
 	error?: ErrorReason;
 	userType?: UserType;
+	transactionId?: string | null;
 };
 
 export type StatusResponse = {
 	status: Status;
 	trackingUri: string;
 	failureReason?: ErrorReason;
+	transactionId?: string | null;
 };
 
 // ----- Setup ----- //
