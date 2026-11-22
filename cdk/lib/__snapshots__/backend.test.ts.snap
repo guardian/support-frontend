@@ -82,6 +82,25 @@ exports[`The Backend stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
+    "AlbSsmParam485C1D52": {
+      "Properties": {
+        "DataType": "text",
+        "Description": "The ARN of the ALB for support-PROD-support-backend. This parameter is created via CDK.",
+        "Name": "/infosec/waf/services/PROD/support-backend-alb-arn",
+        "Tags": {
+          "Stack": "support",
+          "Stage": "PROD",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
+        },
+        "Tier": "Standard",
+        "Type": "String",
+        "Value": {
+          "Ref": "LoadBalancerSupportbackend1445ECB4",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "AliasRecord851000D2": {
       "Properties": {
         "AliasTarget": {
