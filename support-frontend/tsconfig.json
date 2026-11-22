@@ -12,6 +12,7 @@
 		"noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
 		"noImplicitAny": true, // Enable error reporting for expressions and declarations with an implied any type
 		"baseUrl": "./assets", // The baseUrl to be used when resolving absolute module paths
+		"sourceMap": true,
 		"paths": {
 			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
 			"@modules/internationalisation/*": [
