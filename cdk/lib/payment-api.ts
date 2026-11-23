@@ -28,6 +28,11 @@ import {
 	ListenerAction,
 	ListenerCondition,
 } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import {
+	ParameterDataType,
+	ParameterTier,
+	StringParameter,
+} from 'aws-cdk-lib/aws-ssm';
 
 interface PaymentApiProps extends GuStackProps {
 	domainName: string;
@@ -212,6 +217,16 @@ export class PaymentApi extends GuStack {
 					}),
 				],
 			},
+		});
+
+		// This parameter is used by https://github.com/guardian/waf
+		new StringParameter(this, 'AlbSsmParam', {
+			parameterName: `/infosec/waf/services/${this.stage}/payment-api-alb-arn`,
+			description: `The ARN of the ALB for support-${this.stage}-payment-api. This parameter is created via CDK.`,
+			simpleName: false,
+			stringValue: playApp.loadBalancer.loadBalancerArn,
+			tier: ParameterTier.STANDARD,
+			dataType: ParameterDataType.TEXT,
 		});
 
 		// Rule to only allow known http methods
