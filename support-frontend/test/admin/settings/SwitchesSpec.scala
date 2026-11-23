@@ -127,11 +127,11 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableDMCCLayout" : {
           |        "description" : "Enable DMCC layout for GB users",
           |        "state" : "On"
-          |      }
+          |      },
           |      "enableDMCCLayoutDigital" : {
           |        "description" : "Enable DMCC Digital Product layout for GB users",
           |        "state" : "On"
-          |      }
+          |      },
           |      "enableDMCCLayoutPrint" : {
           |        "description" : "Enable DMCC Print Product layout for GB users",
           |        "state" : "On"
