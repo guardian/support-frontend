@@ -5,8 +5,8 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { useEffect, useState } from 'react';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
-import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { StatusResponse } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
@@ -101,7 +101,9 @@ function ThankYouConversionTracking({
 			return undefined;
 		}
 
-		let stopped = false;
+		const abortController = new AbortController();
+		let cancelled = false;
+		const isCancelled = (): boolean => cancelled;
 		let inFlight = false;
 		let timeout: number | undefined;
 		let interval = 5000;
@@ -110,7 +112,7 @@ function ThankYouConversionTracking({
 			setOrder(updatedOrder);
 		};
 		const poll = async () => {
-			if (stopped || inFlight) {
+			if (isCancelled() || inFlight) {
 				return;
 			}
 			if (document.visibilityState === 'hidden') {
@@ -120,12 +122,16 @@ function ThankYouConversionTracking({
 			let finished = false;
 			try {
 				const response = await fetch(statusPath, {
+					signal: abortController.signal,
 					headers: { 'Content-Type': 'application/json' },
 				});
 				if (!response.ok) {
 					throw new Error('Could not retrieve subscription status');
 				}
 				const status = (await response.json()) as StatusResponse;
+				if (isCancelled()) {
+					return;
+				}
 				if (status.status === 'success') {
 					finished = true;
 					saveOrder({
@@ -146,9 +152,9 @@ function ThankYouConversionTracking({
 			} finally {
 				inFlight = false;
 			}
-			if (!finished && !stopped) {
+			if (!finished && !isCancelled()) {
 				interval = Math.min(interval * 1.5, 30000);
-				timeout = window.setTimeout(poll, interval);
+				timeout = window.setTimeout(() => void poll(), interval);
 			}
 		};
 		const onVisibilityChange = () => {
@@ -160,7 +166,8 @@ function ThankYouConversionTracking({
 		document.addEventListener('visibilitychange', onVisibilityChange);
 		void poll();
 		return () => {
-			stopped = true;
+			cancelled = true;
+			abortController.abort();
 			window.clearTimeout(timeout);
 			document.removeEventListener('visibilitychange', onVisibilityChange);
 		};
