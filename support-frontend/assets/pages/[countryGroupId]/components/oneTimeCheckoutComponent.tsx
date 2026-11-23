@@ -770,19 +770,17 @@ export function OneTimeCheckoutComponent({
 					thankYouUrlSearchParams,
 				);
 				if (nextStepRoute) {
-					if (
-						paymentResult.type === 'stripe' &&
-						paymentResult.result.paymentStatus === 'success'
-					) {
-						setThankYouOrder({
-							transactionId: paymentResult.result.transactionId ?? undefined,
-							firstName: '',
-							email: email,
-							paymentMethod: paymentMethod,
-							status: 'success',
-							finalAmount,
-						});
-					}
+					setThankYouOrder({
+						transactionId:
+							paymentResult.type === 'stripe'
+								? paymentResult.result.transactionId ?? undefined
+								: undefined,
+						firstName: '',
+						email,
+						paymentMethod,
+						status: paymentResult.type === 'paypal' ? 'pending' : 'success',
+						finalAmount,
+					});
 					window.location.href = nextStepRoute;
 				} else {
 					clearThankYouOrder();
