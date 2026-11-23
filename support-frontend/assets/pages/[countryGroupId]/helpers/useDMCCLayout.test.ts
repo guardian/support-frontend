@@ -21,16 +21,16 @@ describe('useDMCCLayout (Print & Digital)', () => {
 		${'GB'} | ${'GuardianAdLite'}            | ${true}                 | ${true}
 		${'GB'} | ${'Contribution'}              | ${true}                 | ${true}
 		${'GB'} | ${'SupporterPlus'}             | ${true}                 | ${true}
+		${'GB'} | ${'SupporterPlus'}             | ${false}                | ${false}
 		${'GB'} | ${'DigitalSubscription'}       | ${true}                 | ${true}
 		${'GB'} | ${'GuardianWeeklyDomestic'}    | ${true}                 | ${false}
 		${'US'} | ${'GuardianWeeklyRestOfWorld'} | ${true}                 | ${false}
 		${'GB'} | ${'HomeDelivery'}              | ${true}                 | ${false}
 		${'GB'} | ${'SubscriptionCard'}          | ${true}                 | ${false}
-		${'GB'} | ${'Digital'}                   | ${false}                | ${false}
-		${'US'} | ${'Digital'}                   | ${true}                 | ${false}
-		${'US'} | ${'Digital'}                   | ${false}                | ${false}
-		${'IE'} | ${'Digital'}                   | ${true}                 | ${false}
-		${'AU'} | ${'Digital'}                   | ${true}                 | ${false}
+		${'US'} | ${'SupporterPlus'}             | ${true}                 | ${false}
+		${'US'} | ${'SupporterPlus'}             | ${false}                | ${false}
+		${'IE'} | ${'SupporterPlus'}             | ${true}                 | ${false}
+		${'AU'} | ${'SupporterPlus'}             | ${true}                 | ${false}
 	`(
 		'should return $expected for country:$country when enableDMCCLayoutDigital',
 		({ country, productKey, enableDMCCLayoutDigital, expected }) => {
@@ -51,14 +51,13 @@ describe('useDMCCLayout (Print & Digital)', () => {
 		${'GB'} | ${'SupporterPlus'}             | ${true}               | ${false}
 		${'GB'} | ${'DigitalSubscription'}       | ${true}               | ${false}
 		${'GB'} | ${'GuardianWeeklyDomestic'}    | ${true}               | ${true}
-		${'US'} | ${'GuardianWeeklyRestOfWorld'} | ${true}               | ${false}
+		${'GB'} | ${'GuardianWeeklyDomestic'}    | ${false}              | ${false}
 		${'GB'} | ${'HomeDelivery'}              | ${true}               | ${true}
 		${'GB'} | ${'SubscriptionCard'}          | ${true}               | ${true}
-		${'GB'} | ${'Digital'}                   | ${false}              | ${false}
-		${'US'} | ${'Digital'}                   | ${true}               | ${false}
-		${'US'} | ${'Digital'}                   | ${false}              | ${false}
-		${'IE'} | ${'Digital'}                   | ${true}               | ${false}
-		${'AU'} | ${'Digital'}                   | ${true}               | ${false}
+		${'US'} | ${'GuardianWeeklyRestOfWorld'} | ${true}               | ${false}
+		${'US'} | ${'GuardianWeeklyRestOfWorld'} | ${false}              | ${false}
+		${'IE'} | ${'GuardianWeeklyRestOfWorld'} | ${true}               | ${false}
+		${'AU'} | ${'GuardianWeeklyRestOfWorld'} | ${true}               | ${false}
 	`(
 		'should return $expected for country:$country when enableDMCCLayoutPrint',
 		({ country, productKey, enableDMCCLayoutPrint, expected }) => {
