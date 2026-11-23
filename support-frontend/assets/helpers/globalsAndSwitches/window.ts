@@ -22,7 +22,6 @@ const featureSwitchesSchema = z.object({
 	enableStripePaymentElement: z.optional(z.enum(['On', 'Off'])),
 	enableDeepDiscount: z.optional(z.enum(['On', 'Off'])),
 	enableStudentBeansEuropeAustralia: z.optional(z.enum(['On', 'Off'])),
-	enableDMCCLayout: z.optional(z.enum(['On', 'Off'])),
 	enableDMCCLayoutDigital: z.optional(z.enum(['On', 'Off'])),
 	enableDMCCLayoutPrint: z.optional(z.enum(['On', 'Off'])),
 });
