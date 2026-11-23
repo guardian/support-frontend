@@ -102,9 +102,18 @@ object StripeCheckoutSessionService {
     "observer.thegulocal.com",
   )
 
+  // Some referers contain unencoded characters which java.net.URI rejects, so we percent-encode them before parsing
+  private val illegalUriChars = Map(
+    '{' -> "%7B",
+    '}' -> "%7D",
+  )
+
+  private def sanitiseReferer(url: String): String =
+    url.flatMap(c => illegalUriChars.getOrElse(c, c.toString))
+
   def buildSuccessUrl(refererUrl: String): Option[String] = {
     try {
-      val uri = new java.net.URI(refererUrl)
+      val uri = new java.net.URI(sanitiseReferer(refererUrl))
 
       if (uri.getScheme != "https" || !ALLOWED_SUCCESS_DOMAINS.contains(uri.getHost)) {
         None
@@ -132,7 +141,7 @@ object StripeCheckoutSessionService {
 
   def validateCancelUrl(refererUrl: String): Option[String] = {
     try {
-      val uri = new java.net.URI(refererUrl)
+      val uri = new java.net.URI(sanitiseReferer(refererUrl))
 
       if (uri.getScheme != "https" || !ALLOWED_SUCCESS_DOMAINS.contains(uri.getHost)) {
         None
