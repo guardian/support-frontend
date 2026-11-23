@@ -53,10 +53,8 @@ object CheckoutValidationRules {
       if (switches.stripeHostedCheckout.contains(On)) Valid else Invalid("Invalid Payment Method")
     case s: StripePaymentFields =>
       s.stripePaymentType match {
-        case Some(StripePaymentType.StripeApplePay) =>
-          if (switches.stripeApplePay.contains(On)) Valid else Invalid("Invalid Payment Method")
-        case Some(StripePaymentType.StripePaymentRequestButton) =>
-          if (switches.stripePaymentRequestButton.contains(On)) Valid else Invalid("Invalid Payment Method")
+        case Some(StripePaymentType.StripeApplePay) | Some(StripePaymentType.StripePaymentRequestButton) =>
+          if (switches.stripeExpressCheckout.contains(On)) Valid else Invalid("Invalid Payment Method")
         case Some(StripePaymentType.StripeCheckout) =>
           if (switches.stripe.contains(On)) Valid else Invalid("Invalid Payment Method")
         case None => Invalid("Invalid Payment Method")

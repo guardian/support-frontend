@@ -4,15 +4,11 @@ const mockSettings = {
 	switches: {
 		oneOffPaymentMethods: {
 			stripe: 'On',
-			stripeApplePay: 'On',
-			stripePaymentRequestButton: 'On',
 			stripeExpressCheckout: 'On',
 			payPal: 'On',
 		},
 		recurringPaymentMethods: {
 			stripe: 'On',
-			stripeApplePay: 'On',
-			stripePaymentRequestButton: 'On',
 			stripeExpressCheckout: 'On',
 			payPal: 'On',
 			directDebit: 'Off',

@@ -79,8 +79,6 @@ object OneOffPaymentMethodSwitches {
 
 case class RecurringPaymentMethodSwitches(
     stripe: Option[SwitchState],
-    stripeApplePay: Option[SwitchState],
-    stripePaymentRequestButton: Option[SwitchState],
     // @see https://docs.stripe.com/elements/express-checkout-element
     stripeExpressCheckout: Option[SwitchState],
     payPal: Option[SwitchState],
