@@ -1,17 +1,22 @@
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { Country } from 'helpers/internationalisation/classes/country';
+import type { ActiveProductKey } from 'helpers/productCatalog';
+import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
-export const useDMCCLayout = (): boolean => {
-	const { enableDMCCLayout } = useFeatureSwitches();
-	return enableDMCCLayout && Country.detect() === 'GB';
-};
-
-export const useDMCCLayoutDigital = (): boolean => {
+export const useDMCCLayoutDigital = (productKey: ActiveProductKey): boolean => {
 	const { enableDMCCLayoutDigital } = useFeatureSwitches();
-	return enableDMCCLayoutDigital && Country.detect() === 'GB';
+	return (
+		enableDMCCLayoutDigital &&
+		!isPrintProduct(productKey) &&
+		Country.detect() === 'GB'
+	);
 };
 
-export const useDMCCLayoutPrint = (): boolean => {
+export const useDMCCLayoutPrint = (productKey: ActiveProductKey): boolean => {
 	const { enableDMCCLayoutPrint } = useFeatureSwitches();
-	return enableDMCCLayoutPrint && Country.detect() === 'GB';
+	return (
+		enableDMCCLayoutPrint &&
+		isPrintProduct(productKey) &&
+		Country.detect() === 'GB'
+	);
 };
