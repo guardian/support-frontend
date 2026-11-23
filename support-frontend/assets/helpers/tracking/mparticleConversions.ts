@@ -5,11 +5,13 @@ import type { MParticleSdk, Purchase } from './mparticleSdk';
 
 type Config = NonNullable<AppConfig['mParticleConversions']>;
 type ConversionSource = 'gtm' | 'mparticle';
+type ConversionRoute = ConversionSource | 'gtm-pending';
 type PendingConversion = {
 	config: Config;
 	createPurchase: () => Purchase;
 	onRouteSelected: (source: ConversionSource) => void;
-	route?: ConversionSource;
+	orderId?: string;
+	route?: ConversionRoute;
 	purchase?: Purchase;
 };
 
@@ -53,26 +55,31 @@ function updateGoogleConsent(granted: boolean): void {
 function selectGtmRoute(
 	conversion: PendingConversion,
 	discardIfNotPermitted = false,
+	waitForConsent = false,
 ): void {
 	if (pending !== conversion) {
 		return;
 	}
+	const orderId = conversion.orderId ?? conversion.purchase?.orderId;
+	if (orderId && routedOrders.has(orderId)) {
+		pending = undefined;
+		return;
+	}
 	if (!hasGoogleTagManagerConsent) {
 		if (discardIfNotPermitted) {
-			pending = undefined;
+			if (waitForConsent) {
+				conversion.route = 'gtm-pending';
+			} else {
+				pending = undefined;
+			}
 		}
 		return;
 	}
 	try {
-		const purchase = conversion.purchase;
-		if (purchase && routedOrders.has(purchase.orderId)) {
-			pending = undefined;
-			return;
-		}
 		conversion.route = 'gtm';
 		pending = undefined;
-		if (purchase) {
-			routedOrders.add(purchase.orderId);
+		if (orderId) {
+			routedOrders.add(orderId);
 		}
 		conversion.onRouteSelected('gtm');
 	} catch {
@@ -85,21 +92,32 @@ function selectRoute(conversion: PendingConversion): void {
 	if (pending !== conversion || conversion.route === 'gtm') {
 		return;
 	}
+	if (conversion.route === 'gtm-pending') {
+		if (hasGoogleTagManagerConsent) {
+			selectGtmRoute(conversion);
+		}
+		return;
+	}
 	if (hasConsent && !stoppedUntilReload) {
 		if (conversion.route === 'mparticle') {
 			return;
 		}
 		try {
+			if (conversion.orderId && routedOrders.has(conversion.orderId)) {
+				pending = undefined;
+				return;
+			}
 			const purchase = conversion.createPurchase();
 			if (routedOrders.has(purchase.orderId)) {
 				pending = undefined;
 				return;
 			}
+			conversion.orderId ??= purchase.orderId;
 			conversion.purchase = purchase;
 			conversion.route = 'mparticle';
 			void dispatch();
 		} catch {
-			selectGtmRoute(conversion);
+			selectGtmRoute(conversion, true, true);
 		}
 	} else {
 		selectGtmRoute(conversion);
@@ -128,7 +146,7 @@ async function dispatch(): Promise<void> {
 		pending = undefined;
 		return;
 	}
-	if (routedOrders.has(purchase.orderId)) {
+	if (conversion.orderId && routedOrders.has(conversion.orderId)) {
 		pending = undefined;
 		return;
 	}
@@ -155,17 +173,20 @@ async function dispatch(): Promise<void> {
 		if (pending !== conversion) {
 			return;
 		}
+		sdk.preparePurchase(purchase);
 		sdk.setOptOut(false);
 		sdk.setConsent(true);
 		pending = undefined;
 		// Once the native event is committed, a thrown error cannot prove it was not sent.
-		routedOrders.add(purchase.orderId);
+		if (conversion.orderId) {
+			routedOrders.add(conversion.orderId);
+		}
 		conversion.onRouteSelected('mparticle');
 		sdk.logPurchase(purchase);
 		sdk.upload();
 	} catch {
 		if (pending === conversion) {
-			selectGtmRoute(conversion, true);
+			selectGtmRoute(conversion, true, true);
 		}
 		logException('mParticle conversion tracking failed');
 	} finally {
@@ -180,11 +201,13 @@ export function trackMParticleConversion(
 	config: Config,
 	createPurchase: () => Purchase,
 	onRouteSelected: (source: ConversionSource) => void,
+	orderId?: string,
 ): () => void {
 	const conversion: PendingConversion = {
 		config,
 		createPurchase,
 		onRouteSelected,
+		orderId,
 	};
 	pending = conversion;
 	if (!observingConsent) {

@@ -49,7 +49,7 @@ class PayPalOneOff(
   def processPayPalError(error: PayPalError)(implicit request: RequestHeader): Result = {
     if (error.errorName.contains("PAYMENT_ALREADY_DONE")) {
       logger.info(s"PAYMENT_ALREADY_DONE error code received. Sending user to thank-you page")
-      Redirect("/contribute/one-off/thankyou")
+      Redirect("/contribute/one-off/thankyou?paymentStatus=success")
     } else {
       Redirect(routes.PayPalOneOff.paypalError())
     }
@@ -69,9 +69,9 @@ class PayPalOneOff(
   ): Result = {
     logger.info(s"One-off contribution for Paypal payment is successful")
     val transactionIdQuery = success.transactionId
-      .map(id => s"?transactionId=${java.net.URLEncoder.encode(id, "UTF-8")}")
+      .map(id => s"&transactionId=${java.net.URLEncoder.encode(id, "UTF-8")}")
       .getOrElse("")
-    val redirect = Redirect(s"/$country/$thankyou$transactionIdQuery")
+    val redirect = Redirect(s"/$country/$thankyou?paymentStatus=success$transactionIdQuery")
     success.guestAccountCreationToken.fold {
       logger.info("Redirecting to thank you page without guestAccountCreationToken")
       redirect

@@ -12,8 +12,7 @@ import type { UserType } from '../../../helpers/user/userType';
  * - The client then polls the tracking URI until the status is either 'success' or 'failure' or the maximum number of
  * retries is reached.
  *
- * Reaching the maximum number of retries is treated as a success, as we assume that the job has been delayed, but
- * will complete successfully in the future and if it doesn't, then the user will be emailed about the failure.
+ * If polling times out, the response stays pending and the thank-you page can continue checking for completion.
  */
 type Status = 'failure' | 'pending' | 'success';
 
@@ -23,12 +22,11 @@ type CreateSubscriptionResult = {
 	status: Status;
 	failureReason?: ErrorReason;
 	transactionId?: string | null;
+	trackingUri: string;
 };
 
 // The response returned from the server when we start the subscription creation process.
-type StartCreationProcessResponse = CreateSubscriptionResult & {
-	trackingUri: string;
-};
+type StartCreationProcessResponse = CreateSubscriptionResult;
 
 // The response returned from the server when we poll for the status of the subscription creation process.
 type CheckCreationStatusResponse = Omit<
@@ -93,6 +91,7 @@ const setUpPolling = async (
 	return {
 		userType,
 		...finalResponse,
+		trackingUri,
 	};
 };
 

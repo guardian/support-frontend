@@ -112,7 +112,10 @@ import {
 } from '../../../helpers/storage/abandonedBasketCookies';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { PersonalEmailFields } from '../checkout/components/PersonalEmailFields';
-import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
+import {
+	clearThankYouOrder,
+	setThankYouOrder,
+} from '../checkout/helpers/sessionStorage';
 import getConsentValue from '../helpers/getConsentValue';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
 import {
@@ -562,6 +565,7 @@ export function OneTimeCheckoutComponent({
 				}
 			}
 			setIsProcessingPayment(true);
+			clearThankYouOrder();
 
 			let paymentResult: PaymentResult | undefined;
 			if (paymentMethod === 'PayPal') {
@@ -732,7 +736,7 @@ export function OneTimeCheckoutComponent({
 							firstName: '',
 							email: email,
 							paymentMethod: paymentMethod,
-							status: 'success', // retry pending mechanism not applied to one-time payments
+							status: 'pending',
 							finalAmount,
 						});
 
@@ -752,17 +756,6 @@ export function OneTimeCheckoutComponent({
 			}
 
 			if (paymentResult) {
-				setThankYouOrder({
-					transactionId:
-						paymentResult.type === 'stripe'
-							? paymentResult.result.transactionId ?? undefined
-							: undefined,
-					firstName: '',
-					email: email,
-					paymentMethod: paymentMethod,
-					status: 'success', // retry pending mechanism not applied to one-time payments
-					finalAmount,
-				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
 				paymentResult.type === 'stripe' &&
@@ -777,8 +770,22 @@ export function OneTimeCheckoutComponent({
 					thankYouUrlSearchParams,
 				);
 				if (nextStepRoute) {
+					if (
+						paymentResult.type === 'stripe' &&
+						paymentResult.result.paymentStatus === 'success'
+					) {
+						setThankYouOrder({
+							transactionId: paymentResult.result.transactionId ?? undefined,
+							firstName: '',
+							email: email,
+							paymentMethod: paymentMethod,
+							status: 'success',
+							finalAmount,
+						});
+					}
 					window.location.href = nextStepRoute;
 				} else {
+					clearThankYouOrder();
 					setErrorMessage('Sorry, something went wrong.');
 					if (
 						paymentResult.type === 'stripe' &&

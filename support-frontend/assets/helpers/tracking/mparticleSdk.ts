@@ -26,6 +26,7 @@ export type MParticleSdk = {
 	initialize: (config: MParticleSdkConfig) => Promise<void>;
 	setConsent: (granted: boolean) => void;
 	setOptOut: (isOptingOut: boolean) => void;
+	preparePurchase: (purchase: Purchase) => void;
 	logPurchase: (purchase: Purchase) => void;
 	upload: () => void;
 };
@@ -78,6 +79,29 @@ export async function loadMParticleSdk(): Promise<MParticleSdk> {
 	]);
 	// The package has a runtime default export that its bundled declarations omit.
 	const sdk = (sdkModule as unknown as { default: RuntimeSdk }).default;
+	const preparedPurchases = new WeakMap<
+		Purchase,
+		{ product: SDKProduct; transaction: TransactionAttributes }
+	>();
+	const preparePurchase = (purchase: Purchase) => {
+		const product = sdk.eCommerce.createProduct(
+			purchase.productType,
+			purchase.productType,
+			purchase.value,
+			1,
+		);
+		const transaction = sdk.eCommerce.createTransactionAttributes(
+			purchase.orderId,
+			undefined,
+			undefined,
+			purchase.value,
+		);
+		if (!product || !transaction) {
+			throw new Error('Invalid mParticle purchase data');
+		}
+		sdk.eCommerce.setCurrencyCode(purchase.currency);
+		preparedPurchases.set(purchase, { product, transaction });
+	};
 
 	return {
 		initialize: ({ apiKey, isDevelopmentMode }) =>
@@ -138,47 +162,29 @@ export async function loadMParticleSdk(): Promise<MParticleSdk> {
 			user.setConsentState(state);
 		},
 		setOptOut: (isOptingOut) => sdk.setOptOut(isOptingOut),
-		logPurchase: ({
-			orderId,
-			email,
-			value,
-			currency,
-			productType,
-			ratePlan,
-			billingPeriod,
-			contributionType,
-			paymentMethod,
-		}) => {
-			const product = sdk.eCommerce.createProduct(
-				productType,
-				productType,
-				value,
-				1,
-			);
-			const transaction = sdk.eCommerce.createTransactionAttributes(
-				orderId,
-				undefined,
-				undefined,
-				value,
-			);
-			if (!product || !transaction) {
+		preparePurchase,
+		logPurchase: (purchase) => {
+			if (!preparedPurchases.has(purchase)) {
+				preparePurchase(purchase);
+			}
+			const prepared = preparedPurchases.get(purchase);
+			if (!prepared) {
 				throw new Error('Invalid mParticle purchase data');
 			}
-			sdk.eCommerce.setCurrencyCode(currency);
 			sdk.eCommerce.logProductAction(
 				sdk.ProductActionType.Purchase,
-				[product],
+				[prepared.product],
 				{
-					productType,
-					ratePlan,
-					billingPeriod,
-					conversionKey: `${productType}:${ratePlan}`,
-					contributionType,
-					paymentMethod,
-					...(email ? { email } : {}),
+					productType: purchase.productType,
+					ratePlan: purchase.ratePlan,
+					billingPeriod: purchase.billingPeriod,
+					conversionKey: `${purchase.productType}:${purchase.ratePlan}`,
+					contributionType: purchase.contributionType,
+					paymentMethod: purchase.paymentMethod,
+					...(purchase.email ? { email: purchase.email } : {}),
 				},
 				undefined,
-				transaction,
+				prepared.transaction,
 			);
 		},
 		upload: () => sdk.upload(),

@@ -37,6 +37,7 @@ function setup() {
 		initialize: jest.fn().mockResolvedValue(undefined),
 		setConsent: jest.fn(),
 		setOptOut: jest.fn(),
+		preparePurchase: jest.fn(),
 		logPurchase: jest.fn(),
 		upload: jest.fn(),
 	};

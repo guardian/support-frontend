@@ -254,6 +254,7 @@ const processSubscription = async ({
 			paymentMethod,
 			createSubscriptionResult.transactionId ?? undefined,
 			createSubscriptionResult.status,
+			createSubscriptionResult.trackingUri,
 			supportRegionId,
 			accountNumber,
 			weeklyGiftDeliveryDate,
@@ -283,6 +284,7 @@ const buildThankYouPageUrl = (
 	paymentMethod: PaymentMethod,
 	transactionId: string | undefined,
 	status: 'success' | 'pending',
+	trackingUri: string,
 	supportRegionId: SupportRegionId,
 	accountNumber?: string,
 	weeklyGiftDeliveryDate?: Date,
@@ -294,6 +296,7 @@ const buildThankYouPageUrl = (
 		paymentMethod,
 		transactionId,
 		status,
+		trackingUri,
 		deliveryDate: weeklyGiftDeliveryDate,
 		taxConfig: taxRateConfig,
 	};

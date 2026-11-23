@@ -61,6 +61,7 @@ export function clearSourceContext() {
 const orderKey = 'thankYouOrder';
 const OrderSchema = z.object({
 	transactionId: z.string().optional(),
+	trackingUri: z.string().optional(),
 	firstName: z.string(),
 	email: z.string(),
 	paymentMethod: z.enum([
@@ -94,6 +95,9 @@ const OrderSchema = z.object({
 type OrderSchemaType = z.infer<typeof OrderSchema>;
 export function setThankYouOrder(order: OrderSchemaType) {
 	storage.session.set(orderKey, order);
+}
+export function clearThankYouOrder() {
+	storage.session.remove(orderKey);
 }
 export function getThankYouOrder(): OrderSchemaType | undefined {
 	const parsedOrder = OrderSchema.safeParse(storage.session.get(orderKey));

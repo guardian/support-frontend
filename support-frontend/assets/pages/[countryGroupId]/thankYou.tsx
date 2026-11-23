@@ -3,9 +3,10 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
+import type { StatusResponse } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
@@ -32,12 +33,27 @@ import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyti
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
-import { getThankYouOrder } from './checkout/helpers/sessionStorage';
+import {
+	getThankYouOrder,
+	setThankYouOrder,
+} from './checkout/helpers/sessionStorage';
 import type { OnboardingProductKey } from './components/onboardingComponent';
 import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
 
 const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
+
+function getSupportWorkersStatusPath(trackingUri: string): string | undefined {
+	try {
+		const url = new URL(trackingUri, window.location.origin);
+		return url.pathname === '/support-workers/status' &&
+			url.searchParams.has('jobId')
+			? `${url.pathname}${url.search}`
+			: undefined;
+	} catch {
+		return undefined;
+	}
+}
 
 type ThankYouConversionTrackingProps = {
 	payment: { finalAmount: number };
@@ -55,23 +71,103 @@ function ThankYouConversionTracking({
 	mParticleConfig,
 }: ThankYouConversionTrackingProps) {
 	const { enableMParticleConversions } = useFeatureSwitches();
-	const order = getThankYouOrder();
-	const hasSuccessfulOrder = order?.status === 'success';
+	const [order, setOrder] = useState(getThankYouOrder);
 	const email = order?.email;
+	const queryTransactionId = getQueryParameter('transactionId');
+	const paymentStatus = getQueryParameter('paymentStatus');
 	const transactionId =
-		order?.transactionId ?? getQueryParameter('transactionId');
+		order?.transactionId ?? (queryTransactionId || undefined);
+	const hasSuccessfulOrder =
+		order?.status === 'success' ||
+		((paymentStatus === 'success' || Boolean(queryTransactionId)) &&
+			!order?.trackingUri);
 	const conversionValue = order?.finalAmount ?? payment.finalAmount;
 	const paymentMethod =
 		order?.paymentMethod === 'StripeExpressCheckoutElement'
 			? 'Stripe'
-			: order?.paymentMethod;
+			: order?.paymentMethod ??
+			  (paymentStatus === 'success' ? 'PayPal' : undefined);
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey ?? 'OneTime');
 	const conversionProductKey = productKey ?? 'Contribution';
 	const contributionType =
 		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY';
 
 	useEffect(() => {
-		if (!hasSuccessfulOrder || !transactionId) {
+		if (order?.status !== 'pending' || !order.trackingUri) {
+			return undefined;
+		}
+		const statusPath = getSupportWorkersStatusPath(order.trackingUri);
+		if (!statusPath) {
+			return undefined;
+		}
+
+		let stopped = false;
+		let inFlight = false;
+		let timeout: number | undefined;
+		let interval = 5000;
+		const saveOrder = (updatedOrder: NonNullable<typeof order>) => {
+			setThankYouOrder(updatedOrder);
+			setOrder(updatedOrder);
+		};
+		const poll = async () => {
+			if (stopped || inFlight) {
+				return;
+			}
+			if (document.visibilityState === 'hidden') {
+				return;
+			}
+			inFlight = true;
+			let finished = false;
+			try {
+				const response = await fetch(statusPath, {
+					headers: { 'Content-Type': 'application/json' },
+				});
+				if (!response.ok) {
+					throw new Error('Could not retrieve subscription status');
+				}
+				const status = (await response.json()) as StatusResponse;
+				if (status.status === 'success') {
+					finished = true;
+					saveOrder({
+						...order,
+						status: 'success',
+						transactionId:
+							typeof status.transactionId === 'string'
+								? status.transactionId
+								: order.transactionId,
+						trackingUri: undefined,
+					});
+				} else if (status.status === 'failure') {
+					finished = true;
+					saveOrder({ ...order, trackingUri: undefined });
+				}
+			} catch {
+				// Keep waiting while the page is open; the status endpoint can be temporarily unavailable.
+			} finally {
+				inFlight = false;
+			}
+			if (!finished && !stopped) {
+				interval = Math.min(interval * 1.5, 30000);
+				timeout = window.setTimeout(poll, interval);
+			}
+		};
+		const onVisibilityChange = () => {
+			if (document.visibilityState === 'visible') {
+				window.clearTimeout(timeout);
+				void poll();
+			}
+		};
+		document.addEventListener('visibilitychange', onVisibilityChange);
+		void poll();
+		return () => {
+			stopped = true;
+			window.clearTimeout(timeout);
+			document.removeEventListener('visibilitychange', onVisibilityChange);
+		};
+	}, [order]);
+
+	useEffect(() => {
+		if (!hasSuccessfulOrder) {
 			return undefined;
 		}
 		const sendSuccessfulConversionToGtm = (source?: 'gtm' | 'mparticle') => {
@@ -89,6 +185,10 @@ function ThankYouConversionTracking({
 				transactionId,
 			);
 		};
+		if (!transactionId) {
+			sendSuccessfulConversionToGtm();
+			return undefined;
+		}
 
 		if (
 			mParticleConfig &&
@@ -111,6 +211,7 @@ function ThankYouConversionTracking({
 					billingPeriod,
 				}),
 				(source) => sendSuccessfulConversionToGtm(source),
+				transactionId,
 			);
 		}
 		sendSuccessfulConversionToGtm();
@@ -123,6 +224,7 @@ function ThankYouConversionTracking({
 		conversionProductKey,
 		currencyKey,
 		hasSuccessfulOrder,
+		order,
 		conversionValue,
 		transactionId,
 		email,
