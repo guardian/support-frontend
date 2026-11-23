@@ -131,6 +131,25 @@ exports[`The Payment API stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
+    "AlbSsmParam485C1D52": {
+      "Properties": {
+        "DataType": "text",
+        "Description": "The ARN of the ALB for support-PROD-payment-api. This parameter is created via CDK.",
+        "Name": "/infosec/waf/services/PROD/payment-api-alb-arn",
+        "Tags": {
+          "Stack": "support",
+          "Stage": "PROD",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
+        },
+        "Tier": "Standard",
+        "Type": "String",
+        "Value": {
+          "Ref": "LoadBalancerPaymentapi9D2DA35F",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "AllowKnownMethods07D772B3": {
       "Properties": {
         "Actions": [
