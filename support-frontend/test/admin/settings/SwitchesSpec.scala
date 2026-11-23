@@ -192,7 +192,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(Off),
             Some(Off),
             Some(Off),
-            Some(Off),
+            Some(On),
             Some(Off),
             Some(Off),
           ),
