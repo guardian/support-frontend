@@ -133,7 +133,7 @@ const promotionDigitalMonthly = (
 ): JSX.Element => {
 	const validContribution =
 		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
-	const firstPayment = amount + validContribution;
+	const firstPayment = Math.round((amount + validContribution) * 100) / 100;
 	return (
 		<p css={marginTop}>
 			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
