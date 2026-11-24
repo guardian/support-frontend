@@ -44,6 +44,10 @@ import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
 import GuardianPageLayout from './components/GuardianPageLayout';
 import CurrentMaxRatesByCountry from './helpers/CurrentMaxRatesByCountry';
+import {
+	useDMCCLayoutDigital,
+	useDMCCLayoutPrint,
+} from './helpers/useDMCCLayout';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
@@ -51,6 +55,11 @@ type Props = {
 	appConfig: AppConfig;
 	landingPageSettings: LandingPageVariant;
 	nudgeSettings?: CheckoutNudgeSettings;
+};
+
+export type DMCCA = {
+	print: boolean;
+	digital: boolean;
 };
 
 const countryId: CountryCode = Country.detect();
@@ -277,6 +286,11 @@ export function Checkout({
 		supportRegionId,
 	);
 
+	const dmcca: DMCCA = {
+		print: useDMCCLayoutPrint(productKey),
+		digital: useDMCCLayoutDigital(productKey),
+	};
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
@@ -306,6 +320,7 @@ export function Checkout({
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
 						taxRateConfig={taxRateConfig}
+						dmcca={dmcca}
 					/>
 
 					<CheckoutForm
@@ -330,6 +345,7 @@ export function Checkout({
 						billingState={billingState}
 						setBillingState={setBillingState}
 						taxRateConfig={taxRateConfig}
+						dmcca={dmcca}
 					/>
 				</PageLayout>
 			</Elements>

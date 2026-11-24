@@ -74,6 +74,7 @@ import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import type { DMCCA } from '../checkout';
 import type { BillingStatePostcodeCountry } from '../checkout/components/BillingAddressFields';
 import { PersonalAddressFields } from '../checkout/components/PersonalAddressFields';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
@@ -89,10 +90,6 @@ import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheck
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
-import {
-	useDMCCLayoutDigital,
-	useDMCCLayoutPrint,
-} from '../helpers/useDMCCLayout';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
@@ -162,6 +159,7 @@ type CheckoutFormProps = {
 	billingState: string;
 	setBillingState: (value: string) => void;
 	taxRateConfig: TaxRateConfig;
+	dmcca: DMCCA;
 };
 
 export default function CheckoutForm({
@@ -185,6 +183,7 @@ export default function CheckoutForm({
 	billingState,
 	setBillingState,
 	taxRateConfig,
+	dmcca,
 }: CheckoutFormProps) {
 	const { originalAmount, finalAmount, contributionAmount } = payment;
 	const csrf: CsrfState = appConfig.csrf;
@@ -192,9 +191,10 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
-	const isDMCCPrint = useDMCCLayoutPrint(productKey);
-	const isDMCCDigital = useDMCCLayoutDigital(productKey);
-	const isDMCCA = isDMCCPrint || isDMCCDigital;
+
+	const { print, digital } = dmcca;
+	const isDMCCA = print || digital;
+
 	const abParticipations = useAbParticipations();
 
 	const productCatalog = appConfig.productCatalog;

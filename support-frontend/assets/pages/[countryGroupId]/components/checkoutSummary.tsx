@@ -30,6 +30,7 @@ import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNud
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import type { DMCCA } from '../checkout';
 import {
 	addSourceContextToPath,
 	buildBackButtonPath,
@@ -64,6 +65,7 @@ type CheckoutSummaryProps = {
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
 	nudgeSettings?: CheckoutNudgeSettings;
+	dmcca: DMCCA;
 };
 
 export default function CheckoutSummary({
@@ -83,6 +85,7 @@ export default function CheckoutSummary({
 	forcedCountry,
 	studentDiscount,
 	nudgeSettings,
+	dmcca,
 }: CheckoutSummaryProps) {
 	const { originalAmount } = payment;
 	const urlParams = new URLSearchParams(window.location.search);
@@ -95,6 +98,10 @@ export default function CheckoutSummary({
 		billingPeriod: BillingPeriod.Monthly,
 	};
 	const isRecurringContribution = productKey === 'Contribution';
+
+	const { print, digital } = dmcca;
+	const isDMCCA = print || digital;
+	console.log('*** isDMCCA', isDMCCA);
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -205,19 +212,21 @@ export default function CheckoutSummary({
 						) : undefined
 					}
 					tsAndCs={
-						<OrderSummaryTsAndCs
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							ratePlanDescription={ratePlanDetail.label}
-							countryGroupId={countryGroupId}
-							thresholdAmount={thresholdAmount}
-							promotion={promotion}
-							deliveryDate={
-								isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-									? weeklyDeliveryDate
-									: undefined
-							}
-						/>
+						!isDMCCA ? (
+							<OrderSummaryTsAndCs
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								ratePlanDescription={ratePlanDetail.label}
+								countryGroupId={countryGroupId}
+								thresholdAmount={thresholdAmount}
+								promotion={promotion}
+								deliveryDate={
+									isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+										? weeklyDeliveryDate
+										: undefined
+								}
+							/>
+						) : null
 					}
 					headerButton={
 						showBackButton && (
