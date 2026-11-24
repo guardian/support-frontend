@@ -517,7 +517,7 @@ export const productCatalogDescription: Record<
 		ratePlans: {},
 	},
 	Patron: {
-		label: 'Patrons',
+		label: 'Patron',
 		landingPagePath: '/contribute',
 		benefits: [
 			multipleAccountsBenefit,
