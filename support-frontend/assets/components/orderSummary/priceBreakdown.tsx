@@ -26,6 +26,12 @@ const rowSpacing = css`
 		margin-bottom: ${space[8]}px;
 	}
 `;
+const rowSpacingDmcca = css`
+	display: flex;
+	flex-direction: column;
+	gap: ${space[1]}px;
+	margin-top: ${space[1]}px;
+`;
 
 const boldText = css`
 	font-weight: 700;
@@ -68,6 +74,7 @@ type PriceBreakdownProps = {
 	studentDiscount?: StudentDiscount;
 	billingPeriod: BillingPeriod;
 	isIntroductoryPricing: boolean;
+	isDMCCA?: boolean;
 };
 
 export function PriceBreakdown({
@@ -82,6 +89,7 @@ export function PriceBreakdown({
 	billingPeriod,
 	studentDiscount,
 	isIntroductoryPricing,
+	isDMCCA,
 }: PriceBreakdownProps): JSX.Element {
 	const paymentFrequency = getBillingPeriodNoun(billingPeriod, isWeeklyGift);
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
@@ -128,7 +136,7 @@ export function PriceBreakdown({
 
 	return (
 		<>
-			<div css={rowSpacing}>
+			<div css={isDMCCA ? rowSpacingDmcca : rowSpacing}>
 				<div css={[summaryRow, boldText]}>
 					<p>{priceLabel}</p>
 					<PriceSummary

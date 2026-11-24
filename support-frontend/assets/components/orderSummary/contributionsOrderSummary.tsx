@@ -135,6 +135,12 @@ const termsAndConditions = css`
 	}
 `;
 
+const termsAndConditionsDmcca = css`
+	${textSans15};
+	color: ${neutral[38]};
+	padding-top: ${space[2]}px;
+`;
+
 const startDateWeeklyDigitalList = css`
 	${textSans15};
 	color: ${neutral[7]};
@@ -165,6 +171,7 @@ export type ContributionsOrderSummaryProps = {
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
 	nudgeSettings?: CheckoutNudgeSettings;
+	isDMCCA?: boolean;
 };
 
 export function ContributionsOrderSummary({
@@ -187,6 +194,7 @@ export function ContributionsOrderSummary({
 	studentDiscount,
 	supportRegionId,
 	nudgeSettings,
+	isDMCCA,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const { originalAmount } = payment;
 	const [showCheckList, setCheckList] = useState(false);
@@ -308,9 +316,16 @@ export function ContributionsOrderSummary({
 				studentDiscount={studentDiscount}
 				billingPeriod={billingPeriod}
 				isIntroductoryPricing={promotion?.isIntroductoryPricing ?? false}
+				isDMCCA={isDMCCA}
 			/>
-			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
-			{startDate && <div css={startDateWeeklyDigitalList}>{startDate}</div>}
+			{!!tsAndCs && (
+				<div css={isDMCCA ? termsAndConditionsDmcca : termsAndConditions}>
+					{tsAndCs}
+				</div>
+			)}
+			{!isDMCCA && startDate && (
+				<div css={startDateWeeklyDigitalList}>{startDate}</div>
+			)}
 			{nudgeSettings && (
 				<CheckoutNudgeSelector
 					nudgeSettings={nudgeSettings}

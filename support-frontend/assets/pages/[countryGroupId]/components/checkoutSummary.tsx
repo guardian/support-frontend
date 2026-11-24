@@ -10,6 +10,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { GuardianWeeklyDigitalOrderSummaryStartDate } from 'components/orderSummary/guardianWeeklyDigitalOrderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
+import { OrderSummaryTsAndCsDmcca } from 'components/orderSummary/orderSummmaryTsAndCsDmcca';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { Payment } from 'helpers/forms/checkouts';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
@@ -101,7 +102,6 @@ export default function CheckoutSummary({
 
 	const { print, digital } = dmcca;
 	const isDMCCA = print || digital;
-	console.log('*** isDMCCA', isDMCCA);
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -226,7 +226,14 @@ export default function CheckoutSummary({
 										: undefined
 								}
 							/>
-						) : null
+						) : (
+							<OrderSummaryTsAndCsDmcca
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								ratePlanDescription={ratePlanDetail.label}
+								weeklyDeliveryDate={weeklyDeliveryDate}
+							/>
+						)
 					}
 					headerButton={
 						showBackButton && (
@@ -237,6 +244,7 @@ export default function CheckoutSummary({
 					supportRegionId={supportRegionId}
 					nudgeSettings={nudgeSettings}
 					landingPageSettings={landingPageSettings}
+					isDMCCA={isDMCCA}
 				/>
 			</BoxContents>
 		</Box>
