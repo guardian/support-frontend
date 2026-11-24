@@ -68,8 +68,8 @@ export function ratePlanToBillingPeriod(
 		case 'Annual':
 		case 'AnnualTaxExclusive':
 		case 'AnnualPlus':
-		case 'OneYearGift': // Shouldn't this be OneTime?
-		case 'OneYearStudent': // Shouldn't this be OneTime?
+		case 'OneYearGift':
+		case 'OneYearStudent':
 		case 'V1DeprecatedAnnual':
 		case 'BylineAnnual':
 		case 'HeadlineAnnual':
