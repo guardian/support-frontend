@@ -226,6 +226,7 @@ const expectPolicy = (
 	}
 
 	const { container } = render(policy);
+	expect(container.textContent).toMatchSnapshot();
 	expect(container.textContent).toBe(copy);
 	expect(
 		screen.getByRole('link', { name: /^(here|terms|Terms & Conditions)$/ }),
