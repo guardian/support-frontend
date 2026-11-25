@@ -14,7 +14,9 @@ import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
 
-function getDataExtensionName(product: ProductKey): DataExtensionName {
+function getDataExtensionName(
+	product: ProductKey,
+): DataExtensionName | undefined {
 	switch (product) {
 		case 'DigitalSubscription':
 			return DataExtensionNames.failedCheckoutEmails.digitalSubscription;
@@ -33,8 +35,19 @@ function getDataExtensionName(product: ProductKey): DataExtensionName {
 			return DataExtensionNames.failedCheckoutEmails.tierThree;
 		case 'GuardianAdLite':
 			return DataExtensionNames.failedCheckoutEmails.guardianAdLite;
-		default:
-			throw new Error(`Unknown product type: ${product}`);
+		case 'Patron':
+			console.log('Skipping failure email for Patrons');
+			return;
+		case 'NewspaperVoucher':
+		case 'OneTimeContribution':
+		case 'GuardianPatron':
+		case 'PatronMembership':
+		case 'PartnerMembership':
+		case 'GuardianWeeklyZoneA':
+		case 'GuardianWeeklyZoneB':
+		case 'GuardianWeeklyZoneC':
+		case 'SupporterMembership':
+			throw new Error(`No failed checkout email for product type: ${product}`);
 	}
 }
 
@@ -42,8 +55,11 @@ async function sendFailureEmail(state: FailureHandlerState) {
 	const dataExtensionName = getDataExtensionName(
 		state.productInformation.product,
 	);
-	const emailFields = buildEmailFields(state.user, dataExtensionName, {});
-	await sendEmail(stage, emailFields);
+
+	if (dataExtensionName) {
+		const emailFields = buildEmailFields(state.user, dataExtensionName, {});
+		await sendEmail(stage, emailFields);
+	}
 }
 
 function handleError(
