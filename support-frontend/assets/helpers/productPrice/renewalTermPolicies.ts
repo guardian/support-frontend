@@ -228,8 +228,12 @@ type Policy = Partial<
 	Record<ActiveProductKey, Partial<Record<ActiveRatePlanKey, string>>>
 >;
 
-function getRenewalTerm(fullPrice: number): Policy {
-	return {
+function getRenewalTerm(
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	fullPrice: number,
+): string | undefined {
+	const renewalTerms: Policy = {
 		Contribution: {
 			Monthly: contributionMonthly(fullPrice),
 			Annual: digitalAndPrintAnnual(fullPrice),
@@ -274,6 +278,7 @@ function getRenewalTerm(fullPrice: number): Policy {
 			Sunday: digitalAndPrintMonthly(fullPrice),
 		},
 	};
+	return renewalTerms[productKey]?.[ratePlanKey];
 }
 
 function getPromotionalRenewalTerm(
@@ -282,7 +287,7 @@ function getPromotionalRenewalTerm(
 	amount: number,
 	promotion: PromoWithCatalogInformation,
 	contribution?: number,
-): Policy {
+): string | undefined {
 	const promotionAnnualTerms = promotionAnnual(
 		productKey,
 		ratePlanKey,
@@ -310,7 +315,7 @@ function getPromotionalRenewalTerm(
 		amount,
 		promotion,
 	);
-	return {
+	const promotionRenewalTerms: Policy = {
 		GuardianAdLite: {
 			Monthly: promotionDigitalMonthlyTerms,
 		},
@@ -351,6 +356,7 @@ function getPromotionalRenewalTerm(
 			Sunday: promotionPrintMonthlyTerms,
 		},
 	};
+	return promotionRenewalTerms[productKey]?.[ratePlanKey];
 }
 
 export function getRenewalTermPolicy(
@@ -368,8 +374,10 @@ export function getRenewalTermPolicy(
 				amount,
 				promotion,
 				contribution,
-		  )[productKey]?.[ratePlanKey]
+		  )
 		: getRenewalTerm(
+				productKey,
+				ratePlanKey,
 				productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount,
-		  )[productKey]?.[ratePlanKey];
+		  );
 }
