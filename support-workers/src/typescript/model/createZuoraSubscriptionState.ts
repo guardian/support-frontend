@@ -73,6 +73,7 @@ export const patronStateSchema = z
 	.object({
 		productType: z.literal('Patron'),
 		product: patronProductSchema,
+		similarProductsConsent: optionalDropNulls(z.boolean()),
 	})
 	.merge(baseProductStateSchema);
 export type PatronState = z.infer<typeof patronStateSchema>;

@@ -117,6 +117,7 @@ export const createNextState = (
 					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					salesForceContact: contactRecord,
+					similarProductsConsent: state.similarProductsConsent,
 				},
 				...state,
 			};
