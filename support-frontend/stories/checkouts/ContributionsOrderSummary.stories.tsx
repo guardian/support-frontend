@@ -578,7 +578,7 @@ DmccaWeeklyGift.args = {
 	productKey: ProductKeys.GuardianWeeklyDomestic,
 	ratePlanKey: 'ThreeMonthGift',
 	productLabel: getProductLabel(ProductKeys.GuardianWeeklyDomestic),
-	billingPeriod: BillingPeriod.Monthly,
+	billingPeriod: BillingPeriod.Quarterly,
 	enableCheckList: true,
 	payment: { originalAmount: 19, finalAmount: 19 },
 	currency: {
@@ -757,9 +757,9 @@ DmccaHomedeliveryEveryday.args = {
 
 export const DmccaHomedeliverySunday = Template.bind({});
 DmccaHomedeliverySunday.args = {
-	productKey: ProductKeys.SubscriptionCard,
+	productKey: ProductKeys.HomeDelivery,
 	ratePlanKey: 'Sunday',
-	productLabel: getProductLabel(ProductKeys.SubscriptionCard),
+	productLabel: getProductLabel(ProductKeys.HomeDelivery),
 	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
 	payment: { originalAmount: 50, finalAmount: 50 },
@@ -769,7 +769,7 @@ DmccaHomedeliverySunday.args = {
 		spokenCurrency: 'pound',
 	},
 	checkListData: [
-		...productCatalogDescription.SubscriptionCard.benefits.map((benefit) => ({
+		...productCatalogDescription.HomeDelivery.benefits.map((benefit) => ({
 			isChecked: true,
 			text: benefit.copy,
 		})),
