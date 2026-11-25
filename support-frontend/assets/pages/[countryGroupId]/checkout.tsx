@@ -57,7 +57,7 @@ type Props = {
 	nudgeSettings?: CheckoutNudgeSettings;
 };
 
-export type DMCCA = {
+export type Dmcc = {
 	print: boolean;
 	digital: boolean;
 };
@@ -286,7 +286,7 @@ export function Checkout({
 		supportRegionId,
 	);
 
-	const dmcca: DMCCA = {
+	const dmcc = {
 		print: useDMCCLayoutPrint(productKey),
 		digital: useDMCCLayoutDigital(productKey),
 	};
@@ -320,7 +320,7 @@ export function Checkout({
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
 						taxRateConfig={taxRateConfig}
-						dmcca={dmcca}
+						dmcc={dmcc}
 					/>
 
 					<CheckoutForm
@@ -345,7 +345,7 @@ export function Checkout({
 						billingState={billingState}
 						setBillingState={setBillingState}
 						taxRateConfig={taxRateConfig}
-						dmcca={dmcca}
+						dmcc={dmcc}
 					/>
 				</PageLayout>
 			</Elements>

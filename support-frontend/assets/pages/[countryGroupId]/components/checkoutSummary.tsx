@@ -10,7 +10,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { GuardianWeeklyDigitalOrderSummaryStartDate } from 'components/orderSummary/guardianWeeklyDigitalOrderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
-import { OrderSummaryTsAndCsDmcca } from 'components/orderSummary/orderSummmaryTsAndCsDmcca';
+import { OrderSummaryTsAndCsDmcca } from 'components/orderSummary/orderSummmaryTsAndCsDmcc';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { Payment } from 'helpers/forms/checkouts';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
@@ -31,7 +31,7 @@ import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNud
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import type { DMCCA } from '../checkout';
+import type { Dmcc } from '../checkout';
 import {
 	addSourceContextToPath,
 	buildBackButtonPath,
@@ -66,7 +66,7 @@ type CheckoutSummaryProps = {
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
 	nudgeSettings?: CheckoutNudgeSettings;
-	dmcca: DMCCA;
+	dmcc: Dmcc;
 };
 
 export default function CheckoutSummary({
@@ -86,7 +86,7 @@ export default function CheckoutSummary({
 	forcedCountry,
 	studentDiscount,
 	nudgeSettings,
-	dmcca,
+	dmcc,
 }: CheckoutSummaryProps) {
 	const { originalAmount } = payment;
 	const urlParams = new URLSearchParams(window.location.search);
@@ -99,8 +99,6 @@ export default function CheckoutSummary({
 		billingPeriod: BillingPeriod.Monthly,
 	};
 	const isRecurringContribution = productKey === 'Contribution';
-
-	const { print: isDMCCAPrint } = dmcca;
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -225,8 +223,8 @@ export default function CheckoutSummary({
 							}
 						/>
 					}
-					tsAndCsDMCCA={
-						isDMCCAPrint ? (
+					tsAndCsDmcc={
+						dmcc.print ? (
 							<OrderSummaryTsAndCsDmcca
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}

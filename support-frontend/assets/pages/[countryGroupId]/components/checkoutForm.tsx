@@ -74,7 +74,7 @@ import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import type { DMCCA } from '../checkout';
+import type { Dmcc } from '../checkout';
 import type { BillingStatePostcodeCountry } from '../checkout/components/BillingAddressFields';
 import { PersonalAddressFields } from '../checkout/components/PersonalAddressFields';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
@@ -159,7 +159,7 @@ type CheckoutFormProps = {
 	billingState: string;
 	setBillingState: (value: string) => void;
 	taxRateConfig: TaxRateConfig;
-	dmcca: DMCCA;
+	dmcc: Dmcc;
 };
 
 export default function CheckoutForm({
@@ -183,7 +183,7 @@ export default function CheckoutForm({
 	billingState,
 	setBillingState,
 	taxRateConfig,
-	dmcca,
+	dmcc,
 }: CheckoutFormProps) {
 	const { originalAmount, finalAmount, contributionAmount } = payment;
 	const csrf: CsrfState = appConfig.csrf;
@@ -192,8 +192,8 @@ export default function CheckoutForm({
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
 
-	const { print, digital } = dmcca;
-	const isDMCCA = print || digital;
+	const { print, digital } = dmcc;
+	const isDmcc = print || digital;
 
 	const abParticipations = useAbParticipations();
 
@@ -689,15 +689,15 @@ export default function CheckoutForm({
 
 	const automaticSimilarProductsConsent = countryId === 'US';
 
-	const spacingSubmit = isDMCCA ? 6 : 8;
-	const marginMarketingConsent = isDMCCA
+	const spacingSubmit = isDmcc ? 6 : 8;
+	const marginMarketingConsent = isDmcc
 		? css`
 				margin-top: ${space[6]}px;
 		  `
 		: css`
 				margin: ${space[6]}px 0;
 		  `;
-	const paddingSimilarProductConsent = isDMCCA
+	const paddingSimilarProductConsent = isDmcc
 		? css`
 				> div {
 					padding: 10px 0 0 0;
@@ -1256,7 +1256,7 @@ export default function CheckoutForm({
 									/>
 								)}
 						</div>
-						{isDMCCA ? (
+						{isDmcc ? (
 							<PreContractInformation
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}

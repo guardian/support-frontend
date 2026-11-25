@@ -135,7 +135,7 @@ const termsAndConditions = css`
 	}
 `;
 
-const termsAndConditionsDmcca = css`
+const termsAndConditionsDmcc = css`
 	${textSans15};
 	color: ${neutral[38]};
 	padding-top: ${space[2]}px;
@@ -168,7 +168,7 @@ export type ContributionsOrderSummaryProps = {
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs: React.ReactNode;
-	tsAndCsDMCCA?: React.ReactNode;
+	tsAndCsDmcc?: React.ReactNode;
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
 	nudgeSettings?: CheckoutNudgeSettings;
@@ -191,12 +191,12 @@ export function ContributionsOrderSummary({
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
-	tsAndCsDMCCA,
+	tsAndCsDmcc,
 	studentDiscount,
 	supportRegionId,
 	nudgeSettings,
 }: ContributionsOrderSummaryProps): JSX.Element {
-	const isDMCCA = !!tsAndCsDMCCA;
+	const isDmcc = !!tsAndCsDmcc;
 	const { originalAmount } = payment;
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -317,11 +317,11 @@ export function ContributionsOrderSummary({
 				studentDiscount={studentDiscount}
 				billingPeriod={billingPeriod}
 				isIntroductoryPricing={promotion?.isIntroductoryPricing ?? false}
-				isDMCCA={isDMCCA}
+				isDmcc={isDmcc}
 			/>
-			{isDMCCA && <div css={termsAndConditionsDmcca}>{tsAndCsDMCCA}</div>}
-			{!isDMCCA && !!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
-			{!isDMCCA && startDate && (
+			{isDmcc && <div css={termsAndConditionsDmcc}>{tsAndCsDmcc}</div>}
+			{!isDmcc && !!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
+			{!isDmcc && startDate && (
 				<div css={startDateWeeklyDigitalList}>{startDate}</div>
 			)}
 			{nudgeSettings && (

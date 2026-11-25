@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:GuardianWeeklyDomestic/ratePlan:AnnualPlus correctly (undefined/undefined) 1`] = `"Your first issue of Guardian Weekly will be Friday, December 4, 2026. Please allow 1 to 7 days after your start date for your magazine to arrive, depending on national post services.Your digital benefits will start today."`;
+
+exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:GuardianWeeklyDomestic/ratePlan:MonthlyPlus correctly (undefined/undefined) 1`] = `"Your first issue of Guardian Weekly will be Friday, December 4, 2026. Please allow 1 to 7 days after your start date for your magazine to arrive, depending on national post services.Your digital benefits will start today."`;
+
+exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:GuardianWeeklyDomestic/ratePlan:QuarterlyPlus correctly (undefined/undefined) 1`] = `"Your first issue of Guardian Weekly will be Friday, December 4, 2026. Please allow 1 to 7 days after your start date for your magazine to arrive, depending on national post services.Your digital benefits will start today."`;
+
+exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:GuardianWeeklyDomestic/ratePlan:ThreeMonthGift correctly (undefined/2026-11-25T00:00:00.000Z) 1`] = `"Your Guardian Weekly gift subscription will start on Wednesday, November 25, 2026. The recipient should receive their first magazine 1 - 7 days after this issue date, depending on national post services."`;
+
+exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:GuardianWeeklyDomestic/ratePlan:ThreeMonthGift correctly (undefined/undefined) 1`] = `""`;
+
+exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:HomeDelivery/ratePlan:SixdayPlus correctly (six day/undefined) 1`] = `"You will receive your first newspaper delivery on Saturday, November 28, 2026 as part of your six day subscription.Your digital benefits will start today."`;
+
+exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:HomeDelivery/ratePlan:Sunday correctly (Observer/undefined) 1`] = `"You will receive your first newspaper delivery on Sunday, November 29, 2026 as part of your Observer subscription.Your digital benefits will start today."`;
+
+exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:SubscriptionCard/ratePlan:Sunday correctly (Observer/undefined) 1`] = `"Your physical subscription card will be delivered to your door by Sunday, December 6, 2026, for you to collect in store the first newspaper edition you are entitled to in your Observer subscription.Your digital benefits will start today."`;
+
+exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:SubscriptionCard/ratePlan:WeekendPlus correctly (weekend/undefined) 1`] = `"Your physical subscription card will be delivered to your door by Saturday, December 5, 2026, for you to collect in store the first newspaper edition you are entitled to in your weekend subscription.Your digital benefits will start today."`;

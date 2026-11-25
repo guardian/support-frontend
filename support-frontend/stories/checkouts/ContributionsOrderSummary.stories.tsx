@@ -10,7 +10,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
-import { OrderSummaryTsAndCsDmcca } from 'components/orderSummary/orderSummmaryTsAndCsDmcca';
+import { OrderSummaryTsAndCsDmcca } from 'components/orderSummary/orderSummmaryTsAndCsDmcc';
 import {
 	getProductLabel,
 	productCatalogDescription,
@@ -556,7 +556,7 @@ DmccaWeekly.args = {
 			thresholdAmount={19}
 		/>
 	),
-	tsAndCsDMCCA: (
+	tsAndCsDmcc: (
 		<OrderSummaryTsAndCsDmcca
 			productKey={'GuardianWeeklyDomestic'}
 			ratePlanKey={'MonthlyPlus'}
@@ -602,7 +602,7 @@ DmccaWeeklyGift.args = {
 			thresholdAmount={19}
 		/>
 	),
-	tsAndCsDMCCA: (
+	tsAndCsDmcc: (
 		<OrderSummaryTsAndCsDmcca
 			productKey={'GuardianWeeklyDomestic'}
 			ratePlanKey={'ThreeMonthGift'}
@@ -647,7 +647,7 @@ DmccaSubscardSixday.args = {
 			thresholdAmount={15}
 		/>
 	),
-	tsAndCsDMCCA: (
+	tsAndCsDmcc: (
 		<OrderSummaryTsAndCsDmcca
 			productKey={'SubscriptionCard'}
 			ratePlanKey={'SixdayPlus'}
@@ -692,7 +692,7 @@ DmccaSubcardSunday.args = {
 			thresholdAmount={15}
 		/>
 	),
-	tsAndCsDMCCA: (
+	tsAndCsDmcc: (
 		<OrderSummaryTsAndCsDmcca
 			productKey={'SubscriptionCard'}
 			ratePlanKey={'Sunday'}
@@ -737,7 +737,7 @@ DmccaHomedeliveryEveryday.args = {
 			thresholdAmount={15}
 		/>
 	),
-	tsAndCsDMCCA: (
+	tsAndCsDmcc: (
 		<OrderSummaryTsAndCsDmcca
 			productKey={'HomeDelivery'}
 			ratePlanKey={'EverydayPlus'}
@@ -782,7 +782,7 @@ DmccaHomedeliverySunday.args = {
 			thresholdAmount={15}
 		/>
 	),
-	tsAndCsDMCCA: (
+	tsAndCsDmcc: (
 		<OrderSummaryTsAndCsDmcca
 			productKey={'HomeDelivery'}
 			ratePlanKey={'Sunday'}

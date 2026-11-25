@@ -3,7 +3,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { OrderSummaryTsAndCsDmcca } from './orderSummmaryTsAndCsDmcca';
+import { OrderSummaryTsAndCsDmcca } from './orderSummmaryTsAndCsDmcc';
 
 // Mock a specific date and including copy that contains delivery date
 const mockDate = new Date('2026-11-25');
@@ -39,7 +39,7 @@ const expectSummaryTsAndCs = (
 	expect(container.textContent).toBe(copy);
 };
 
-describe('dmcca orderSummaryTs&Cs Snapshot comparison', () => {
+describe('orderSummaryTs&Cs Dmcc Snapshot comparison', () => {
 	type OrderSummaryTestParams = [
 		ActiveProductKey,
 		ActiveRatePlanKey,
