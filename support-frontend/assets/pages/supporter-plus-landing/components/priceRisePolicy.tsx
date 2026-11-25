@@ -16,10 +16,13 @@ export function PriceRisePolicy({
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent'; // TODO: UTS Students
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
-	return !isStudentOneYearRatePlan && !isContribution && !isWeeklyGift ? (
+	if (isStudentOneYearRatePlan && isContribution && isWeeklyGift) {
+		return null;
+	}
+	return (
 		<p>
 			We may increase the price of your subscription in the future. If this
 			happens, we'll email you at least 30 days before it takes effect.
 		</p>
-	) : null;
+	);
 }
