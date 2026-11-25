@@ -16,7 +16,7 @@ export function PriceRisePolicy({
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent'; // TODO: UTS Students
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
-	if (isStudentOneYearRatePlan && isContribution && isWeeklyGift) {
+	if (isStudentOneYearRatePlan || isContribution || isWeeklyGift) {
 		return null;
 	}
 	return (
