@@ -29,6 +29,15 @@ export function isPrintProduct(productKey: ActiveProductKey): boolean {
 	return printProductsKeys.includes(productKey);
 }
 
+const dmccPrintProductsKeys: ActiveProductKey[] = [
+	...paperProductsKeys,
+	...['GuardianWeeklyDomestic' as ActiveProductKey], // GBPCountries only
+];
+
+export function isDMCCPrintProduct(productKey: ActiveProductKey): boolean {
+	return dmccPrintProductsKeys.includes(productKey);
+}
+
 export function isContributionOnlyProduct(
 	productKey: ActiveProductKey,
 ): boolean {

@@ -100,8 +100,7 @@ export default function CheckoutSummary({
 	};
 	const isRecurringContribution = productKey === 'Contribution';
 
-	const { print, digital } = dmcca;
-	const isDMCCA = print || digital;
+	const { print: isDMCCAPrint } = dmcca;
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -227,7 +226,7 @@ export default function CheckoutSummary({
 						/>
 					}
 					tsAndCsDMCCA={
-						isDMCCA ? (
+						isDMCCAPrint ? (
 							<OrderSummaryTsAndCsDmcca
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}
