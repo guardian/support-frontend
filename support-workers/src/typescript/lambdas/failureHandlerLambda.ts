@@ -38,14 +38,14 @@ function getDataExtensionName(
 		case 'Patron':
 			console.log('Skipping failure email for Patrons');
 			return;
-		case 'NewspaperVoucher':
-		case 'OneTimeContribution':
 		case 'GuardianPatron':
-		case 'PatronMembership':
-		case 'PartnerMembership':
 		case 'GuardianWeeklyZoneA':
 		case 'GuardianWeeklyZoneB':
 		case 'GuardianWeeklyZoneC':
+		case 'NewspaperVoucher':
+		case 'OneTimeContribution':
+		case 'PartnerMembership':
+		case 'PatronMembership':
 		case 'SupporterMembership':
 			throw new Error(`No failed checkout email for product type: ${product}`);
 	}
