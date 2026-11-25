@@ -212,28 +212,29 @@ export default function CheckoutSummary({
 						) : undefined
 					}
 					tsAndCs={
-						!isDMCCA ? (
-							<OrderSummaryTsAndCs
-								productKey={productKey}
-								ratePlanKey={ratePlanKey}
-								ratePlanDescription={ratePlanDetail.label}
-								countryGroupId={countryGroupId}
-								thresholdAmount={thresholdAmount}
-								promotion={promotion}
-								deliveryDate={
-									isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-										? weeklyDeliveryDate
-										: undefined
-								}
-							/>
-						) : (
+						<OrderSummaryTsAndCs
+							productKey={productKey}
+							ratePlanKey={ratePlanKey}
+							ratePlanDescription={ratePlanDetail.label}
+							countryGroupId={countryGroupId}
+							thresholdAmount={thresholdAmount}
+							promotion={promotion}
+							deliveryDate={
+								isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+									? weeklyDeliveryDate
+									: undefined
+							}
+						/>
+					}
+					tsAndCsDMCCA={
+						isDMCCA ? (
 							<OrderSummaryTsAndCsDmcca
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}
 								ratePlanDescription={ratePlanDetail.label}
-								weeklyDeliveryDate={weeklyDeliveryDate}
+								weeklyGiftDeliveryDate={weeklyDeliveryDate}
 							/>
-						)
+						) : undefined
 					}
 					headerButton={
 						showBackButton && (
@@ -244,7 +245,6 @@ export default function CheckoutSummary({
 					supportRegionId={supportRegionId}
 					nudgeSettings={nudgeSettings}
 					landingPageSettings={landingPageSettings}
-					isDMCCA={isDMCCA}
 				/>
 			</BoxContents>
 		</Box>

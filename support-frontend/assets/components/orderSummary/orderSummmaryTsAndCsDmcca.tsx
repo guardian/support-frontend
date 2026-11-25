@@ -78,16 +78,16 @@ interface OrderSummaryTsAndCsDmccaProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	ratePlanDescription?: string;
-	weeklyDeliveryDate?: Date;
+	weeklyGiftDeliveryDate?: Date;
 }
 export function OrderSummaryTsAndCsDmcca({
 	productKey,
 	ratePlanKey,
 	ratePlanDescription,
-	weeklyDeliveryDate,
+	weeklyGiftDeliveryDate,
 }: OrderSummaryTsAndCsDmccaProps): JSX.Element | null {
 	const deliveryStart = isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-		? weeklyDeliveryDate
+		? weeklyGiftDeliveryDate
 		: getProductFirstDeliveryDate(
 				productKey,
 				ratePlanKey as ActivePaperProductOptions,

@@ -168,10 +168,10 @@ export type ContributionsOrderSummaryProps = {
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs: React.ReactNode;
+	tsAndCsDMCCA?: React.ReactNode;
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
 	nudgeSettings?: CheckoutNudgeSettings;
-	isDMCCA?: boolean;
 };
 
 export function ContributionsOrderSummary({
@@ -191,11 +191,12 @@ export function ContributionsOrderSummary({
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
+	tsAndCsDMCCA,
 	studentDiscount,
 	supportRegionId,
 	nudgeSettings,
-	isDMCCA,
 }: ContributionsOrderSummaryProps): JSX.Element {
+	const isDMCCA = !!tsAndCsDMCCA;
 	const { originalAmount } = payment;
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -318,11 +319,8 @@ export function ContributionsOrderSummary({
 				isIntroductoryPricing={promotion?.isIntroductoryPricing ?? false}
 				isDMCCA={isDMCCA}
 			/>
-			{!!tsAndCs && (
-				<div css={isDMCCA ? termsAndConditionsDmcca : termsAndConditions}>
-					{tsAndCs}
-				</div>
-			)}
+			{isDMCCA && <div css={termsAndConditionsDmcca}>{tsAndCsDMCCA}</div>}
+			{!isDMCCA && !!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 			{!isDMCCA && startDate && (
 				<div css={startDateWeeklyDigitalList}>{startDate}</div>
 			)}
