@@ -22,17 +22,19 @@ const mockWeeklyGiftCopy =
 beforeAll(() => {
 	jest.useFakeTimers().setSystemTime(mockDate);
 });
-
 afterAll(() => {
 	jest.useRealTimers();
 });
 
-const expectSummaryTsAndCs = (summaryTsAndCs: JSX.Element, copy?: string) => {
+const expectSummaryTsAndCs = (
+	summaryTsAndCs: JSX.Element | null,
+	copy?: string,
+) => {
+	const { container } = render(summaryTsAndCs);
 	if (copy === undefined) {
-		expect(summaryTsAndCs).toBeNull();
+		expect(container.firstChild).toBeNull();
 		return;
 	}
-	const { container } = render(summaryTsAndCs);
 	expect(container.textContent).toMatchSnapshot();
 	expect(container.textContent).toBe(copy);
 };
@@ -47,7 +49,8 @@ describe('dmcca orderSummaryTs&Cs Snapshot comparison', () => {
 	];
 
 	const orderSummaryProductKeys: OrderSummaryTestParams[] = [
-		// ['SupporterPlus', 'Monthly', undefined, undefined, undefined],
+		['SupporterPlus', 'Monthly', undefined, undefined, undefined],
+		['DigitalSubscription', 'Annual', undefined, undefined, undefined],
 		[
 			'GuardianWeeklyDomestic',
 			'MonthlyPlus',
