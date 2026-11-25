@@ -218,7 +218,8 @@ class StripeBackend(
     cloudWatchService.recordPaymentSuccess(paymentProvider)
 
     getOrCreateIdentityIdFromEmail(request.paymentData.email.value).map { identityUserDetails =>
-      paymentIntent.getCharges.getData.asScala.toList.headOption match {
+      val charge = paymentIntent.getCharges.getData.asScala.toList.headOption
+      charge match {
         case Some(charge) =>
           postPaymentTasks(
             request.paymentData.email.value,
@@ -236,10 +237,13 @@ class StripeBackend(
             PaymentProvider.Stripe,
             s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request",
           )
-          identityUserDetails
+          ()
       }
 
-      StripePaymentIntentsApiResponse.Success(identityUserDetails.map(_.userType))
+      StripePaymentIntentsApiResponse.Success(
+        identityUserDetails.map(_.userType),
+        charge.map(_.getId),
+      )
     }
   }
 

@@ -5,6 +5,22 @@ import org.scalatest.wordspec.AnyWordSpec
 import io.circe.parser.decode
 
 class SwitchesSpec extends AnyWordSpec with Matchers {
+  "FeatureSwitches" should {
+    "keep browser conversions disabled when only the audience switch is enabled" in {
+      val switches = decode[FeatureSwitches]("""{"enableMParticle":"On"}""").toOption.get
+
+      switches.enableMParticle mustBe Some(On)
+      switches.enableMParticleConversions mustBe None
+    }
+
+    "decode browser conversions independently of the audience switch" in {
+      val switches = decode[FeatureSwitches]("""{"enableMParticleConversions":"On"}""").toOption.get
+
+      switches.enableMParticle mustBe None
+      switches.enableMParticleConversions mustBe Some(On)
+    }
+  }
+
   "Switches" should {
     "decode json" in {
       val json =

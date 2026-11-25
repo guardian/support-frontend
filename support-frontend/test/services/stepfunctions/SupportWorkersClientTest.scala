@@ -3,6 +3,7 @@ package services.stepfunctions
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.CheckoutFailureState
 import com.gu.support.workers.{CheckoutFailureReasons, Status, User}
+import io.circe.Json
 import org.mockito.Mockito._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -14,7 +15,7 @@ import software.amazon.awssdk.services.sfn.model.StateExitedEventDetails
 import scala.util.{Failure, Success}
 
 object StatusResults {
-  val success = StatusResponse(Status.Success, "tracking123", None)
+  val success = StatusResponse(Status.Success, "tracking123", None, Some("A-S01073354"))
   def failure(reason: CheckoutFailureReason): StatusResponse =
     StatusResponse(Status.Failure, "tracking123", Some(reason))
   val pending = StatusResponse(Status.Pending, "tracking123", None)
@@ -34,7 +35,18 @@ class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSug
     val checkoutSuccessState = StateExitedEventDetails
       .builder()
       .name("CheckoutSuccess")
+      .output("checkout-success")
       .build()
+    when(mockStateWrapper.unWrap[Json]("checkout-success"))
+      .thenReturn(
+        Success(
+          Json.obj(
+            "sendThankYouEmailState" -> Json.obj(
+              "subscriptionNumber" -> Json.fromString("A-S01073354"),
+            ),
+          ),
+        ),
+      )
     val actual =
       checkoutStatus(
         List(failure, Success(fillerState), Success(checkoutSuccessState), failure),

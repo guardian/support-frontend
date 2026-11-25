@@ -6,6 +6,7 @@ echo "🔍 Running pre-push checks..."
 # Fail fast
 set -e
 
+pnpm --filter support-frontend prettier
 pnpm --filter support-frontend typecheck
 pnpm --filter support-frontend knip
 pnpm --filter support-frontend test

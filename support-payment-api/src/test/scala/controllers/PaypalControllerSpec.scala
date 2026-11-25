@@ -233,6 +233,10 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(enrichedPaymentServiceResponse)
           when(enrichedPaymentMock.email)
             .thenReturn(Some("a@b.com"))
+          when(enrichedPaymentMock.payment)
+            .thenReturn(paymentMock)
+          when(paymentMock.getId)
+            .thenReturn("PAY-3JE44966X7714540ELKLL2YY")
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
@@ -341,6 +345,10 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(enrichedPaymentServiceResponse)
           when(enrichedPaymentMock.email)
             .thenReturn(Some("a@b.com"))
+          when(enrichedPaymentMock.payment)
+            .thenReturn(paymentMock)
+          when(paymentMock.getId)
+            .thenReturn("PAY-3JE44966X7714540ELKLL2YY")
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")

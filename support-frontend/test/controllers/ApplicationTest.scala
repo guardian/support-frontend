@@ -7,7 +7,7 @@ import org.apache.pekko.util.Timeout
 import assets.AssetsResolver
 import com.gu.identity.auth.{DefaultAccessClaims, OktaAuthService}
 import com.gu.support.config._
-import config.{Identity, RecaptchaConfigProvider, StringsConfig}
+import config.{Identity, MParticleConversionsConfigProvider, RecaptchaConfigProvider, StringsConfig}
 import fixtures.TestCSRFComponents
 import io.circe.{Json, JsonObject}
 import org.mockito.ArgumentMatchers.any
@@ -93,6 +93,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     mock[TickerService],
     mock[MParticleClient],
     mock[PayPalCompletePaymentsConfigProvider],
+    mock[MParticleConversionsConfigProvider],
   )(mock[ExecutionContext])
 
   "/healthcheck" should {

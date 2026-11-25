@@ -53,7 +53,12 @@ class PaypalController(
         )
         .fold(
           err => toErrorResult(err),
-          payment => Ok(ResultBody.Success(ExecutePaymentResponse(payment.email))),
+          payment =>
+            Ok(
+              ResultBody.Success(
+                ExecutePaymentResponse(payment.email, Some(payment.payment.getId)),
+              ),
+            ),
         )
     }
     .withLogging(this.getClass.getCanonicalName, "executePayment")
