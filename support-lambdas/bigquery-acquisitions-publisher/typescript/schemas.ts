@@ -12,6 +12,7 @@ export const ProductTypeSchema = z.enum([
 	'APP_PREMIUM_TIER',
 	'GUARDIAN_AD_LITE',
 	'FEAST_APP',
+	'PATRON',
 ]);
 export type Product = z.infer<typeof ProductTypeSchema>;
 

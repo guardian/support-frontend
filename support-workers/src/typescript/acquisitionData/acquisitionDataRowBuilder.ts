@@ -25,7 +25,7 @@ type AcquisitionProduct =
 	| 'DIGITAL_SUBSCRIPTION'
 	| 'PRINT_SUBSCRIPTION'
 	| 'GUARDIAN_AD_LITE'
-	| 'PATRON_MEMBERSHIP';
+	| 'PATRON';
 type AcquisitionPaymentFrequency = 'MONTHLY' | 'QUARTERLY' | 'ANNUALLY';
 type AcquisitionPaymentProvider =
 	| 'STRIPE'
@@ -229,7 +229,7 @@ function productTypeAndAmount(product: ProductType): {
 		case 'GuardianAdLite':
 			return { product: 'GUARDIAN_AD_LITE' };
 		case 'Patron':
-			return { product: 'PATRON_MEMBERSHIP' };
+			return { product: 'PATRON' };
 	}
 }
 
