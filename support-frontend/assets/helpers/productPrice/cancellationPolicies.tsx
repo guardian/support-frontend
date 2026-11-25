@@ -326,9 +326,9 @@ export function getCancellationPolicy(
 	fullPrice: number,
 	promotion?: PromoWithCatalogInformation,
 	contribution?: number,
-): PolicyElement {
+): JSX.Element | undefined {
 	const isValidPromotion = promotion?.discount?.amount !== undefined;
-	return isValidPromotion
+	const cancellationPolicy = isValidPromotion
 		? getPromotionalCancellation(
 				productKey,
 				ratePlanKey,
@@ -337,4 +337,5 @@ export function getCancellationPolicy(
 				contribution,
 		  )
 		: getCancellation(productKey, ratePlanKey);
+	return cancellationPolicy[productKey]?.[ratePlanKey];
 }
