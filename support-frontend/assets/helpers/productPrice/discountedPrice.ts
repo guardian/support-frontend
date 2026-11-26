@@ -3,7 +3,7 @@ import type { discountDetailsSchema } from '@modules/promotions/v2/schema';
 import type { z } from 'zod';
 import { getNumberOfMonthsInPeriod } from './billingPeriods';
 
-type PromoDiscount = z.infer<typeof discountDetailsSchema>;
+export type PromoDiscount = z.infer<typeof discountDetailsSchema>;
 
 /**
  * Rounds a non-negative number to `decimalPlaces` using HALF_DOWN rounding
