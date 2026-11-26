@@ -58,6 +58,9 @@ describe('useDMCCLayout (Print & Digital)', () => {
 		${'US'} | ${'GuardianWeeklyRestOfWorld'} | ${false}              | ${false}
 		${'IE'} | ${'GuardianWeeklyRestOfWorld'} | ${true}               | ${false}
 		${'AU'} | ${'GuardianWeeklyRestOfWorld'} | ${true}               | ${false}
+		${'US'} | ${'GuardianWeeklyDomestic'}    | ${true}               | ${false}
+		${'IE'} | ${'GuardianWeeklyDomestic'}    | ${true}               | ${false}
+		${'AU'} | ${'GuardianWeeklyDomestic'}    | ${true}               | ${false}
 	`(
 		'should return $expected for country:$country when enableDMCCLayoutPrint',
 		({ country, productKey, enableDMCCLayoutPrint, expected }) => {
