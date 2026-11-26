@@ -64,11 +64,18 @@ export const getPromotionExpiryDate = (
 	return promotionExpiryDate;
 };
 
-const contributionMonthly = (fullPrice: number): string => {
-	return `This payment auto-renews monthly until you cancel. You can cancel your auto-renewal at any time. We will attempt to take payment of £${fullPrice}, on the ${getDateWithOrdinal(
+const contributionMonthly = (): string => {
+	return `This payment auto-renews monthly until you cancel. You can cancel your auto-renewal at any time. We will attempt to take payment on the ${getDateWithOrdinal(
 		new Date(),
-	)} day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
+	)} day of every month. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
 };
+
+const contributionAnnual = (): string => {
+	return `This payment auto-renews annually until you cancel. You can cancel your auto-renewal at any time. We will attempt to take payment on the ${getDateWithOrdinal(
+		new Date(),
+	)} day of every year. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
+};
+
 const digitalAndPrintMonthly = (fullPrice: number): string => {
 	return `Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 };
@@ -235,8 +242,8 @@ function getRenewalTerm(
 ): string | undefined {
 	const renewalTerms: Policy = {
 		Contribution: {
-			Monthly: contributionMonthly(fullPrice),
-			Annual: digitalAndPrintAnnual(fullPrice),
+			Monthly: contributionMonthly(),
+			Annual: contributionAnnual(),
 		},
 		GuardianAdLite: {
 			Monthly: digitalAndPrintMonthly(fullPrice),
