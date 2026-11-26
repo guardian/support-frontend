@@ -6,9 +6,10 @@ import type { App } from 'aws-cdk-lib';
 import { Duration } from 'aws-cdk-lib';
 import {
 	ComparisonOperator,
+	Metric,
 	TreatMissingData,
 } from 'aws-cdk-lib/aws-cloudwatch';
-import { Schedule } from 'aws-cdk-lib/aws-events';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
@@ -81,6 +82,36 @@ export class PlaySecretRotation extends GuStack {
 				'The ErrorCode and ErrorMessage message attributes give the reason. ' +
 				'Purge the queue once investigated or the alarm will remain in an alarm state.',
 			metric: deadLetterQueue.metricApproximateNumberOfMessagesVisible(),
+			threshold: 1,
+			evaluationPeriods: 1,
+			comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+			treatMissingData: TreatMissingData.NOT_BREACHING,
+			snsTopicName,
+			actionsEnabled: shouldAlarm,
+		});
+
+		// The Lambda DLQ can't see events EventBridge failed to deliver to Lambda (e.g. throttling),
+		// so alarm on the rule's FailedInvocations metric too
+		const rule = lambda.node.children.find(
+			(child): child is Rule => child instanceof Rule,
+		);
+		if (!rule) {
+			throw new Error('Scheduled rule not found for PlaySecretRotationLambda');
+		}
+
+		new GuAlarm(this, 'RuleFailedInvocationsAlarm', {
+			app,
+			alarmName: `The ${this.stage} ${app} schedule failed to invoke the lambda`,
+			alarmDescription:
+				'Impact - the support-frontend Play secret may not have been rotated. ' +
+				'EventBridge failed to deliver the scheduled event to the lambda, ' +
+				'so it will not appear in the dead letter queue or the lambda error metrics.',
+			metric: new Metric({
+				namespace: 'AWS/Events',
+				metricName: 'FailedInvocations',
+				dimensionsMap: { RuleName: rule.ruleName },
+				statistic: 'Sum',
+			}),
 			threshold: 1,
 			evaluationPeriods: 1,
 			comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
