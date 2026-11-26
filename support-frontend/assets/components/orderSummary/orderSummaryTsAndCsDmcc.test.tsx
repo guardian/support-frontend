@@ -104,7 +104,7 @@ describe('orderSummaryTs&Cs Dmcc Snapshot comparison', () => {
 		['HomeDelivery', 'Sunday', 'Observer', undefined, mockObserverDeliveryCopy],
 	];
 	it.each(orderSummaryProductKeys)(
-		`dmcca orderSummaryTs&Cs render product:%s/ratePlan:%s correctly (%s/%s)`,
+		`dmcca orderSummaryTs&Cs render product:%s/ratePlan:%s correctly (%s)`,
 		(
 			paymentProductKey,
 			activeRatePlanKey,
