@@ -2,7 +2,7 @@ import type { CountryCode } from '@modules/internationalisation/country';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import { useDMCCLayoutDigital, useDMCCLayoutPrint } from './useDMCCLayout';
+import { useDmccLayout } from './useDMCCLayout';
 
 jest.mock('contexts/FeatureSwitchesContext', () => ({
 	__esModule: true,
@@ -38,7 +38,7 @@ describe('useDMCCLayout (Print & Digital)', () => {
 				enableDMCCLayoutDigital: enableDMCCLayoutDigital as boolean,
 			} as ReturnType<typeof useFeatureSwitches>);
 			jest.spyOn(Country, 'detect').mockReturnValue(country as CountryCode);
-			expect(useDMCCLayoutDigital(productKey as ActiveProductKey)).toBe(
+			expect(useDmccLayout(productKey as ActiveProductKey).digitalDmcc).toBe(
 				expected,
 			);
 		},
@@ -68,7 +68,9 @@ describe('useDMCCLayout (Print & Digital)', () => {
 				enableDMCCLayoutPrint: enableDMCCLayoutPrint as boolean,
 			} as ReturnType<typeof useFeatureSwitches>);
 			jest.spyOn(Country, 'detect').mockReturnValue(country as CountryCode);
-			expect(useDMCCLayoutPrint(productKey as ActiveProductKey)).toBe(expected);
+			expect(useDmccLayout(productKey as ActiveProductKey).printDmcc).toBe(
+				expected,
+			);
 		},
 	);
 });
