@@ -6,8 +6,6 @@ exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs rend
 
 exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:GuardianWeeklyDomestic/ratePlan:QuarterlyPlus correctly (undefined/undefined) 1`] = `"Your first issue of Guardian Weekly will be Friday, December 4, 2026. Please allow 1 to 7 days after your start date for your magazine to arrive, depending on national post services.Your digital benefits will start today."`;
 
-exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:GuardianWeeklyDomestic/ratePlan:ThreeMonthGift correctly (undefined/2026-11-25T00:00:00.000Z) 1`] = `"Your Guardian Weekly gift subscription will start on Wednesday, November 25, 2026. The recipient should receive their first magazine 1 - 7 days after this issue date, depending on national post services."`;
-
 exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:GuardianWeeklyDomestic/ratePlan:ThreeMonthGift correctly (undefined/Wed Nov 25 2026 00:00:00 GMT+0000 (Greenwich Mean Time)) 1`] = `"Your Guardian Weekly gift subscription will start on Wednesday, November 25, 2026. The recipient should receive their first magazine 1 - 7 days after this issue date, depending on national post services."`;
 
 exports[`orderSummaryTs&Cs Dmcc Snapshot comparison dmcca orderSummaryTs&Cs render product:GuardianWeeklyDomestic/ratePlan:ThreeMonthGift correctly (undefined/undefined) 1`] = `""`;
