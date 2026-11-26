@@ -30,8 +30,9 @@ export function isPrintProduct(productKey: ActiveProductKey): boolean {
 }
 
 const dmccPrintProductsKeys: ActiveProductKey[] = [
-	...paperProductsKeys,
-	...['GuardianWeeklyDomestic' as ActiveProductKey], // GBPCountries only
+	'HomeDelivery',
+	'SubscriptionCard',
+	'GuardianWeeklyDomestic', // GBPCountries only
 ];
 
 export function isDMCCPrintProduct(productKey: ActiveProductKey): boolean {
