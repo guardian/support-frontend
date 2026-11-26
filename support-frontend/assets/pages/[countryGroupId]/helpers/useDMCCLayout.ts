@@ -6,20 +6,24 @@ import {
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
-export const useDMCCLayoutDigital = (productKey: ActiveProductKey): boolean => {
-	const { enableDMCCLayoutDigital } = useFeatureSwitches();
-	return (
-		enableDMCCLayoutDigital &&
-		!isPrintProduct(productKey) &&
-		Country.detect() === 'GB'
-	);
+type DmccLayouts = {
+	digitalDmcc: boolean;
+	printDmcc: boolean;
 };
-
-export const useDMCCLayoutPrint = (productKey: ActiveProductKey): boolean => {
-	const { enableDMCCLayoutPrint } = useFeatureSwitches();
-	return (
-		enableDMCCLayoutPrint &&
+export const useDmccLayout = (productKey: ActiveProductKey): DmccLayouts => {
+	const { enableDMCCLayoutDigital, enableDMCCLayoutPrint } =
+		useFeatureSwitches();
+	const isPrintDmcc =
+		Boolean(enableDMCCLayoutPrint) &&
 		isDMCCPrintProduct(productKey) &&
-		Country.detect() === 'GB'
-	);
+		Country.detect() === 'GB';
+	const isDigitalDmcc =
+		Boolean(enableDMCCLayoutDigital) &&
+		!isPrintProduct(productKey) &&
+		Country.detect() === 'GB';
+
+	return {
+		digitalDmcc: isDigitalDmcc,
+		printDmcc: isPrintDmcc,
+	};
 };

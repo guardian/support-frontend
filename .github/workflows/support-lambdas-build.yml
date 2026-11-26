@@ -172,5 +172,6 @@ jobs:
           contentDirectories: |
             cfn:
               - ./cdk/cdk.out/PlaySecretRotation-CODE.template.json
+              - ./cdk/cdk.out/PlaySecretRotation-PROD.template.json
             play-secret-rotation:
               - ./support-lambdas/play-secret-rotation/target/typescript/index.zip

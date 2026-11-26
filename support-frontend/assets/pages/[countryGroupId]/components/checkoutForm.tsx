@@ -90,6 +90,7 @@ import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheck
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
+import { useDmccLayout } from '../helpers/useDMCCLayout';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
@@ -194,6 +195,8 @@ export default function CheckoutForm({
 
 	const { print, digital } = dmcc;
 	const isDmcc = print || digital;
+	const { digitalDmcc, printDmcc } = useDmccLayout(productKey);
+	const isDmcc = printDmcc || digitalDmcc;
 
 	const abParticipations = useAbParticipations();
 
