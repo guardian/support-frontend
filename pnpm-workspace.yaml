@@ -3,6 +3,7 @@ packages:
   - support-backend
   - cdk
   - support-lambdas/bigquery-acquisitions-publisher
+  - support-lambdas/play-secret-rotation
   - support-e2e
   - support-workers
   - modules
