@@ -19,13 +19,12 @@ export function CancellationPolicy({
 	promotion,
 	contribution,
 }: CancellationPolicyProps): JSX.Element | null {
-	return (
-		getCancellationPolicy(
-			productKey,
-			ratePlanKey,
-			amount,
-			promotion,
-			contribution,
-		)[productKey]?.[ratePlanKey] ?? null
+	const policy = getCancellationPolicy(
+		productKey,
+		ratePlanKey,
+		amount,
+		promotion,
+		contribution,
 	);
+	return policy ? <p>{policy}</p> : null;
 }

@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
 import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import {
 	contributionsTermsLinks,
@@ -19,10 +17,6 @@ import type {
 import { textLink } from 'helpers/utilities/textLink';
 import { ratePlanToBillingPeriod } from './billingPeriods';
 import { getPromotionDiscountedPrice } from './promotionPricing';
-
-const marginTop = css`
-	margin-top: ${space[2]}px;
-`;
 
 const getTerms = (
 	copy: string,
@@ -57,72 +51,72 @@ const digitalMonthly = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
-	<p css={marginTop}>
+	<>
 		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
 		within 14 days of sign-up and receive a full refund. See more about your
 		cooling-off rights in your full pre-contract information{' '}
 		{getTerms('here', productKey, ratePlanKey)}.
-	</p>
+	</>
 );
 const digitalAnnual = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
-	<p css={marginTop}>
+	<>
 		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
 		within 14 days of sign-up or each renewal and receive a full refund of your
 		last payment. See more about your cooling-off rights in your full
 		pre-contract information {getTerms('here', productKey, ratePlanKey)}.
-	</p>
+	</>
 );
 const studentAnnual = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
-	<p css={marginTop}>
+	<>
 		You may cancel your All-access digital subscription within 14 days of taking
 		out the subscription. If you do, you'll receive a full refund and your
 		subscription will stop immediately. To cancel, go to{' '}
 		{textLink('Manage My Account', manageAccountLink)} or see our{' '}
 		{getTerms('terms', productKey, ratePlanKey)}. This subscription does not
 		auto-renew.
-	</p>
+	</>
 );
 const printMonthly = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
-	<p css={marginTop}>
+	<>
 		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
 		within 14 days of receiving your{' '}
 		{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
 		and receive a full refund. See more about your cooling-off rights in your
 		full pre-contract information {getTerms('here', productKey, ratePlanKey)}.
-	</p>
+	</>
 );
 const printAnnual = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
-	<p css={marginTop}>
+	<>
 		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
 		within 14 days of receiving your{' '}
 		{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
 		and receive a full refund. See more about your cooling-off rights in your
 		full pre-contract information {getTerms('here', productKey, ratePlanKey)}.
-	</p>
+	</>
 );
 const printGift = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
-	<p css={marginTop}>
+	<>
 		By proceeding, you are agreeing to our{' '}
 		{getTerms('Terms & Conditions', productKey, ratePlanKey)}. This subscription
 		does not auto-renew. If you cancel within 14 days of sign-up, you'll receive
 		a full refund. To cancel within 14 days of sign-up and receive a refund
 		contact {textLink('Customer Service', guardianHelpCentreLink)}.
-	</p>
+	</>
 );
 
 const promotionDigitalMonthly = (
@@ -133,15 +127,15 @@ const promotionDigitalMonthly = (
 ): JSX.Element => {
 	const validContribution =
 		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
-	const firstPayment = amount + validContribution;
+	const firstPayment = Math.round((amount + validContribution) * 100) / 100;
 	return (
-		<p css={marginTop}>
+		<>
 			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
 			within 14 days of sign-up or your first payment at £{firstPayment} and
 			receive a full refund of your last payment. See more about your
 			cooling-off rights in your full pre-contract information{' '}
 			{getTerms('here', productKey, ratePlanKey)}.
-		</p>
+		</>
 	);
 };
 const promotionPrintAnnual = (
@@ -154,14 +148,14 @@ const promotionPrintAnnual = (
 		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
 	const firstPayment = amount + validContribution;
 	return (
-		<p css={marginTop}>
+		<>
 			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
 			within 14 days of receiving your{' '}
 			{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
 			or your first payment at £{firstPayment} and receive a full refund of that
 			payment. See more about your cooling-off rights in your full pre-contract
 			information {getTerms('here', productKey, ratePlanKey)}.
-		</p>
+		</>
 	);
 };
 const promotionObserverMonthly = (
@@ -169,13 +163,13 @@ const promotionObserverMonthly = (
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => {
 	return (
-		<p css={marginTop}>
+		<>
 			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
 			within 14 days of receiving your{' '}
 			{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
 			and receive a full refund. See more about your cooling-off rights in your
 			full pre-contract information {getTerms('here', productKey, ratePlanKey)}.
-		</p>
+		</>
 	);
 };
 
@@ -332,9 +326,9 @@ export function getCancellationPolicy(
 	fullPrice: number,
 	promotion?: PromoWithCatalogInformation,
 	contribution?: number,
-): PolicyElement {
+): JSX.Element | undefined {
 	const isValidPromotion = promotion?.discount?.amount !== undefined;
-	return isValidPromotion
+	const cancellationPolicy = isValidPromotion
 		? getPromotionalCancellation(
 				productKey,
 				ratePlanKey,
@@ -343,4 +337,5 @@ export function getCancellationPolicy(
 				contribution,
 		  )
 		: getCancellation(productKey, ratePlanKey);
+	return cancellationPolicy[productKey]?.[ratePlanKey];
 }

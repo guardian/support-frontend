@@ -226,6 +226,7 @@ const expectPolicy = (
 	}
 
 	const { container } = render(policy);
+	expect(container.textContent).toMatchSnapshot();
 	expect(container.textContent).toBe(copy);
 	expect(
 		screen.getByRole('link', { name: /^(here|terms|Terms & Conditions)$/ }),
@@ -243,7 +244,7 @@ describe('getCancellationPolicy', () => {
 		(product, ratePlan, copy, _promotionalCopy, termsLink) => {
 			const { fullPrice } = getTestPricesAndPromotion(product, ratePlan);
 			const result = getCancellationPolicy(product, ratePlan, fullPrice);
-			expectPolicy(result[product]?.[ratePlan], copy, termsLink);
+			expectPolicy(result, copy, termsLink);
 		},
 	);
 
@@ -260,7 +261,7 @@ describe('getCancellationPolicy', () => {
 				fullPrice,
 				promotion,
 			);
-			expectPolicy(result[product]?.[ratePlan], promotionalCopy, termsLink);
+			expectPolicy(result, promotionalCopy, termsLink);
 		},
 	);
 
@@ -289,7 +290,7 @@ describe('getCancellationPolicy', () => {
 				promotion,
 				contribution,
 			);
-			expectPolicy(result[product]?.[ratePlan], promotionalCopy, termsLink);
+			expectPolicy(result, promotionalCopy, termsLink);
 		},
 	);
 });
