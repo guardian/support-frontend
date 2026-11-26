@@ -84,6 +84,7 @@ case class RecurringPaymentMethodSwitches(
     payPal: Option[SwitchState],
     directDebit: Option[SwitchState],
     stripeHostedCheckout: Option[SwitchState],
+    stripeExpressCheckoutUK: Option[SwitchState],
 )
 
 object RecurringPaymentMethodSwitches {

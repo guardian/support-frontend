@@ -42,6 +42,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(Off),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -62,6 +63,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(Off),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -78,6 +80,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(Off),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -97,6 +100,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -116,6 +120,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -135,6 +140,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -150,6 +156,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(Off),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -168,6 +175,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(Off),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -191,6 +199,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -208,6 +217,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -228,6 +238,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -244,6 +255,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -263,6 +275,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -282,6 +295,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -301,6 +315,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -316,6 +331,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -334,6 +350,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -357,6 +374,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -771,6 +789,7 @@ object TestData {
         payPal = Some(On),
         directDebit = Some(On),
         stripeHostedCheckout = Some(Off),
+        stripeExpressCheckoutUK = Some(Off),
       ),
   ): Switches = Switches(
     OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),
