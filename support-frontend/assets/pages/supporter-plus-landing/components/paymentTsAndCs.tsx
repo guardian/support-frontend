@@ -27,6 +27,7 @@ import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import { useDMCCLayout } from 'pages/[countryGroupId]/helpers/useDMCCLayout';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
@@ -150,6 +151,7 @@ export function PaymentTsAndCs({
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
+	const enableDMCCALayout = useDMCCLayout();
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
@@ -356,7 +358,7 @@ export function PaymentTsAndCs({
 	return (
 		<div css={container}>
 			<FinePrint mobileTheme={'dark'}>
-				{paymentTsAndCs[productKey]}
+				{!enableDMCCALayout && paymentTsAndCs[productKey]}
 				<FooterTsAndCs
 					productKey={productKey}
 					ratePlanKey={ratePlanKey}
