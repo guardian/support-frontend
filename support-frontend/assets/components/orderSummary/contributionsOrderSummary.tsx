@@ -32,12 +32,14 @@ import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import { useDMCCLayout } from 'pages/[countryGroupId]/helpers/useDMCCLayout';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import {
 	isContributionOnlyProduct,
 	isGuardianWeeklyDigitalProduct,
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
+	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -63,6 +65,10 @@ const rowSpacing = css`
 			margin-bottom: ${space[6]}px;
 		}
 	}
+`;
+
+const priceRowSpacing = css`
+	margin-top: ${space[8]}px;
 `;
 
 const headingRow = css`
@@ -122,6 +128,11 @@ const detailsSection = css`
 	}
 `;
 
+const subscriptionStartAndDelivery = css`
+	${textSans15};
+	color: ${neutral[38]};
+	margin-top: ${space[3]}px;
+`;
 const termsAndConditions = css`
 	${textSans15};
 	color: ${neutral[7]};
@@ -188,6 +199,7 @@ export function ContributionsOrderSummary({
 	supportRegionId,
 	nudgeSettings,
 }: ContributionsOrderSummaryProps): JSX.Element {
+	const enableDMCCALayout = useDMCCLayout();
 	const { originalAmount } = payment;
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -294,7 +306,6 @@ export function ContributionsOrderSummary({
 					</>
 				)}
 			</div>
-
 			<hr css={hrCss} />
 			<PriceBreakdown
 				weeklyPrice={weeklyPrice}
@@ -309,7 +320,16 @@ export function ContributionsOrderSummary({
 				billingPeriod={billingPeriod}
 				isIntroductoryPricing={promotion?.isIntroductoryPricing ?? false}
 			/>
-			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
+
+			{enableDMCCALayout && isPrintProduct(productKey) && (
+				<div css={subscriptionStartAndDelivery}>{tsAndCs}</div>
+			)}
+			{!enableDMCCALayout && (
+				<div css={priceRowSpacing}>
+					{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
+				</div>
+			)}
+
 			{startDate && <div css={startDateWeeklyDigitalList}>{startDate}</div>}
 			{nudgeSettings && (
 				<CheckoutNudgeSelector

@@ -12,6 +12,13 @@ jest.mock('pages/[countryGroupId]/checkout/helpers/deliveryDays', () => ({
 	getProductFirstDeliveryDate: () => 'Sunday, September 21, 2025',
 }));
 
+// Mocking FeatureSwitchProvider
+jest.mock('contexts/FeatureSwitchesContext', () => ({
+	useFeatureSwitches: () => ({
+		enableDMCCLayout: false,
+	}),
+}));
+
 const oneYearStudentDiscount = {
 	amount: 9,
 	periodNoun: 'year',

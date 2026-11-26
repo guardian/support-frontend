@@ -701,6 +701,7 @@ export default function CheckoutForm({
 				}
 		  `
 		: css``;
+
 	return (
 		<>
 			<form

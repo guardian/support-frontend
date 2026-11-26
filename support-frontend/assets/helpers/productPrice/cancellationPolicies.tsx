@@ -74,12 +74,11 @@ const studentAnnual = (
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
 	<>
-		You may cancel your All-access digital subscription within 14 days of taking
-		out the subscription. If you do, you'll receive a full refund and your
-		subscription will stop immediately. To cancel, go to{' '}
+		This subscription does not auto-renew. If you cancel within 14 days of
+		sign-up, you will receive a full refund and your subscription will stop
+		immediately. To cancel, go to{' '}
 		{textLink('Manage My Account', manageAccountLink)} or see our{' '}
-		{getTerms('terms', productKey, ratePlanKey)}. This subscription does not
-		auto-renew.
+		{getTerms('terms', productKey, ratePlanKey)}.
 	</>
 );
 const printMonthly = (
@@ -106,16 +105,12 @@ const printAnnual = (
 		full pre-contract information {getTerms('here', productKey, ratePlanKey)}.
 	</>
 );
-const printGift = (
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-): JSX.Element => (
+const printGift = (): JSX.Element => (
 	<>
-		By proceeding, you are agreeing to our{' '}
-		{getTerms('Terms & Conditions', productKey, ratePlanKey)}. This subscription
-		does not auto-renew. If you cancel within 14 days of sign-up, you'll receive
-		a full refund. To cancel within 14 days of sign-up and receive a refund
-		contact {textLink('Customer Service', guardianHelpCentreLink)}.
+		This subscription does not auto-renew. If you cancel within 14 days of
+		sign-up, you'll receive a full refund and your subscription will stop
+		immediately. To cancel contact{' '}
+		{textLink('Customer Service', guardianHelpCentreLink)}.
 	</>
 );
 
@@ -202,15 +197,15 @@ const getCancellation = (
 			MonthlyPlus: printMonthly(productKey, ratePlanKey),
 			QuarterlyPlus: printMonthly(productKey, ratePlanKey),
 			AnnualPlus: printAnnual(productKey, ratePlanKey),
-			ThreeMonthGift: printGift(productKey, ratePlanKey),
-			OneYearGift: printGift(productKey, ratePlanKey),
+			ThreeMonthGift: printGift(),
+			OneYearGift: printGift(),
 		},
 		GuardianWeeklyRestOfWorld: {
 			MonthlyPlus: printMonthly(productKey, ratePlanKey),
 			QuarterlyPlus: printMonthly(productKey, ratePlanKey),
 			AnnualPlus: printAnnual(productKey, ratePlanKey),
-			ThreeMonthGift: printGift(productKey, ratePlanKey),
-			OneYearGift: printGift(productKey, ratePlanKey),
+			ThreeMonthGift: printGift(),
+			OneYearGift: printGift(),
 		},
 		SubscriptionCard: {
 			EverydayPlus: printMonthly(productKey, ratePlanKey),
@@ -273,15 +268,15 @@ const promotionalCancellation = (
 			MonthlyPlus: promoPrintAnnual,
 			QuarterlyPlus: promoPrintAnnual,
 			AnnualPlus: promoPrintAnnual,
-			ThreeMonthGift: printGift(productKey, ratePlanKey),
-			OneYearGift: printGift(productKey, ratePlanKey),
+			ThreeMonthGift: printGift(),
+			OneYearGift: printGift(),
 		},
 		GuardianWeeklyRestOfWorld: {
 			MonthlyPlus: promoPrintAnnual,
 			QuarterlyPlus: promoPrintAnnual,
 			AnnualPlus: promoPrintAnnual,
-			ThreeMonthGift: printGift(productKey, ratePlanKey),
-			OneYearGift: printGift(productKey, ratePlanKey),
+			ThreeMonthGift: printGift(),
+			OneYearGift: printGift(),
 		},
 		SubscriptionCard: {
 			EverydayPlus: promoPrintAnnual,

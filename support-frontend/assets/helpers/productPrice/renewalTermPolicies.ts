@@ -65,7 +65,7 @@ export const getPromotionExpiryDate = (
 };
 
 const contributionMonthly = (fullPrice: number): string => {
-	return `We will attempt to take payment of £${fullPrice}, on the ${getDateWithOrdinal(
+	return `This payment auto-renews monthly until you cancel. You can cancel your auto-renewal at any time. We will attempt to take payment of £${fullPrice}, on the ${getDateWithOrdinal(
 		new Date(),
 	)} day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
 };

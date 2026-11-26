@@ -10,6 +10,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
+import { FeatureSwitchesProvider } from 'contexts/FeatureSwitchesContext';
 import {
 	getProductLabel,
 	productCatalogDescription,
@@ -82,20 +83,22 @@ export default {
 	},
 	decorators: [
 		(Story: React.FC): JSX.Element => (
-			<Columns
-				collapseUntil="tablet"
-				cssOverrides={css`
-					width: 100%;
-				`}
-			>
-				<Column span={[1, 8, 7]}>
-					<Box>
-						<BoxContents>
-							<Story />
-						</BoxContents>
-					</Box>
-				</Column>
-			</Columns>
+			<FeatureSwitchesProvider>
+				<Columns
+					collapseUntil="tablet"
+					cssOverrides={css`
+						width: 100%;
+					`}
+				>
+					<Column span={[1, 8, 7]}>
+						<Box>
+							<BoxContents>
+								<Story />
+							</BoxContents>
+						</Box>
+					</Column>
+				</Columns>
+			</FeatureSwitchesProvider>
 		),
 		withCenterAlignment,
 		withSourceReset,

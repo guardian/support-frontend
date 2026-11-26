@@ -1,3 +1,4 @@
+import { FeatureSwitchesProvider } from 'contexts/FeatureSwitchesContext';
 import type { PaymentTsAndCsProps } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 
@@ -25,7 +26,11 @@ const auStudentDiscount = {
 };
 
 function Template(args: PaymentTsAndCsProps) {
-	return <PaymentTsAndCs {...args} />;
+	return (
+		<FeatureSwitchesProvider>
+			<PaymentTsAndCs {...args} />
+		</FeatureSwitchesProvider>
+	);
 }
 
 Template.args = {} as Omit<PaymentTsAndCsProps, ''>;
