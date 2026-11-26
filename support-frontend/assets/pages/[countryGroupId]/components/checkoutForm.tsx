@@ -74,7 +74,6 @@ import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import type { Dmcc } from '../checkout';
 import type { BillingStatePostcodeCountry } from '../checkout/components/BillingAddressFields';
 import { PersonalAddressFields } from '../checkout/components/PersonalAddressFields';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
@@ -90,7 +89,7 @@ import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheck
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
-import { useDmccLayout } from '../helpers/useDMCCLayout';
+import type { DmccLayouts } from '../helpers/useDMCCLayout';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
@@ -160,7 +159,7 @@ type CheckoutFormProps = {
 	billingState: string;
 	setBillingState: (value: string) => void;
 	taxRateConfig: TaxRateConfig;
-	dmcc: Dmcc;
+	dmcc: DmccLayouts;
 };
 
 export default function CheckoutForm({
@@ -193,9 +192,7 @@ export default function CheckoutForm({
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
 
-	const { print, digital } = dmcc;
-	const isDmcc = print || digital;
-	const { digitalDmcc, printDmcc } = useDmccLayout(productKey);
+	const { digitalDmcc, printDmcc } = dmcc;
 	const isDmcc = printDmcc || digitalDmcc;
 
 	const abParticipations = useAbParticipations();

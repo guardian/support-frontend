@@ -31,7 +31,6 @@ import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNud
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import type { Dmcc } from '../checkout';
 import {
 	addSourceContextToPath,
 	buildBackButtonPath,
@@ -40,6 +39,7 @@ import {
 	getBenefitsChecklist,
 	getProductBenefitsChecklist,
 } from '../checkout/helpers/benefitsChecklist';
+import type { DmccLayouts } from '../helpers/useDMCCLayout';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
@@ -66,7 +66,7 @@ type CheckoutSummaryProps = {
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
 	nudgeSettings?: CheckoutNudgeSettings;
-	dmcc: Dmcc;
+	dmcc: DmccLayouts;
 };
 
 export default function CheckoutSummary({
@@ -209,7 +209,7 @@ export default function CheckoutSummary({
 						) : undefined
 					}
 					tsAndCs={
-						!dmcc.digital ? (
+						!dmcc.digitalDmcc ? (
 							<OrderSummaryTsAndCs
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}
@@ -226,7 +226,7 @@ export default function CheckoutSummary({
 						) : null
 					}
 					tsAndCsDmcc={
-						dmcc.print ? (
+						dmcc.printDmcc ? (
 							<OrderSummaryTsAndCsDmcca
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}

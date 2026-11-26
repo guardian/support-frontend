@@ -44,10 +44,7 @@ import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
 import GuardianPageLayout from './components/GuardianPageLayout';
 import CurrentMaxRatesByCountry from './helpers/CurrentMaxRatesByCountry';
-import {
-	useDMCCLayoutDigital,
-	useDMCCLayoutPrint,
-} from './helpers/useDMCCLayout';
+import { useDmccLayout } from './helpers/useDMCCLayout';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
@@ -55,11 +52,6 @@ type Props = {
 	appConfig: AppConfig;
 	landingPageSettings: LandingPageVariant;
 	nudgeSettings?: CheckoutNudgeSettings;
-};
-
-export type Dmcc = {
-	print: boolean;
-	digital: boolean;
 };
 
 const countryId: CountryCode = Country.detect();
@@ -286,10 +278,7 @@ export function Checkout({
 		supportRegionId,
 	);
 
-	const dmcc = {
-		print: useDMCCLayoutPrint(productKey),
-		digital: useDMCCLayoutDigital(productKey),
-	};
+	const dmcc = useDmccLayout(productKey);
 
 	return (
 		<ThemeProvider theme={theme}>
