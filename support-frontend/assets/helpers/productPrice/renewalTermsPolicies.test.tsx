@@ -1,4 +1,5 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import { render, screen } from '@testing-library/react';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -17,7 +18,7 @@ const contributionMonthly = (fullPrice: number) =>
 		new Date(),
 	)} day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
 const digitalAndPrintMonthly = (fullPrice: number) =>
-	`Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
+	`Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 const digitalAndPrintAnnual = (fullPrice: number) =>
 	`Subscription auto-renews annually. Pay £${fullPrice}/year, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
 		fullPrice,
@@ -67,6 +68,26 @@ const promotionAnnual = (
 		BillingPeriod.Annual,
 	)}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 
+const expectPolicy = (
+	policy: JSX.Element | undefined,
+	copy?: string,
+	termsLink?: string,
+) => {
+	if (copy === undefined) {
+		expect(policy).toBeUndefined();
+		return;
+	}
+
+	const { container } = render(policy);
+	expect(container.textContent).toMatchSnapshot();
+	expect(container.textContent).toBe(copy);
+	if (termsLink) {
+		expect(
+			screen.getByRole('link', { name: /^(here|terms|Terms & Conditions)$/ }),
+		).toHaveAttribute('href', termsLink);
+	}
+};
+
 describe('getRenewalTermPolicyCopy', () => {
 	it.each([
 		['Contribution', 'Monthly', contributionMonthly],
@@ -93,13 +114,12 @@ describe('getRenewalTermPolicyCopy', () => {
 		'renewal term for product:%s ratePlan:%s',
 		(product, ratePlan, policy) => {
 			const { fullPrice } = getTestPricesAndPromotion(product, ratePlan);
-			const result =
-				getRenewalTermPolicy(
-					product as ActiveProductKey,
-					ratePlan as ActiveRatePlanKey,
-					fullPrice,
-				) ?? '';
-			expect(result).toBe(policy(fullPrice));
+			const result = getRenewalTermPolicy(
+				product as ActiveProductKey,
+				ratePlan as ActiveRatePlanKey,
+				fullPrice,
+			);
+			expectPolicy(result, policy(fullPrice));
 		},
 	);
 
@@ -143,7 +163,8 @@ describe('getRenewalTermPolicyCopy', () => {
 				ratePlan,
 				promotion.discount?.durationMonths ?? 0,
 			);
-			expect(result).toBe(
+			expectPolicy(
+				result,
 				policy(fullPrice, discountedPrice, formatUserDate(expiry)),
 			);
 		},
@@ -175,7 +196,8 @@ describe('getRenewalTermPolicyCopy', () => {
 				promotion,
 				contribution,
 			);
-			expect(result).toBe(
+			expectPolicy(
+				result,
 				policy(
 					fullPrice + contribution,
 					discountedPrice + contribution,
