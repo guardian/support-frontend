@@ -122,3 +122,55 @@ jobs:
               - ./cdk/cdk.out
             bigquery-acquisitions-publisher:
               - ./support-lambdas/bigquery-acquisitions-publisher/target/typescript/index.zip
+
+  support_lambdas_typescripts_play_secret_rotation:
+    if: >-
+      (github.actor != 'dependabot[bot]') &&
+        (github.repository_owner == 'guardian' ||
+          github.event_name == 'push')
+
+    # Required by actions-assume-aws-role
+    permissions:
+      id-token: write
+      contents: read
+
+    name: support-lambdas-play-secret-rotation build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
+
+      - name: Build CFN from CDK
+        run: ./script/ci
+        working-directory: cdk
+
+      - run: pnpm --filter play-secret-rotation tsc
+
+      - run: pnpm --filter play-secret-rotation prettier
+
+      - run: pnpm --filter play-secret-rotation lint
+
+      - run: pnpm --filter play-secret-rotation test
+
+      - run: pnpm --filter play-secret-rotation build
+
+      - run: zip -qr index.zip ./*.js
+        working-directory: support-lambdas/play-secret-rotation/target/typescript
+
+      - name: Upload to Riff-Raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          projectName: "support:lambdas:play-secret-rotation"
+          buildNumberOffset: 15000
+          configPath: "support-lambdas/play-secret-rotation/riff-raff.yaml"
+          commentingEnabled: "false"
+          contentDirectories: |
+            cfn:
+              - ./cdk/cdk.out/PlaySecretRotation-CODE.template.json
+            play-secret-rotation:
+              - ./support-lambdas/play-secret-rotation/target/typescript/index.zip

@@ -25,6 +25,6 @@ export function CancellationPolicy({
 		amount,
 		promotion,
 		contribution,
-	)[productKey]?.[ratePlanKey];
+	);
 	return policy ? <p>{policy}</p> : null;
 }

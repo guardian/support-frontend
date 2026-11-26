@@ -5,6 +5,7 @@ import { Backend } from '../lib/backend';
 import { BigqueryAcquisitionsPublisher } from '../lib/bigquery-acquisitions-publisher';
 import { Frontend } from '../lib/frontend';
 import { PaymentApi } from '../lib/payment-api';
+import { PlaySecretRotation } from '../lib/play-secret-rotation';
 import { StripePatronsData } from '../lib/stripe-patrons-data';
 import { SupportWorkers } from '../lib/support-workers';
 
@@ -125,6 +126,11 @@ new BigqueryAcquisitionsPublisher(app, 'BigqueryAcquisitionsPublisher-CODE', {
 new BigqueryAcquisitionsPublisher(app, 'BigqueryAcquisitionsPublisher-PROD', {
 	stack: 'support',
 	stage: 'PROD',
+});
+
+new PlaySecretRotation(app, 'PlaySecretRotation-CODE', {
+	stack: 'support',
+	stage: 'CODE',
 });
 
 new SupportWorkers(app, 'SupportWorkers-CODE', {
