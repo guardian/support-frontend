@@ -89,7 +89,7 @@ import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheck
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
-import { useDMCCLayout } from '../helpers/useDMCCLayout';
+import { useDmccLayout } from '../helpers/useDMCCLayout';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
@@ -189,7 +189,9 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
-	const isDMCCA = useDMCCLayout();
+	const { digitalDmcc, printDmcc } = useDmccLayout(productKey);
+	const isDmcc = printDmcc || digitalDmcc;
+
 	const abParticipations = useAbParticipations();
 
 	const productCatalog = appConfig.productCatalog;
@@ -684,15 +686,15 @@ export default function CheckoutForm({
 
 	const automaticSimilarProductsConsent = countryId === 'US';
 
-	const spacingSubmit = isDMCCA ? 6 : 8;
-	const marginMarketingConsent = isDMCCA
+	const spacingSubmit = isDmcc ? 6 : 8;
+	const marginMarketingConsent = isDmcc
 		? css`
 				margin-top: ${space[6]}px;
 		  `
 		: css`
 				margin: ${space[6]}px 0;
 		  `;
-	const paddingSimilarProductConsent = isDMCCA
+	const paddingSimilarProductConsent = isDmcc
 		? css`
 				> div {
 					padding: 10px 0 0 0;
@@ -1251,7 +1253,7 @@ export default function CheckoutForm({
 									/>
 								)}
 						</div>
-						{isDMCCA ? (
+						{isDmcc ? (
 							<PreContractInformation
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}
