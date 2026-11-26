@@ -133,6 +133,11 @@ new PlaySecretRotation(app, 'PlaySecretRotation-CODE', {
 	stage: 'CODE',
 });
 
+new PlaySecretRotation(app, 'PlaySecretRotation-PROD', {
+	stack: 'support',
+	stage: 'PROD',
+});
+
 new SupportWorkers(app, 'SupportWorkers-CODE', {
 	stack: 'support',
 	stage: 'CODE',
