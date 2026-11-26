@@ -194,7 +194,7 @@ export default function CheckoutForm({
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
 	const isDMCCPrint = useDMCCLayoutPrint(productKey);
 	const isDMCCDigital = useDMCCLayoutDigital(productKey);
-	const isDMCCA = isDMCCPrint || isDMCCDigital;
+	const isDmcc = isDMCCPrint || isDMCCDigital;
 
 	const abParticipations = useAbParticipations();
 
@@ -690,15 +690,15 @@ export default function CheckoutForm({
 
 	const automaticSimilarProductsConsent = countryId === 'US';
 
-	const spacingSubmit = isDMCCA ? 6 : 8;
-	const marginMarketingConsent = isDMCCA
+	const spacingSubmit = isDmcc ? 6 : 8;
+	const marginMarketingConsent = isDmcc
 		? css`
 				margin-top: ${space[6]}px;
 		  `
 		: css`
 				margin: ${space[6]}px 0;
 		  `;
-	const paddingSimilarProductConsent = isDMCCA
+	const paddingSimilarProductConsent = isDmcc
 		? css`
 				> div {
 					padding: 10px 0 0 0;
@@ -1257,7 +1257,7 @@ export default function CheckoutForm({
 									/>
 								)}
 						</div>
-						{isDMCCA ? (
+						{isDmcc ? (
 							<PreContractInformation
 								productKey={productKey}
 								ratePlanKey={ratePlanKey}
