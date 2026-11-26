@@ -209,19 +209,21 @@ export default function CheckoutSummary({
 						) : undefined
 					}
 					tsAndCs={
-						<OrderSummaryTsAndCs
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							ratePlanDescription={ratePlanDetail.label}
-							countryGroupId={countryGroupId}
-							thresholdAmount={thresholdAmount}
-							promotion={promotion}
-							deliveryDate={
-								isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-									? weeklyDeliveryDate
-									: undefined
-							}
-						/>
+						!dmcc.digital ? (
+							<OrderSummaryTsAndCs
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								ratePlanDescription={ratePlanDetail.label}
+								countryGroupId={countryGroupId}
+								thresholdAmount={thresholdAmount}
+								promotion={promotion}
+								deliveryDate={
+									isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+										? weeklyDeliveryDate
+										: undefined
+								}
+							/>
+						) : null
 					}
 					tsAndCsDmcc={
 						dmcc.print ? (
