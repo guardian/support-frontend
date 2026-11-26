@@ -3,11 +3,11 @@ import { Template } from 'aws-cdk-lib/assertions';
 import { PlaySecretRotation } from './play-secret-rotation';
 
 describe('The PlaySecretRotation stack', () => {
-	it('matches the snapshot', () => {
+	it.each(['CODE', 'PROD'])('matches the snapshot in %s', (stage) => {
 		const app = new App();
-		const stack = new PlaySecretRotation(app, 'PlaySecretRotation-CODE', {
+		const stack = new PlaySecretRotation(app, `PlaySecretRotation-${stage}`, {
 			stack: 'support',
-			stage: 'CODE',
+			stage,
 		});
 
 		const template = Template.fromStack(stack);
