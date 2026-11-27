@@ -15,14 +15,6 @@
 	"recurringPaymentMethods": {
 		"description": "Payment methods - recurring contributions",
 		"switches": {
-			"stripePaymentRequestButton": {
-				"description": "Stripe - Payment Request Button",
-				"state": "On"
-			},
-			"stripeApplePay": {
-				"description": "Stripe - Apple Pay",
-				"state": "On"
-			},
 			"directDebit": {
 				"description": "Direct Debit",
 				"state": "On"
@@ -44,14 +36,6 @@
 	"oneOffPaymentMethods": {
 		"description": "Payment methods - one-off contributions",
 		"switches": {
-			"stripePaymentRequestButton": {
-				"description": "Stripe - Payment Request Button",
-				"state": "On"
-			},
-			"stripeApplePay": {
-				"description": "Stripe - Apple Pay",
-				"state": "On"
-			},
 			"stripeExpressCheckout": {
 				"description": "Stripe - Express Checkout",
 				"state": "Off"

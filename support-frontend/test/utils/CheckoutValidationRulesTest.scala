@@ -38,8 +38,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(Off),
@@ -49,7 +47,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
-  it should "return Invalid if a user tries to pay with Apple Pay but the  Apple Pay switch in RRCP is off" in {
+  it should "return Invalid if a user tries to pay with Apple Pay but the Express Checkout switch in RRCP is off" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
@@ -60,9 +58,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(Off),
-          stripePaymentRequestButton = Some(On),
-          stripeExpressCheckout = Some(On),
+          stripeExpressCheckout = Some(Off),
           payPal = Some(On),
           directDebit = Some(Off),
           stripeHostedCheckout = Some(Off),
@@ -78,8 +74,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(Off),
           directDebit = Some(On),
@@ -99,8 +93,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(Off),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -109,7 +101,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
-  it should "return Invalid if a user tries to pay with Stripe Payment Request Button but the switch in RRCP is off" in {
+  it should "return Invalid if a user tries to pay with Stripe Payment Request Button but the Express Checkout switch in RRCP is off" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
@@ -120,9 +112,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(Off),
-          stripeExpressCheckout = Some(On),
+          stripeExpressCheckout = Some(Off),
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
@@ -141,8 +131,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(Off),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -158,8 +146,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(Off),
           directDebit = Some(On),
@@ -178,8 +164,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(Off),
@@ -203,8 +187,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(Off),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -222,8 +204,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -244,8 +224,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -262,8 +240,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -283,8 +259,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -304,8 +278,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -325,8 +297,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -342,8 +312,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -362,8 +330,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -387,8 +353,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
@@ -803,8 +767,6 @@ object TestData {
   def buildSwitches(
       recurringPaymentMethodSwitches: RecurringPaymentMethodSwitches = RecurringPaymentMethodSwitches(
         stripe = Some(On),
-        stripeApplePay = Some(On),
-        stripePaymentRequestButton = Some(On),
         stripeExpressCheckout = Some(On),
         payPal = Some(On),
         directDebit = Some(On),
