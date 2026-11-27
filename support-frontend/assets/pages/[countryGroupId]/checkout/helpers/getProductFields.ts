@@ -125,6 +125,13 @@ export const getProductFields = ({
 				deliveryAgent,
 			};
 		}
+		case 'Patron':
+			return {
+				productType: 'Patron',
+				currency: currencyKey,
+				billingPeriod: billingPeriod,
+			};
+
 		case 'OneTimeContribution':
 			logException(unsupportedProductMessage);
 			throw new Error(unsupportedProductMessage);

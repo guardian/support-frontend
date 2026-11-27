@@ -1,38 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { FactAcquisitionEventRow } from './acquisitions';
 import { transformAcquisitionProductForBigQuery } from './acquisitions';
+import { baseAcquisitionProduct } from './fixtures';
 import type { AcquisitionProduct } from './schemas';
-
-const baseAcquisitionProduct: AcquisitionProduct = {
-	eventTimeStamp: '2025-03-04 12:22:40.378000 UTC',
-	country: 'US',
-	componentId: null,
-	componentType: null,
-	campaignCode: 'test',
-	referrerUrl: null,
-	abTests: [{ name: 'test', variant: 'variant' }],
-	paymentFrequency: 'ONE_OFF',
-	paymentProvider: 'STRIPE',
-	printOptions: null,
-	browserId: null,
-	identityId: '123456789',
-	pageViewId: 'm7uglc67vllj2cigko3l',
-	referrerPageViewId: null,
-	promoCode: 'PROMO',
-	queryParameters: [{ name: 'test', value: 'testValue' }],
-	reusedExistingPaymentMethod: false,
-	acquisitionType: 'Purchase',
-	readerType: 'Direct',
-	zuoraSubscriptionNumber: null,
-	contributionId: '123456789',
-	paymentId: '123456789',
-	product: 'CONTRIBUTION',
-	amount: 1.0,
-	currency: 'GBP',
-	source: 'EMAIL',
-	platform: 'IOSNATIVEAPP',
-	labels: ['label'],
-};
 
 describe('The transformAcquisitionProductForBigQuery function', () => {
 	it('transforms an AcquisitionProduct to an AcquisitionDataRow', () => {

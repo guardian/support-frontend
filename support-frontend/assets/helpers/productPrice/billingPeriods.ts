@@ -71,6 +71,9 @@ export function ratePlanToBillingPeriod(
 		case 'OneYearGift':
 		case 'OneYearStudent':
 		case 'V1DeprecatedAnnual':
+		case 'BylineAnnual':
+		case 'HeadlineAnnual':
+		case 'MastheadAnnual':
 			return BillingPeriod.Annual;
 		case 'ThreeMonthGift':
 		case 'Quarterly':
@@ -89,6 +92,9 @@ export function ratePlanToBillingPeriod(
 		case 'WeekendPlus':
 		case 'SaturdayPlus':
 		case 'V1DeprecatedMonthly':
+		case 'BylineMonthly':
+		case 'HeadlineMonthly':
+		case 'MastheadMonthly':
 			return BillingPeriod.Monthly;
 		case 'OneTime':
 			return BillingPeriod.OneTime;
