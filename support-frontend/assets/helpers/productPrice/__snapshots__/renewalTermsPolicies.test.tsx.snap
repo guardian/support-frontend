@@ -40,17 +40,17 @@ exports[`getRenewalTermPolicyCopy promotional renewal term for product:Supporter
 
 exports[`getRenewalTermPolicyCopy promotional renewal term for product:SupporterPlus ratePlan:Monthly 1`] = `"Subscription auto-renews monthly. Pay £6/month for 6 months, then £14/month from Thursday, May 27, 2027, unless you cancel. We'll remind you 2 weeks before Thursday, May 27, 2027 then every 6 months, 2 weeks before your renewal date."`;
 
-exports[`getRenewalTermPolicyCopy renewal term for product:Contribution ratePlan:Annual 1`] = `"Subscription auto-renews annually. Pay £50/year, unless you cancel. Equivalent to £4.17/month. We'll remind you every year, 2 weeks before your renewal date."`;
+exports[`getRenewalTermPolicyCopy renewal term for product:Contribution ratePlan:Annual 1`] = `"Subscription auto-renews annually. Pay £50/year, unless you cancel (if payments were due monthly this would be £4.17/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
 exports[`getRenewalTermPolicyCopy renewal term for product:Contribution ratePlan:Monthly 1`] = `"We will attempt to take payment of £4, on the 27th day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time."`;
 
-exports[`getRenewalTermPolicyCopy renewal term for product:DigitalSubscription ratePlan:Annual 1`] = `"Subscription auto-renews annually. Pay £180/year, unless you cancel. Equivalent to £15/month. We'll remind you every year, 2 weeks before your renewal date."`;
+exports[`getRenewalTermPolicyCopy renewal term for product:DigitalSubscription ratePlan:Annual 1`] = `"Subscription auto-renews annually. Pay £180/year, unless you cancel (if payments were due monthly this would be £15/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
 exports[`getRenewalTermPolicyCopy renewal term for product:DigitalSubscription ratePlan:Monthly 1`] = `"Subscription auto-renews monthly. Pay £18/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
 exports[`getRenewalTermPolicyCopy renewal term for product:GuardianAdLite ratePlan:Monthly 1`] = `"Subscription auto-renews monthly. Pay £5/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
-exports[`getRenewalTermPolicyCopy renewal term for product:GuardianWeeklyDomestic ratePlan:AnnualPlus 1`] = `"Subscription auto-renews annually. Pay £228/year, unless you cancel. Equivalent to £19/month. We'll remind you every year, 2 weeks before your renewal date."`;
+exports[`getRenewalTermPolicyCopy renewal term for product:GuardianWeeklyDomestic ratePlan:AnnualPlus 1`] = `"Subscription auto-renews annually. Your first payment will be taken on Friday, December 11, 2026. You'll pay £228/year, unless you cancel (if payments were due monthly this would be £19/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
 exports[`getRenewalTermPolicyCopy renewal term for product:GuardianWeeklyDomestic ratePlan:MonthlyPlus 1`] = `"Subscription auto-renews monthly. Your first payment will be taken on Friday, December 11, 2026. You'll pay £19/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
@@ -76,6 +76,6 @@ exports[`getRenewalTermPolicyCopy renewal term for product:SubscriptionCard rate
 
 exports[`getRenewalTermPolicyCopy renewal term for product:SubscriptionCard ratePlan:WeekendPlus 1`] = `"Subscription auto-renews monthly. Your first payment will be taken on Saturday, December 12, 2026. You'll pay £29.99/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
-exports[`getRenewalTermPolicyCopy renewal term for product:SupporterPlus ratePlan:Annual 1`] = `"Subscription auto-renews annually. Pay £140/year, unless you cancel. Equivalent to £11.67/month. We'll remind you every year, 2 weeks before your renewal date."`;
+exports[`getRenewalTermPolicyCopy renewal term for product:SupporterPlus ratePlan:Annual 1`] = `"Subscription auto-renews annually. Pay £140/year, unless you cancel (if payments were due monthly this would be £11.67/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
 exports[`getRenewalTermPolicyCopy renewal term for product:SupporterPlus ratePlan:Monthly 1`] = `"Subscription auto-renews monthly. Pay £14/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;

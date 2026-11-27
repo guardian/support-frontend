@@ -34,13 +34,22 @@ const printMonthly = (test: RenewalTestProps) =>
 	)}. You'll pay £${
 		test.fullPrice
 	}/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
-const digitalAndPrintAnnual = (test: RenewalTestProps) =>
+const digitalAnnual = (test: RenewalTestProps) =>
 	`Subscription auto-renews annually. Pay £${
 		test.fullPrice
-	}/year, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
+	}/year, unless you cancel (if payments were due monthly this would be £${monthlyEquivalentPrice(
 		test.fullPrice,
 		BillingPeriod.Annual,
-	)}/month. We'll remind you every year, 2 weeks before your renewal date.`;
+	)}/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
+const printAnnual = (test: RenewalTestProps) =>
+	`Subscription auto-renews annually. Your first payment will be taken on ${formatUserDate(
+		test.deliveryDate,
+	)}. You'll pay £${
+		test.fullPrice
+	}/year, unless you cancel (if payments were due monthly this would be £${monthlyEquivalentPrice(
+		test.fullPrice,
+		BillingPeriod.Annual,
+	)}/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 const printQuarterly = (test: RenewalTestProps) =>
 	`Subscription auto-renews quarterly. Your first payment will be taken on ${formatUserDate(
 		test.deliveryDate,
@@ -112,15 +121,15 @@ const expectPolicy = (
 describe('getRenewalTermPolicyCopy', () => {
 	it.each([
 		['Contribution', 'Monthly', contributionMonthly],
-		['Contribution', 'Annual', digitalAndPrintAnnual],
+		['Contribution', 'Annual', digitalAnnual],
 		['GuardianAdLite', 'Monthly', digitalMonthly],
 		['SupporterPlus', 'Monthly', digitalMonthly],
-		['SupporterPlus', 'Annual', digitalAndPrintAnnual],
+		['SupporterPlus', 'Annual', digitalAnnual],
 		['DigitalSubscription', 'Monthly', digitalMonthly],
-		['DigitalSubscription', 'Annual', digitalAndPrintAnnual],
+		['DigitalSubscription', 'Annual', digitalAnnual],
 		['GuardianWeeklyDomestic', 'MonthlyPlus', printMonthly],
 		['GuardianWeeklyDomestic', 'QuarterlyPlus', printQuarterly],
-		['GuardianWeeklyDomestic', 'AnnualPlus', digitalAndPrintAnnual],
+		['GuardianWeeklyDomestic', 'AnnualPlus', printAnnual],
 		['HomeDelivery', 'EverydayPlus', printMonthly],
 		['HomeDelivery', 'SixdayPlus', printMonthly],
 		['HomeDelivery', 'WeekendPlus', printMonthly],
