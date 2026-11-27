@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@emotion/react';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -156,9 +156,13 @@ export function Checkout({
 
 	const paypalClientId = getPaypalClientId(isTestUser);
 
+	const { recurringPaymentMethods } = window.guardian.settings.switches;
+	const regionalisedStripeExpressCheckoutSwitch =
+		supportRegionId === SupportRegionId.UK
+			? recurringPaymentMethods.stripeExpressCheckoutUK
+			: recurringPaymentMethods.stripeExpressCheckout;
 	const stripeExpressCheckoutSwitch =
-		window.guardian.settings.switches.recurringPaymentMethods
-			.stripeExpressCheckout === 'On';
+		regionalisedStripeExpressCheckoutSwitch === 'On';
 
 	let elementsOptions = {};
 	let useStripeExpressCheckout = false;

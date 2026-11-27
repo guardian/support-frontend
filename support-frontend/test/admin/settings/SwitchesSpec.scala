@@ -49,6 +49,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "stripeHostedCheckout" : {
           |        "description" : "Stripe - Hosted Checkout",
           |        "state" : "Off"
+          |      },
+          |      "stripeExpressCheckoutUK" : {
+          |        "description" : "Stripe - Express Checkout UK",
+          |        "state" : "Off"
           |      }
           |    }
           |  },
@@ -164,6 +168,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             payPal = Some(On),
             directDebit = Some(On),
             stripeHostedCheckout = Some(Off),
+            stripeExpressCheckoutUK = Some(Off),
           ),
           subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On)),
           featureSwitches = FeatureSwitches(

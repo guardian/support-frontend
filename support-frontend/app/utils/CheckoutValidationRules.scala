@@ -44,6 +44,7 @@ object CheckoutValidationRules {
   def checkContributionPaymentMethodEnabled(
       switches: RecurringPaymentMethodSwitches,
       paymentFields: PaymentFields,
+      currency: Currency,
   ) = paymentFields match {
     case _: PayPalCompletePaymentsPaymentFields =>
       if (switches.payPal.contains(On)) Valid else Invalid("Invalid Payment Method")
@@ -54,7 +55,13 @@ object CheckoutValidationRules {
     case s: StripePaymentFields =>
       s.stripePaymentType match {
         case Some(StripePaymentType.StripeApplePay) | Some(StripePaymentType.StripePaymentRequestButton) =>
-          if (switches.stripeExpressCheckout.contains(On)) Valid else Invalid("Invalid Payment Method")
+          // Note: There is a separate Stripe Express switch for the UK.
+          // GBP is used as a proxy for the UK support region, since we don't have region available
+          // directly here. Current thinking is that this switch will be short lived, so I don't think
+          // it's worth the added complexity to pass the region additionally.
+          val expressCheckoutSwitch =
+            if (currency == GBP) switches.stripeExpressCheckoutUK else switches.stripeExpressCheckout
+          if (expressCheckoutSwitch.contains(On)) Valid else Invalid("Invalid Payment Method")
         case Some(StripePaymentType.StripeCheckout) =>
           if (switches.stripe.contains(On)) Valid else Invalid("Invalid Payment Method")
         case None => Invalid("Invalid Payment Method")
@@ -67,6 +74,7 @@ object CheckoutValidationRules {
   ) = checkContributionPaymentMethodEnabled(
     switches.recurringPaymentMethods,
     paymentFields,
+    product.currency,
   )
 
   def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =

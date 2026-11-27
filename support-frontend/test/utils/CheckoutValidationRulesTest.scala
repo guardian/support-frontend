@@ -9,6 +9,7 @@ import admin.settings.{
   RecaptchaSwitches,
   RecurringPaymentMethodSwitches,
   SubscriptionsSwitches,
+  SwitchState,
   Switches,
 }
 import com.gu.i18n.Currency.GBP
@@ -42,12 +43,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(Off),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
-  it should "return Invalid if a user tries to pay with Apple Pay but the Express Checkout switch in RRCP is off" in {
+  it should "return Invalid if a user tries to pay with Apple Pay in GBP but the Express Checkout UK switch in RRCP is off" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
@@ -58,10 +60,11 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeExpressCheckout = Some(Off),
+          stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(Off),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -78,6 +81,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(Off),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -97,11 +101,12 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
-  it should "return Invalid if a user tries to pay with Stripe Payment Request Button but the Express Checkout switch in RRCP is off" in {
+  it should "return Invalid if a user tries to pay with Stripe Payment Request Button in GBP but the Express Checkout UK switch in RRCP is off" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
@@ -112,15 +117,16 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeExpressCheckout = Some(Off),
+          stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
-  it should "return Invalid if a user tries to pay with Stripe Checkout but the switch  in RRCP is off" in {
+  it should "return Invalid if a user tries to pay with Stripe Checkout but the switch in RRCP is off" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
@@ -135,6 +141,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -150,6 +157,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(Off),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -168,12 +176,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(Off),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
-  it should "return Invalid if a user tries to pay with Credit card(Stripe) but the  switch in RRCP is off" in {
+  it should "return Invalid if a user tries to pay with Credit card(Stripe) but the switch in RRCP is off" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
@@ -191,6 +200,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -208,12 +218,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
 
-  it should "return Valid if a user tries to pay with Apple Pay while the  Apple Pay switch in RRCP is on" in {
+  it should "return Valid if a user tries to pay with Apple Pay in GBP while the Apple Pay UK switch in RRCP is on" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
@@ -224,13 +235,38 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeExpressCheckout = Some(On),
+          stripeExpressCheckout = Some(Off),
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(On),
         ),
       ),
     ) shouldBe Valid
+  }
+
+  it should "use the regular Express Checkout switch, not the UK one, if a user tries to pay with Apple Pay in USD" in {
+    def check(regularSwitch: SwitchState, ukSwitch: SwitchState) =
+      CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
+        product = Contribution(0, Currency.USD, Monthly),
+        paymentFields = StripePaymentFields(
+          paymentMethod = PaymentMethodId("testId").get,
+          stripePaymentType = Some(StripePaymentType.StripeApplePay),
+          stripePublicKey = StripePublicKey.get("pk_test_asdf"),
+        ),
+        switches = TestData.buildSwitches(
+          RecurringPaymentMethodSwitches(
+            stripe = Some(On),
+            stripeExpressCheckout = Some(regularSwitch),
+            payPal = Some(On),
+            directDebit = Some(On),
+            stripeHostedCheckout = Some(Off),
+            stripeExpressCheckoutUK = Some(ukSwitch),
+          ),
+        ),
+      )
+    check(regularSwitch = On, ukSwitch = Off) shouldBe Valid
+    check(regularSwitch = Off, ukSwitch = On) shouldBe Invalid("Invalid Payment Method")
   }
 
   it should "return Valid if a user tries to pay with PayPal while the Pay Pal switch in RRCP is on" in {
@@ -244,11 +280,12 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
-  it should "return Valid if a user tries to pay with Stripe  while the switch  in RRCP is on" in {
+  it should "return Valid if a user tries to pay with Stripe while the switch in RRCP is on" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
@@ -263,11 +300,12 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
-  it should "return Valid if a user tries to pay with Stripe Payment Request Button while the switch  in RRCP is on" in {
+  it should "return Valid if a user tries to pay with Stripe Payment Request Button in GBP while the Express Checkout UK switch in RRCP is on" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
@@ -278,15 +316,16 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeExpressCheckout = Some(On),
+          stripeExpressCheckout = Some(Off),
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(On),
         ),
       ),
     ) shouldBe Valid
   }
-  it should "return Valid if a user tries to pay with Stripe Checkout while the switch  in RRCP is on" in {
+  it should "return Valid if a user tries to pay with Stripe Checkout while the switch in RRCP is on" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
@@ -301,6 +340,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -316,6 +356,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -334,12 +375,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
 
-  it should "return Valid if a user tries to pay with Credit card(Stripe) but while the  switch in RRCP is on" in {
+  it should "return Valid if a user tries to pay with Credit card(Stripe) but while the switch in RRCP is on" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
@@ -357,6 +399,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
+          stripeExpressCheckoutUK = Some(Off),
         ),
       ),
     ) shouldBe Valid
@@ -436,7 +479,7 @@ class PaidProductValidationTest extends AnyFlatSpec with Matchers {
     PaidProductValidation.passes(requestMissingState) shouldBe an[Invalid]
   }
 
-  it should "succeed  if the country is UK and there is no state" in {
+  it should "succeed if the country is UK and there is no state" in {
     val requestSupporterPlus = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, state = None),
       product = SupporterPlus(50, Currency.GBP, Annual),
@@ -771,6 +814,7 @@ object TestData {
         payPal = Some(On),
         directDebit = Some(On),
         stripeHostedCheckout = Some(Off),
+        stripeExpressCheckoutUK = Some(Off),
       ),
   ): Switches = Switches(
     OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),

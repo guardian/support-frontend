@@ -12,6 +12,7 @@ const mockSettings = {
 			stripeExpressCheckout: 'On',
 			payPal: 'On',
 			directDebit: 'Off',
+			stripeExpressCheckoutUK: 'Off',
 		},
 		subscriptionsSwitches: {
 			enableDigitalSubGifting: 'On',
