@@ -1,6 +1,7 @@
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
+import { manageAccountLink } from 'helpers/legal';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -8,6 +9,7 @@ import type {
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
+import { textLink } from 'helpers/utilities/textLink';
 import {
 	addDays,
 	getProductFirstDeliveryDate,
@@ -25,7 +27,7 @@ import {
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 
 // PaymentTsAndCs implies a 15day wait for digitalSubscriptions alongside GuardianAdLite
-const getFirstDeliveryDateInclDigitalSubscription = (
+export const getFirstDeliveryDateInclDigitalSubscription = (
 	productKey: ActiveProductKey,
 	paperProductOptions?: ActivePaperProductOptions,
 ): Date | undefined => {
@@ -64,27 +66,87 @@ export const getPromotionExpiryDate = (
 	return promotionExpiryDate;
 };
 
-const contributionMonthly = (fullPrice: number): string => {
-	return `We will attempt to take payment of £${fullPrice}, on the ${getDateWithOrdinal(
-		new Date(),
-	)} day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
+const contributionMonthly = (fullPrice: number): JSX.Element => (
+	<>
+		We will attempt to take payment of £{fullPrice}, on the{' '}
+		{getDateWithOrdinal(new Date())} day of every month, from now until you
+		cancel your payment. Payments may take up to 6 days to be recorded in your
+		bank account. You can change how much you give or cancel your payment at any
+		time.
+	</>
+);
+
+const digitalMonthly = (fullPrice: number): JSX.Element => (
+	<>
+		Subscription <strong>auto-renews monthly</strong>. Pay{' '}
+		<strong>£{fullPrice}/month</strong>, unless you cancel. We'll remind you
+		every 6 months, 1 week before your subscription auto-renews. To stop
+		auto-renewal, cancel via {textLink('Manage My Account', manageAccountLink)}{' '}
+		before your next renewal date.
+	</>
+);
+const printMonthly = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	fullPrice: number,
+): JSX.Element => {
+	const deliveryDate =
+		getFirstDeliveryDateInclDigitalSubscription(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		) ?? new Date();
+	return (
+		<>
+			Subscription <strong>auto-renews monthly</strong>. Your first payment will
+			be taken on {formatUserDate(deliveryDate)}. You'll pay{' '}
+			<strong>£{fullPrice}/month</strong>, unless you cancel. We'll remind you
+			every 6 months, 1 week before your subscription auto-renews. To stop
+			auto-renewal, cancel via{' '}
+			{textLink('Manage My Account', manageAccountLink)} before your next
+			renewal date.
+		</>
+	);
 };
-const digitalAndPrintMonthly = (fullPrice: number): string => {
-	return `Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
-};
-const digitalAndPrintAnnual = (fullPrice: number): string => {
+
+const digitalAndPrintAnnual = (fullPrice: number): JSX.Element => {
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Annual,
 	);
-	return `Subscription auto-renews annually. Pay £${fullPrice}/year, unless you cancel. Equivalent to £${monthlyEquivalent}/month. We'll remind you every year, 2 weeks before your renewal date.`;
+	return (
+		<>
+			Subscription auto-renews annually. Pay £{fullPrice}/year, unless you
+			cancel. Equivalent to £{monthlyEquivalent}/month. We'll remind you every
+			year, 2 weeks before your renewal date.
+		</>
+	);
 };
-const printQuarterly = (fullPrice: number) => {
+const printQuarterly = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	fullPrice: number,
+): JSX.Element => {
+	const deliveryDate =
+		getFirstDeliveryDateInclDigitalSubscription(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		) ?? new Date();
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Quarterly,
 	);
-	return `Subscription auto-renews quarterly. Pay £${fullPrice}/quarter, unless you cancel. Equivalent to £${monthlyEquivalent}/month for each quarter. We'll remind you every 6 months, 2 weeks before your renewal date.`;
+	return (
+		<>
+			Subscription <strong>auto-renews quarterly</strong>. Your first payment
+			will be taken on {formatUserDate(deliveryDate)}. You'll pay{' '}
+			<strong>£{fullPrice}/quarter</strong>, unless you cancel (if payments were
+			due monthly this would be £{monthlyEquivalent}/month). We'll remind you
+			every 6 months, 1 week before your subscription auto-renews. To stop
+			auto-renewal, cancel via{' '}
+			{textLink('Manage My Account', manageAccountLink)} before your next
+			renewal date.
+		</>
+	);
 };
 
 type RenewalTermDetailProps = {
@@ -141,12 +203,12 @@ const promotionDigitalMonthly = (
 	amount: number,
 	promotion: PromoWithCatalogInformation,
 	contribution?: number,
-): string => {
+): JSX.Element => {
 	const { discount } = promotion;
 	if (!discount) {
 		const totalAmount =
 			productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount;
-		return digitalAndPrintMonthly(totalAmount);
+		return digitalMonthly(totalAmount);
 	}
 	const { discountedPrice, durationPeriods, periodName, expiry } =
 		renewalTermDetail(productKey, ratePlanKey, amount, discount);
@@ -154,21 +216,35 @@ const promotionDigitalMonthly = (
 		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
 	const fullPrice = amount + validContribution;
 	const discountPrice = discountedPrice + validContribution;
-	return `Subscription auto-renews monthly. Pay £${discountPrice}/month for ${durationPeriods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	return (
+		<>
+			Subscription auto-renews monthly. Pay £{discountPrice}/month for{' '}
+			{durationPeriods} {periodName}, then £{fullPrice}/month from {expiry},
+			unless you cancel. We'll remind you 2 weeks before {expiry} then every 6
+			months, 2 weeks before your renewal date.
+		</>
+	);
 };
 const promotionPrintMonthly = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
 	promotion: PromoWithCatalogInformation,
-): string => {
+): JSX.Element => {
 	const { discount } = promotion;
 	if (!discount) {
-		return digitalAndPrintMonthly(fullPrice);
+		return printMonthly(productKey, ratePlanKey, fullPrice);
 	}
 	const { discountedPrice, durationPeriods, periodName, expiry } =
 		renewalTermDetail(productKey, ratePlanKey, fullPrice, discount);
-	return `Subscription auto-renews monthly. Pay £${discountedPrice}/month for the first ${durationPeriods} ${periodName}, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	return (
+		<>
+			Subscription auto-renews monthly. Pay £{discountedPrice}/month for the
+			first {durationPeriods} {periodName}, then £{fullPrice}/month from{' '}
+			{expiry}, unless you cancel. We'll remind you 2 weeks before {expiry} then
+			every 6 months, 2 weeks before your renewal date.
+		</>
+	);
 };
 
 const promotionPrintQuarterly = (
@@ -176,10 +252,10 @@ const promotionPrintQuarterly = (
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
 	promotion: PromoWithCatalogInformation,
-): string => {
+): JSX.Element => {
 	const { discount } = promotion;
 	if (!discount) {
-		return printQuarterly(fullPrice);
+		return printQuarterly(productKey, ratePlanKey, fullPrice);
 	}
 	const {
 		discountedPrice,
@@ -189,7 +265,16 @@ const promotionPrintQuarterly = (
 		discountMonthlyEquivalent,
 		monthlyEquivalent,
 	} = renewalTermDetail(productKey, ratePlanKey, fullPrice, discount);
-	return `Subscription auto-renews quarterly. Pay £${discountedPrice}/quarter for ${durationPeriods} ${periodName}, then £${fullPrice}/quarter from ${expiry}, unless you cancel. Equivalent to £${discountMonthlyEquivalent}/month for ${durationPeriods} ${periodName}, then £${monthlyEquivalent}/month for each quarter after. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	return (
+		<>
+			Subscription auto-renews quarterly. Pay £{discountedPrice}/quarter for{' '}
+			{durationPeriods} {periodName}, then £{fullPrice}/quarter from {expiry},
+			unless you cancel. Equivalent to £{discountMonthlyEquivalent}/month for{' '}
+			{durationPeriods} {periodName}, then £{monthlyEquivalent}/month for each
+			quarter after. We'll remind you 2 weeks before {expiry} then every 6
+			months, 2 weeks before your renewal date.
+		</>
+	);
 };
 const promotionAnnual = (
 	productKey: ActiveProductKey,
@@ -197,7 +282,7 @@ const promotionAnnual = (
 	amount: number,
 	promotion: PromoWithCatalogInformation,
 	contribution?: number,
-): string => {
+): JSX.Element => {
 	const { discount } = promotion;
 	if (!discount) {
 		const totalAmount =
@@ -221,61 +306,70 @@ const promotionAnnual = (
 		discountPrice,
 		billingPeriod,
 	);
-	return `Subscription auto-renews annually. Pay £${discountPrice}/year for ${durationPeriods} ${periodName}, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${discountPriceMonthlyEquivalent}/month for ${durationPeriods} ${periodName}, then £${fullPriceMonthlyEquivalent}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	return (
+		<>
+			Subscription auto-renews annually. Pay £{discountPrice}/year for{' '}
+			{durationPeriods} {periodName}, then £{fullPrice}/year from {expiry},
+			unless you cancel. Equivalent to £{discountPriceMonthlyEquivalent}/month
+			for {durationPeriods} {periodName}, then £{fullPriceMonthlyEquivalent}
+			/month for each year after. We'll remind you every year, 2 weeks before
+			your renewal date.
+		</>
+	);
 };
 
 type Policy = Partial<
-	Record<ActiveProductKey, Partial<Record<ActiveRatePlanKey, string>>>
+	Record<ActiveProductKey, Partial<Record<ActiveRatePlanKey, JSX.Element>>>
 >;
 
 function getRenewalTerm(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
-): string | undefined {
+): JSX.Element | undefined {
 	const renewalTerms: Policy = {
 		Contribution: {
 			Monthly: contributionMonthly(fullPrice),
 			Annual: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianAdLite: {
-			Monthly: digitalAndPrintMonthly(fullPrice),
+			Monthly: digitalMonthly(fullPrice),
 		},
 		SupporterPlus: {
-			Monthly: digitalAndPrintMonthly(fullPrice),
-			MonthlyTaxExclusive: digitalAndPrintMonthly(fullPrice),
+			Monthly: digitalMonthly(fullPrice),
+			MonthlyTaxExclusive: digitalMonthly(fullPrice),
 			Annual: digitalAndPrintAnnual(fullPrice),
 			AnnualTaxExclusive: digitalAndPrintAnnual(fullPrice),
 		},
 		DigitalSubscription: {
-			Monthly: digitalAndPrintMonthly(fullPrice),
-			MonthlyTaxExclusive: digitalAndPrintMonthly(fullPrice),
+			Monthly: digitalMonthly(fullPrice),
+			MonthlyTaxExclusive: digitalMonthly(fullPrice),
 			Annual: digitalAndPrintAnnual(fullPrice),
 			AnnualTaxExclusive: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianWeeklyDomestic: {
-			MonthlyPlus: digitalAndPrintMonthly(fullPrice),
-			QuarterlyPlus: printQuarterly(fullPrice),
+			MonthlyPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			QuarterlyPlus: printQuarterly(productKey, ratePlanKey, fullPrice),
 			AnnualPlus: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianWeeklyRestOfWorld: {
-			MonthlyPlus: digitalAndPrintMonthly(fullPrice),
-			QuarterlyPlus: printQuarterly(fullPrice),
+			MonthlyPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			QuarterlyPlus: printQuarterly(productKey, ratePlanKey, fullPrice),
 			AnnualPlus: digitalAndPrintAnnual(fullPrice),
 		},
 		SubscriptionCard: {
-			EverydayPlus: digitalAndPrintMonthly(fullPrice),
-			SixdayPlus: digitalAndPrintMonthly(fullPrice),
-			WeekendPlus: digitalAndPrintMonthly(fullPrice),
-			SaturdayPlus: digitalAndPrintMonthly(fullPrice),
-			Sunday: digitalAndPrintMonthly(fullPrice),
+			EverydayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			SixdayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			WeekendPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			SaturdayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			Sunday: printMonthly(productKey, ratePlanKey, fullPrice),
 		},
 		HomeDelivery: {
-			EverydayPlus: digitalAndPrintMonthly(fullPrice),
-			SixdayPlus: digitalAndPrintMonthly(fullPrice),
-			WeekendPlus: digitalAndPrintMonthly(fullPrice),
-			SaturdayPlus: digitalAndPrintMonthly(fullPrice),
-			Sunday: digitalAndPrintMonthly(fullPrice),
+			EverydayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			SixdayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			WeekendPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			SaturdayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			Sunday: printMonthly(productKey, ratePlanKey, fullPrice),
 		},
 	};
 	return renewalTerms[productKey]?.[ratePlanKey];
@@ -287,7 +381,7 @@ function getPromotionalRenewalTerm(
 	amount: number,
 	promotion: PromoWithCatalogInformation,
 	contribution?: number,
-): string | undefined {
+): JSX.Element | undefined {
 	const promotionAnnualTerms = promotionAnnual(
 		productKey,
 		ratePlanKey,
