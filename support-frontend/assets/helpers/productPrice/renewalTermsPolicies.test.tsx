@@ -17,7 +17,9 @@ import {
 
 type RenewalTestProps = {
 	fullPrice: number;
-	deliveryDate: Date;
+	discountPrice: number;
+	expiryDate: string;
+	deliveryDate: string;
 };
 const contributionMonthly = (test: RenewalTestProps) =>
 	`We will attempt to take payment of £${
@@ -29,11 +31,7 @@ const contributionMonthly = (test: RenewalTestProps) =>
 const digitalMonthly = (test: RenewalTestProps) =>
 	`Subscription auto-renews monthly. Pay £${test.fullPrice}/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 const printMonthly = (test: RenewalTestProps) =>
-	`Subscription auto-renews monthly. Your first payment will be taken on ${formatUserDate(
-		test.deliveryDate,
-	)}. You'll pay £${
-		test.fullPrice
-	}/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
+	`Subscription auto-renews monthly. Your first payment will be taken on ${test.deliveryDate}. You'll pay £${test.fullPrice}/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 const digitalAnnual = (test: RenewalTestProps) =>
 	`Subscription auto-renews annually. Pay £${
 		test.fullPrice
@@ -42,59 +40,66 @@ const digitalAnnual = (test: RenewalTestProps) =>
 		BillingPeriod.Annual,
 	)}/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 const printAnnual = (test: RenewalTestProps) =>
-	`Subscription auto-renews annually. Your first payment will be taken on ${formatUserDate(
-		test.deliveryDate,
-	)}. You'll pay £${
+	`Subscription auto-renews annually. Your first payment will be taken on ${
+		test.deliveryDate
+	}. You'll pay £${
 		test.fullPrice
 	}/year, unless you cancel (if payments were due monthly this would be £${monthlyEquivalentPrice(
 		test.fullPrice,
 		BillingPeriod.Annual,
 	)}/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 const printQuarterly = (test: RenewalTestProps) =>
-	`Subscription auto-renews quarterly. Your first payment will be taken on ${formatUserDate(
-		test.deliveryDate,
-	)}. You'll pay £${
+	`Subscription auto-renews quarterly. Your first payment will be taken on ${
+		test.deliveryDate
+	}. You'll pay £${
 		test.fullPrice
 	}/quarter, unless you cancel (if payments were due monthly this would be £${monthlyEquivalentPrice(
 		test.fullPrice,
 		BillingPeriod.Quarterly,
 	)}/month). We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 
-const promoDigitalMonthly = (
-	fullPrice: number,
-	discountPrice: number,
-	expiry: string,
-) =>
-	`Subscription auto-renews monthly. Pay £${discountPrice}/month for 6 months, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
-const promoPrintMonthly = (
-	fullPrice: number,
-	discountPrice: number,
-	expiry: string,
-) =>
-	`Subscription auto-renews monthly. Pay £${discountPrice}/month for the first 6 months, then £${fullPrice}/month from ${expiry}, unless you cancel. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
-const promoPrintQuarterly = (
-	fullPrice: number,
-	discountPrice: number,
-	expiry: string,
-) =>
-	`Subscription auto-renews quarterly. Pay £${discountPrice}/quarter for 2 quarters, then £${fullPrice}/quarter from ${expiry}, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
-		discountPrice,
+const promoDigitalMonthly = (test: RenewalTestProps) =>
+	`Subscription auto-renews monthly. Pay £${test.discountPrice}/month for 6 months, then £${test.fullPrice}/month from ${test.expiryDate}, unless you cancel. We'll remind you 1 week before your first higher payment, then every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
+const promoPrintMonthly = (test: RenewalTestProps) =>
+	`Subscription auto-renews monthly. Your first payment will be taken on ${test.deliveryDate}. You'll pay £${test.discountPrice}/month for 6 months, then £${test.fullPrice}/month from ${test.expiryDate}, unless you cancel. We'll remind you 1 week before your first higher payment, then every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
+const promoPrintQuarterly = (test: RenewalTestProps) =>
+	`Subscription auto-renews quarterly. Pay £${
+		test.discountPrice
+	}/quarter for 2 quarters, then £${test.fullPrice}/quarter from ${
+		test.expiryDate
+	}, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
+		test.discountPrice,
 		BillingPeriod.Quarterly,
 	)}/month for 2 quarters, then £${monthlyEquivalentPrice(
-		fullPrice,
+		test.fullPrice,
 		BillingPeriod.Quarterly,
-	)}/month for each quarter after. We'll remind you 2 weeks before ${expiry} then every 6 months, 2 weeks before your renewal date.`;
+	)}/month for each quarter after. We'll remind you 2 weeks before ${
+		test.expiryDate
+	} then every 6 months, 2 weeks before your renewal date.`;
 
-const promotionAnnual = (
-	fullPrice: number,
-	discountPrice: number,
-	expiry: string,
-) =>
-	`Subscription auto-renews annually. Pay £${discountPrice}/year for 1 year, then £${fullPrice}/year from ${expiry}, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
-		discountPrice,
+const promoDigitalAnnual = (test: RenewalTestProps) =>
+	`Subscription auto-renews annually. Pay £${
+		test.discountPrice
+	}/year for 1 year, then £${test.fullPrice}/year from ${
+		test.expiryDate
+	}, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
+		test.discountPrice,
 		BillingPeriod.Annual,
 	)}/month for 1 year, then £${monthlyEquivalentPrice(
-		fullPrice,
+		test.fullPrice,
+		BillingPeriod.Annual,
+	)}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+
+const promoPrintAnnual = (test: RenewalTestProps) =>
+	`Subscription auto-renews annually. Pay £${
+		test.discountPrice
+	}/year for 1 year, then £${test.fullPrice}/year from ${
+		test.expiryDate
+	}, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
+		test.discountPrice,
+		BillingPeriod.Annual,
+	)}/month for 1 year, then £${monthlyEquivalentPrice(
+		test.fullPrice,
 		BillingPeriod.Annual,
 	)}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
 
@@ -144,29 +149,38 @@ describe('getRenewalTermPolicyCopy', () => {
 		'renewal term for product:%s ratePlan:%s',
 		(product, ratePlan, policy) => {
 			const { fullPrice } = getTestPricesAndPromotion(product, ratePlan);
-			const deliveryDate =
+			const deliveryDate = formatUserDate(
 				getFirstDeliveryDateInclDigitalSubscription(
 					product,
 					ratePlan as ActivePaperProductOptions,
-				) ?? new Date();
+				) ?? new Date(),
+			);
 			const result = getRenewalTermPolicy(
 				product as ActiveProductKey,
 				ratePlan as ActiveRatePlanKey,
 				fullPrice,
 			);
-			expectPolicy(result, policy({ fullPrice, deliveryDate }));
+			expectPolicy(
+				result,
+				policy({
+					fullPrice,
+					discountPrice: fullPrice,
+					expiryDate: deliveryDate,
+					deliveryDate,
+				}),
+			);
 		},
 	);
 
 	it.each([
 		['GuardianAdLite', 'Monthly', promoDigitalMonthly],
 		['SupporterPlus', 'Monthly', promoDigitalMonthly],
-		['SupporterPlus', 'Annual', promotionAnnual],
+		['SupporterPlus', 'Annual', promoDigitalAnnual],
 		['DigitalSubscription', 'Monthly', promoDigitalMonthly],
-		['DigitalSubscription', 'Annual', promotionAnnual],
+		['DigitalSubscription', 'Annual', promoDigitalAnnual],
 		['GuardianWeeklyDomestic', 'MonthlyPlus', promoPrintMonthly],
 		['GuardianWeeklyDomestic', 'QuarterlyPlus', promoPrintQuarterly],
-		['GuardianWeeklyDomestic', 'AnnualPlus', promotionAnnual],
+		['GuardianWeeklyDomestic', 'AnnualPlus', promoPrintAnnual],
 		['HomeDelivery', 'EverydayPlus', promoPrintMonthly],
 		['HomeDelivery', 'SixdayPlus', promoPrintMonthly],
 		['HomeDelivery', 'WeekendPlus', promoPrintMonthly],
@@ -180,8 +194,11 @@ describe('getRenewalTermPolicyCopy', () => {
 	] as const)(
 		'promotional renewal term for product:%s ratePlan:%s',
 		(product, ratePlan, policy) => {
-			const { fullPrice, discountedPrice, promotion } =
-				getTestPricesAndPromotion(product, ratePlan);
+			const {
+				fullPrice,
+				discountedPrice: discountPrice,
+				promotion,
+			} = getTestPricesAndPromotion(product, ratePlan);
 			if (!promotion) {
 				throw new Error(
 					`Missing promotion for product ${product} rate plan: ${ratePlan}`,
@@ -193,21 +210,34 @@ describe('getRenewalTermPolicyCopy', () => {
 				fullPrice,
 				promotion,
 			);
-			const expiry = getPromotionExpiryDate(
-				product,
-				ratePlan,
-				promotion.discount?.durationMonths ?? 0,
+			const expiryDate = formatUserDate(
+				getPromotionExpiryDate(
+					product,
+					ratePlan,
+					promotion.discount?.durationMonths ?? 0,
+				),
+			);
+			const deliveryDate = formatUserDate(
+				getFirstDeliveryDateInclDigitalSubscription(
+					product,
+					ratePlan as ActivePaperProductOptions,
+				) ?? new Date(),
 			);
 			expectPolicy(
 				result,
-				policy(fullPrice, discountedPrice, formatUserDate(expiry)),
+				policy({
+					fullPrice,
+					discountPrice,
+					expiryDate,
+					deliveryDate,
+				}),
 			);
 		},
 	);
 
 	it.each([
 		['Monthly', promoDigitalMonthly],
-		['Annual', promotionAnnual],
+		['Annual', promoDigitalAnnual],
 	] as const)(
 		'adds contribution to discounted SupporterPlus %s renewal terms after discounting',
 		(ratePlan, policy) => {
@@ -217,12 +247,18 @@ describe('getRenewalTermPolicyCopy', () => {
 			if (!promotion) {
 				throw new Error(`Missing promotion for SupporterPlus ${ratePlan}`);
 			}
-			const expiry = formatUserDate(
+			const expiryDate = formatUserDate(
 				getPromotionExpiryDate(
 					'SupporterPlus',
 					ratePlan,
 					promotion.discount?.durationMonths ?? 0,
 				),
+			);
+			const deliveryDate = formatUserDate(
+				getFirstDeliveryDateInclDigitalSubscription(
+					'SupporterPlus',
+					ratePlan as ActivePaperProductOptions,
+				) ?? new Date(),
 			);
 			const result = getRenewalTermPolicy(
 				'SupporterPlus',
@@ -233,11 +269,12 @@ describe('getRenewalTermPolicyCopy', () => {
 			);
 			expectPolicy(
 				result,
-				policy(
-					fullPrice + contribution,
-					discountedPrice + contribution,
-					expiry,
-				),
+				policy({
+					fullPrice: fullPrice + contribution,
+					discountPrice: discountedPrice + contribution,
+					expiryDate,
+					deliveryDate,
+				}),
 			);
 		},
 	);

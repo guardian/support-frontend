@@ -187,6 +187,7 @@ type RenewalTermDetailProps = {
 	durationPeriods: number;
 	periodName: string;
 	expiry: string;
+	delivery: string;
 	discountMonthlyEquivalent: number;
 	monthlyEquivalent: number;
 };
@@ -220,11 +221,18 @@ const renewalTermDetail = (
 		billingPeriod,
 	);
 	const monthlyEquivalent = monthlyEquivalentPrice(amount, billingPeriod);
+	const delivery = formatUserDate(
+		getFirstDeliveryDateInclDigitalSubscription(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		) ?? new Date(),
+	);
 	return {
 		discountedPrice,
 		durationPeriods,
 		periodName,
 		expiry,
+		delivery,
 		discountMonthlyEquivalent,
 		monthlyEquivalent,
 	};
@@ -251,10 +259,17 @@ const promotionDigitalMonthly = (
 	const discountPrice = discountedPrice + validContribution;
 	return (
 		<>
-			Subscription auto-renews monthly. Pay £{discountPrice}/month for{' '}
-			{durationPeriods} {periodName}, then £{fullPrice}/month from {expiry},
-			unless you cancel. We'll remind you 2 weeks before {expiry} then every 6
-			months, 2 weeks before your renewal date.
+			Subscription <strong>auto-renews monthly</strong>. Pay{' '}
+			<strong>£{discountPrice}/month</strong> for{' '}
+			<strong>
+				{durationPeriods} {periodName}
+			</strong>
+			, then <strong>£{fullPrice}/month</strong> from <strong>{expiry}</strong>,
+			unless you cancel. We'll remind you 1 week before your first higher
+			payment, then every 6 months, 1 week before your subscription auto-renews.
+			To stop auto-renewal, cancel via{' '}
+			{textLink('Manage My Account', manageAccountLink)} before your next
+			renewal date.
 		</>
 	);
 };
@@ -268,14 +283,22 @@ const promotionPrintMonthly = (
 	if (!discount) {
 		return printMonthly(productKey, ratePlanKey, fullPrice);
 	}
-	const { discountedPrice, durationPeriods, periodName, expiry } =
+	const { discountedPrice, durationPeriods, periodName, expiry, delivery } =
 		renewalTermDetail(productKey, ratePlanKey, fullPrice, discount);
 	return (
 		<>
-			Subscription auto-renews monthly. Pay £{discountedPrice}/month for the
-			first {durationPeriods} {periodName}, then £{fullPrice}/month from{' '}
-			{expiry}, unless you cancel. We'll remind you 2 weeks before {expiry} then
-			every 6 months, 2 weeks before your renewal date.
+			Subscription <strong>auto-renews monthly</strong>. Your first payment will
+			be taken on <strong>{delivery}</strong>. You'll pay{' '}
+			<strong>£{discountedPrice}/month</strong> for{' '}
+			<strong>
+				{durationPeriods} {periodName}
+			</strong>
+			, then <strong>£{fullPrice}/month</strong> from <strong>{expiry}</strong>,
+			unless you cancel. We'll remind you 1 week before your first higher
+			payment, then every 6 months, 1 week before your subscription auto-renews.
+			To stop auto-renewal, cancel via{' '}
+			{textLink('Manage My Account', manageAccountLink)} before your next
+			renewal date.
 		</>
 	);
 };
