@@ -7,8 +7,8 @@ import {
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
 type DmccLayouts = {
-	digitalDmcc: boolean;
-	printDmcc: boolean;
+	isDigitalDmcc: boolean;
+	isPrintDmcc: boolean;
 };
 export const useDmccLayout = (productKey: ActiveProductKey): DmccLayouts => {
 	const { enableDMCCLayoutDigital, enableDMCCLayoutPrint } =
@@ -23,7 +23,7 @@ export const useDmccLayout = (productKey: ActiveProductKey): DmccLayouts => {
 		Country.detect() === 'GB';
 
 	return {
-		digitalDmcc: isDigitalDmcc,
-		printDmcc: isPrintDmcc,
+		isDigitalDmcc,
+		isPrintDmcc,
 	};
 };

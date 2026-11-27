@@ -26,5 +26,10 @@ export function RenewalTermPolicy({
 		promotion,
 		contribution,
 	);
-	return policy ? <p>{policy}</p> : null;
+
+	if (!policy) {
+		return null;
+	}
+
+	return <p>{policy}</p>;
 }

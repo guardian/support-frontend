@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-import { neutral, space } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { productLegal } from 'helpers/legalCopy';
@@ -23,10 +21,6 @@ import {
 	isGuardianWeeklyProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
-const containerSummaryTsCs = css`
-	border-radius: ${space[2]}px;
-	background-color: ${neutral[97]};
-`;
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -69,7 +63,7 @@ export function OrderSummaryTsAndCs({
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
 	const supporterPlusTsAndCs = (
-		<div css={containerSummaryTsCs}>
+		<>
 			{promotion && (
 				<p>
 					You’ll pay {promoMessage} afterwards unless you cancel. Offer only
@@ -115,10 +109,10 @@ export function OrderSummaryTsAndCs({
 					</p>
 				</>
 			)}
-		</div>
+		</>
 	);
 	const defaultOrderSummaryTsAndCs = (
-		<div css={containerSummaryTsCs}>
+		<>
 			{promotion && <p>You’ll pay {promoMessage}.</p>}
 			<p>Auto renews every {periodNoun} until you cancel.</p>
 			<p>
@@ -126,7 +120,7 @@ export function OrderSummaryTsAndCs({
 					? 'Cancel or change your support anytime.'
 					: 'Cancel anytime.'}
 			</p>
-		</div>
+		</>
 	);
 	const paperSundayOrPlusCopy: Partial<Record<ActiveProductKey, JSX.Element>> =
 		{
@@ -146,18 +140,15 @@ export function OrderSummaryTsAndCs({
 		};
 	const paperPlusTsAndCs = (
 		<>
-			<div css={containerSummaryTsCs}>
-				{promotion && <p>You’ll pay {promoMessage}.</p>}
-				<p>Auto renews every {periodNoun} until you cancel. Cancel anytime.</p>
-			</div>
-			<div css={containerSummaryTsCs}>
-				{isPaperSundayOrPlus && (
-					<>
-						{paperSundayOrPlusCopy[productKey]}
-						{isPaperPlus && <p>Your digital benefits will start today.</p>}
-					</>
-				)}
-			</div>
+			{promotion && <p>You’ll pay {promoMessage}.</p>}
+			<p>Auto renews every {periodNoun} until you cancel. Cancel anytime.</p>
+
+			{isPaperSundayOrPlus && (
+				<>
+					{paperSundayOrPlusCopy[productKey]}
+					{isPaperPlus && <p>Your digital benefits will start today.</p>}
+				</>
+			)}
 		</>
 	);
 	const orderSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
