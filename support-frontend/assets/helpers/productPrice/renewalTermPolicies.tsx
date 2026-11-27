@@ -27,7 +27,7 @@ import {
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 
 // PaymentTsAndCs implies a 15day wait for digitalSubscriptions alongside GuardianAdLite
-const getFirstDeliveryDateInclDigitalSubscription = (
+export const getFirstDeliveryDateInclDigitalSubscription = (
 	productKey: ActiveProductKey,
 	paperProductOptions?: ActivePaperProductOptions,
 ): Date | undefined => {
@@ -76,15 +76,38 @@ const contributionMonthly = (fullPrice: number): JSX.Element => (
 	</>
 );
 
-const digitalAndPrintMonthly = (fullPrice: number): JSX.Element => (
+const digitalMonthly = (fullPrice: number): JSX.Element => (
 	<>
-		Subscription auto-renews monthly. Pay £{fullPrice}/month, unless you cancel.
-		We'll remind you every 6 months, 1 week before your subscription
-		auto-renews. To stop auto-renewal, cancel via{' '}
-		{textLink('Manage My Account', manageAccountLink)} before your next renewal
-		date.
+		Subscription <strong>auto-renews monthly</strong>. Pay{' '}
+		<strong>£{fullPrice}/month</strong>, unless you cancel. We'll remind you
+		every 6 months, 1 week before your subscription auto-renews. To stop
+		auto-renewal, cancel via {textLink('Manage My Account', manageAccountLink)}{' '}
+		before your next renewal date.
 	</>
 );
+const printMonthly = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	fullPrice: number,
+): JSX.Element => {
+	const deliveryDate =
+		getFirstDeliveryDateInclDigitalSubscription(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		) ?? new Date();
+	return (
+		<>
+			Subscription <strong>auto-renews monthly</strong>. Your first payment will
+			be taken on {formatUserDate(deliveryDate)}. You'll pay{' '}
+			<strong>£{fullPrice}/month</strong>, unless you cancel. We'll remind you
+			every 6 months, 1 week before your subscription auto-renews. To stop
+			auto-renewal, cancel via{' '}
+			{textLink('Manage My Account', manageAccountLink)} before your next
+			renewal date.
+		</>
+	);
+};
+
 const digitalAndPrintAnnual = (fullPrice: number): JSX.Element => {
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
@@ -171,7 +194,7 @@ const promotionDigitalMonthly = (
 	if (!discount) {
 		const totalAmount =
 			productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount;
-		return digitalAndPrintMonthly(totalAmount);
+		return digitalMonthly(totalAmount);
 	}
 	const { discountedPrice, durationPeriods, periodName, expiry } =
 		renewalTermDetail(productKey, ratePlanKey, amount, discount);
@@ -196,7 +219,7 @@ const promotionPrintMonthly = (
 ): JSX.Element => {
 	const { discount } = promotion;
 	if (!discount) {
-		return digitalAndPrintMonthly(fullPrice);
+		return printMonthly(productKey, ratePlanKey, fullPrice);
 	}
 	const { discountedPrice, durationPeriods, periodName, expiry } =
 		renewalTermDetail(productKey, ratePlanKey, fullPrice, discount);
@@ -296,43 +319,43 @@ function getRenewalTerm(
 			Annual: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianAdLite: {
-			Monthly: digitalAndPrintMonthly(fullPrice),
+			Monthly: digitalMonthly(fullPrice),
 		},
 		SupporterPlus: {
-			Monthly: digitalAndPrintMonthly(fullPrice),
-			MonthlyTaxExclusive: digitalAndPrintMonthly(fullPrice),
+			Monthly: digitalMonthly(fullPrice),
+			MonthlyTaxExclusive: digitalMonthly(fullPrice),
 			Annual: digitalAndPrintAnnual(fullPrice),
 			AnnualTaxExclusive: digitalAndPrintAnnual(fullPrice),
 		},
 		DigitalSubscription: {
-			Monthly: digitalAndPrintMonthly(fullPrice),
-			MonthlyTaxExclusive: digitalAndPrintMonthly(fullPrice),
+			Monthly: digitalMonthly(fullPrice),
+			MonthlyTaxExclusive: digitalMonthly(fullPrice),
 			Annual: digitalAndPrintAnnual(fullPrice),
 			AnnualTaxExclusive: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianWeeklyDomestic: {
-			MonthlyPlus: digitalAndPrintMonthly(fullPrice),
+			MonthlyPlus: printMonthly(productKey, ratePlanKey, fullPrice),
 			QuarterlyPlus: printQuarterly(fullPrice),
 			AnnualPlus: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianWeeklyRestOfWorld: {
-			MonthlyPlus: digitalAndPrintMonthly(fullPrice),
+			MonthlyPlus: printMonthly(productKey, ratePlanKey, fullPrice),
 			QuarterlyPlus: printQuarterly(fullPrice),
 			AnnualPlus: digitalAndPrintAnnual(fullPrice),
 		},
 		SubscriptionCard: {
-			EverydayPlus: digitalAndPrintMonthly(fullPrice),
-			SixdayPlus: digitalAndPrintMonthly(fullPrice),
-			WeekendPlus: digitalAndPrintMonthly(fullPrice),
-			SaturdayPlus: digitalAndPrintMonthly(fullPrice),
-			Sunday: digitalAndPrintMonthly(fullPrice),
+			EverydayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			SixdayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			WeekendPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			SaturdayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			Sunday: printMonthly(productKey, ratePlanKey, fullPrice),
 		},
 		HomeDelivery: {
-			EverydayPlus: digitalAndPrintMonthly(fullPrice),
-			SixdayPlus: digitalAndPrintMonthly(fullPrice),
-			WeekendPlus: digitalAndPrintMonthly(fullPrice),
-			SaturdayPlus: digitalAndPrintMonthly(fullPrice),
-			Sunday: digitalAndPrintMonthly(fullPrice),
+			EverydayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			SixdayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			WeekendPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			SaturdayPlus: printMonthly(productKey, ratePlanKey, fullPrice),
+			Sunday: printMonthly(productKey, ratePlanKey, fullPrice),
 		},
 	};
 	return renewalTerms[productKey]?.[ratePlanKey];
