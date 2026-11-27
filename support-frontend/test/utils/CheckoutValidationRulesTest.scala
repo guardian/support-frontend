@@ -60,7 +60,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeExpressCheckout = Some(Off),
+          stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(Off),
           stripeHostedCheckout = Some(Off),
@@ -117,7 +117,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeExpressCheckout = Some(Off),
+          stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
@@ -235,7 +235,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeExpressCheckout = Some(On),
+          stripeExpressCheckout = Some(Off),
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
@@ -316,7 +316,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
-          stripeExpressCheckout = Some(On),
+          stripeExpressCheckout = Some(Off),
           payPal = Some(On),
           directDebit = Some(On),
           stripeHostedCheckout = Some(Off),
