@@ -21,10 +21,6 @@ const rowSpacing = css`
 	flex-direction: column;
 	gap: ${space[1]}px;
 	margin-top: ${space[1]}px;
-
-	&:not(:last-child) {
-		margin-bottom: ${space[8]}px;
-	}
 `;
 
 const boldText = css`

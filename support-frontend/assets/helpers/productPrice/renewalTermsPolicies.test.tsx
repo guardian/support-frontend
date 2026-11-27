@@ -1,4 +1,6 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import { render, screen } from '@testing-library/react';
+import { manageAccountLink } from 'helpers/legal';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -12,10 +14,14 @@ import {
 	getRenewalTermPolicy,
 } from './renewalTermPolicies';
 
-const contributionMonthly = (fullPrice: number) =>
-	`We will attempt to take payment of £${fullPrice}, on the ${getDateWithOrdinal(
+const contributionMonthly = () =>
+	`This payment auto-renews monthly until you cancel. You can cancel your auto-renewal at any time. We will attempt to take payment on the ${getDateWithOrdinal(
 		new Date(),
-	)} day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
+	)} day of every month. Payments may take up to 6 days to be recorded in your bank account. To cancel or change how much you give, go to Manage My Account.`;
+const contributionAnnual = () =>
+	`This payment auto-renews annualy until you cancel. You can cancel your auto-renewal at any time. We will attempt to take payment on the ${getDateWithOrdinal(
+		new Date(),
+	)} day of every year. Payments may take up to 6 days to be recorded in your bank account. To cancel or change how much you give, go to Manage My Account.`;
 const digitalAndPrintMonthly = (fullPrice: number) =>
 	`Subscription auto-renews monthly. Pay £${fullPrice}/month, unless you cancel. We'll remind you every 6 months, 2 weeks before your renewal date.`;
 const digitalAndPrintAnnual = (fullPrice: number) =>
@@ -69,8 +75,22 @@ const promotionAnnual = (
 
 describe('getRenewalTermPolicyCopy', () => {
 	it.each([
-		['Contribution', 'Monthly', contributionMonthly],
-		['Contribution', 'Annual', digitalAndPrintAnnual],
+		['Monthly', contributionMonthly],
+		['Annual', contributionAnnual],
+	] as const)(
+		'renewal term for product:Contribution ratePlan:%s',
+		(ratePlan, policy) => {
+			const { fullPrice } = getTestPricesAndPromotion('Contribution', ratePlan);
+			const result = getRenewalTermPolicy('Contribution', ratePlan, fullPrice);
+			const { container } = render(<>{result}</>);
+			expect(container.textContent).toBe(policy());
+			expect(
+				screen.getByRole('link', { name: 'Manage My Account' }),
+			).toHaveAttribute('href', manageAccountLink);
+		},
+	);
+
+	it.each([
 		['GuardianAdLite', 'Monthly', digitalAndPrintMonthly],
 		['SupporterPlus', 'Monthly', digitalAndPrintMonthly],
 		['SupporterPlus', 'Annual', digitalAndPrintAnnual],

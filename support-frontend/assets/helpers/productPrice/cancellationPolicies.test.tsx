@@ -22,13 +22,13 @@ const digitalMonthly =
 	'Cancel anytime, via your account. Cancel within 14 days of sign-up and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
 const digitalAnnual = `Cancel anytime, via your account. Cancel within 14 days of sign-up or each renewal and receive a full refund of your last payment. See more about your cooling-off rights in your full pre-contract information here.`;
 const studentAnnual =
-	"You may cancel your All-access digital subscription within 14 days of taking out the subscription. If you do, you'll receive a full refund and your subscription will stop immediately. To cancel, go to Manage My Account or see our terms. This subscription does not auto-renew.";
+	'This subscription does not auto-renew. If you cancel within 14 days of sign-up, you will receive a full refund and your subscription will stop immediately. To cancel, go to Manage My Account or see our terms.';
 const printDelivery =
 	'Cancel anytime, via your account. Cancel within 14 days of receiving your first issue and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
 const printSubscription =
 	'Cancel anytime, via your account. Cancel within 14 days of receiving your subscription card and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
 const printGift =
-	"By proceeding, you are agreeing to our Terms & Conditions. This subscription does not auto-renew. If you cancel within 14 days of sign-up, you'll receive a full refund. To cancel within 14 days of sign-up and receive a refund contact Customer Service.";
+	"This subscription does not auto-renew. If you cancel within 14 days of sign-up, you'll receive a full refund and your subscription will stop immediately. To cancel contact Customer Service.";
 const promotionDigitalMonthly = (firstPayment: number) =>
 	`Cancel anytime, via your account. Cancel within 14 days of sign-up or your first payment at £${firstPayment} and receive a full refund of your last payment. See more about your cooling-off rights in your full pre-contract information here.`;
 const promotionPrintDelivery = (firstPayment: number) =>
@@ -123,20 +123,8 @@ const policyCases: PolicyCase[] = [
 		),
 		guardianWeeklyTermsLink,
 	],
-	[
-		'GuardianWeeklyDomestic',
-		'ThreeMonthGift',
-		printGift,
-		printGift,
-		guardianWeeklyTermsLink,
-	],
-	[
-		'GuardianWeeklyDomestic',
-		'OneYearGift',
-		printGift,
-		printGift,
-		guardianWeeklyTermsLink,
-	],
+	['GuardianWeeklyDomestic', 'ThreeMonthGift', printGift, printGift, undefined],
+	['GuardianWeeklyDomestic', 'OneYearGift', printGift, printGift, undefined],
 	[
 		'HomeDelivery',
 		'EverydayPlus',
@@ -228,9 +216,13 @@ const expectPolicy = (
 	const { container } = render(policy);
 	expect(container.textContent).toMatchSnapshot();
 	expect(container.textContent).toBe(copy);
-	expect(
-		screen.getByRole('link', { name: /^(here|terms|Terms & Conditions)$/ }),
-	).toHaveAttribute('href', termsLink);
+
+	if (termsLink !== undefined) {
+		expect(
+			screen.queryByRole('link', { name: /^(here|terms|Terms & Conditions)$/ }),
+		).toHaveAttribute('href', termsLink);
+	}
+
 	if (copy !== printGift) {
 		expect(
 			screen.getByRole('link', { name: /^(your account|Manage My Account)$/ }),
