@@ -66,8 +66,8 @@ const rowSpacing = css`
 	}
 `;
 
-const priceRowSpacing = css`
-	margin-top: ${space[8]}px;
+const priceRowSpacing = (isweeklyPrice: boolean) => css`
+	margin-top: ${isweeklyPrice ? space[6] : space[8]}px;
 `;
 
 const headingRow = css`
@@ -322,7 +322,7 @@ export function ContributionsOrderSummary({
 
 			{isPrintDmcc && <div css={subscriptionStartAndDelivery}>{tsAndCs}</div>}
 			{!isPrintDmcc && !isDigitalDmcc && (
-				<div css={priceRowSpacing}>
+				<div css={priceRowSpacing(isWeeklyPricing)}>
 					{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 				</div>
 			)}
