@@ -46,7 +46,11 @@ export default function PreContractLink({
 		return null;
 	}
 
-	const link = <a href={preContractLink}>here</a>;
+	const link = (
+		<a href={preContractLink} target="_blank" rel="noopener noreferrer">
+			here
+		</a>
+	);
 
 	return (
 		<p css={preContractLinkStyle}>
