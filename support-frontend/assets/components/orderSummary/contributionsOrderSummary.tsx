@@ -321,7 +321,7 @@ export function ContributionsOrderSummary({
 			/>
 
 			{isPrintDmcc && <div css={subscriptionStartAndDelivery}>{tsAndCs}</div>}
-			{!isPrintDmcc && !isDigitalDmcc && (
+			{!(isPrintDmcc || isDigitalDmcc) && (
 				<div css={priceRowSpacing(isWeeklyPricing)}>
 					{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 				</div>
