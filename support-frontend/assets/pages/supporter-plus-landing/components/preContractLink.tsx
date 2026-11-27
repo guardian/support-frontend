@@ -17,7 +17,7 @@ const preContractLinkByProduct = {
 	NationalDelivery: preContractLinks.NEWSPAPER,
 	SubscriptionCard: preContractLinks.NEWSPAPER,
 	GuardianWeeklyDomestic: preContractLinks.GUARDIAN_WEEKLY,
-	GuardianWeeklyRestOfWorld: preContractLinks.GUARDIAN_WEEKLY,
+	GuardianWeeklyRestOfWorld: undefined,
 	Contribution: undefined,
 	OneTimeContribution: undefined,
 } satisfies Record<ActiveProductKey, string | undefined>;
@@ -56,12 +56,12 @@ export default function PreContractLink({
 		<p css={preContractLinkStyle}>
 			{isObserver ? (
 				<>
-					For more important information about your subscription click {link}.
+					See more details about your subscription in your full pre-contract
+					information {link}.
 				</>
 			) : (
 				<>
-					See more details about your subscription in your full pre-contract
-					information {link}.
+					For more important information about your subscription click {link}.
 				</>
 			)}
 		</p>
