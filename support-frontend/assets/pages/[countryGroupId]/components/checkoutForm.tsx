@@ -189,8 +189,8 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
-	const { digitalDmcc, printDmcc } = useDmccLayout(productKey);
-	const isDmcc = printDmcc || digitalDmcc;
+	const { isDigitalDmcc, isPrintDmcc } = useDmccLayout(productKey);
+	const isDmcc = isPrintDmcc || isDigitalDmcc;
 
 	const abParticipations = useAbParticipations();
 

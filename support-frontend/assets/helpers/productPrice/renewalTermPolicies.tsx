@@ -242,14 +242,17 @@ const promotionAnnual = (
 };
 
 type Policy = Partial<
-	Record<ActiveProductKey, Partial<Record<ActiveRatePlanKey, string>>>
+	Record<
+		ActiveProductKey,
+		Partial<Record<ActiveRatePlanKey, string | JSX.Element>>
+	>
 >;
 
 function getRenewalTerm(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	fullPrice: number,
-): string | undefined {
+): string | JSX.Element | undefined {
 	const renewalTerms: Policy = {
 		Contribution: {
 			Monthly: contributionMonthly(),
@@ -304,7 +307,7 @@ function getPromotionalRenewalTerm(
 	amount: number,
 	promotion: PromoWithCatalogInformation,
 	contribution?: number,
-): string | undefined {
+): string | JSX.Element | undefined {
 	const promotionAnnualTerms = promotionAnnual(
 		productKey,
 		ratePlanKey,

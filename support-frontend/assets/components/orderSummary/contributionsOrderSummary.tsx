@@ -32,14 +32,13 @@ import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import { useDMCCLayout } from 'pages/[countryGroupId]/helpers/useDMCCLayout';
+import { useDmccLayout } from 'pages/[countryGroupId]/helpers/useDMCCLayout';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import {
 	isContributionOnlyProduct,
 	isGuardianWeeklyDigitalProduct,
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
-	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -199,7 +198,7 @@ export function ContributionsOrderSummary({
 	supportRegionId,
 	nudgeSettings,
 }: ContributionsOrderSummaryProps): JSX.Element {
-	const enableDMCCALayout = useDMCCLayout();
+	const { isDigitalDmcc, isPrintDmcc } = useDmccLayout(productKey);
 	const { originalAmount } = payment;
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -321,10 +320,8 @@ export function ContributionsOrderSummary({
 				isIntroductoryPricing={promotion?.isIntroductoryPricing ?? false}
 			/>
 
-			{enableDMCCALayout && isPrintProduct(productKey) && (
-				<div css={subscriptionStartAndDelivery}>{tsAndCs}</div>
-			)}
-			{!enableDMCCALayout && (
+			{isPrintDmcc && <div css={subscriptionStartAndDelivery}>{tsAndCs}</div>}
+			{!isPrintDmcc && !isDigitalDmcc && (
 				<div css={priceRowSpacing}>
 					{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 				</div>

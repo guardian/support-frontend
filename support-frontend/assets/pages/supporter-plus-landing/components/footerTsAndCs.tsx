@@ -17,7 +17,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
-import { useDMCCLayout } from 'pages/[countryGroupId]/helpers/useDMCCLayout';
+import { useDmccLayout } from 'pages/[countryGroupId]/helpers/useDMCCLayout';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
 
@@ -35,7 +35,7 @@ export function FooterTsAndCs({
 	countryGroupId,
 	ratePlanKey,
 }: FooterTsAndCsProps) {
-	const enableDMCCALayout = useDMCCLayout();
+	const { isPrintDmcc } = useDmccLayout(productKey);
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 	const getProductNameSummary = (): string => {
 		switch (productKey) {
@@ -81,8 +81,7 @@ export function FooterTsAndCs({
 	return (
 		<div css={marginTop}>
 			By proceeding, you are agreeing to {getProductNameSummary()}{' '}
-			{getProductTerms()}.{' '}
-			{!enableDMCCALayout && isWeeklyGift && weeklyGiftTerms}
+			{getProductTerms()}. {!isPrintDmcc && isWeeklyGift && weeklyGiftTerms}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
