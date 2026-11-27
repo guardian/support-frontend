@@ -66,7 +66,7 @@ export function PreContractInformation({
 				promotion={promotion}
 			/>
 			<PriceRisePolicy productKey={productKey} ratePlanKey={ratePlanKey} />
-			<PreContractLink productKey={productKey} />
+			<PreContractLink productKey={productKey} ratePlanKey={ratePlanKey} />
 		</div>
 	);
 }

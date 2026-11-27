@@ -1,8 +1,11 @@
 import { css } from '@emotion/react';
 import { neutral, space } from '@guardian/source/foundations';
-import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { observerLinks, preContractLinks } from 'helpers/legal';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+import { isObserverProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
 const preContractLinkStyle = css`
 	border-top: 1px solid ${neutral[73]};
@@ -34,12 +37,14 @@ export function getPreContractLinkByProduct(
 
 interface PreContractLinkProps {
 	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 }
 
 export default function PreContractLink({
 	productKey,
+	ratePlanKey,
 }: PreContractLinkProps): JSX.Element | null {
-	const isObserver = isObserverSubdomain();
+	const isObserver = isObserverProduct(productKey, ratePlanKey);
 	const preContractLink = getPreContractLinkByProduct(productKey, isObserver);
 
 	if (!preContractLink) {
