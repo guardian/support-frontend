@@ -38,7 +38,7 @@ describe('useDMCCLayout (Print & Digital)', () => {
 				enableDMCCLayoutDigital: enableDMCCLayoutDigital as boolean,
 			} as ReturnType<typeof useFeatureSwitches>);
 			jest.spyOn(Country, 'detect').mockReturnValue(country as CountryCode);
-			expect(useDmccLayout(productKey as ActiveProductKey).digitalDmcc).toBe(
+			expect(useDmccLayout(productKey as ActiveProductKey).isDigitalDmcc).toBe(
 				expected,
 			);
 		},
@@ -68,7 +68,7 @@ describe('useDMCCLayout (Print & Digital)', () => {
 				enableDMCCLayoutPrint: enableDMCCLayoutPrint as boolean,
 			} as ReturnType<typeof useFeatureSwitches>);
 			jest.spyOn(Country, 'detect').mockReturnValue(country as CountryCode);
-			expect(useDmccLayout(productKey as ActiveProductKey).printDmcc).toBe(
+			expect(useDmccLayout(productKey as ActiveProductKey).isPrintDmcc).toBe(
 				expected,
 			);
 		},
