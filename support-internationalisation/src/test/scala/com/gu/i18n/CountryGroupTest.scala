@@ -25,6 +25,12 @@ class CountryGroupTest extends AnyFlatSpec with Matchers with Inspectors {
     CountryGroup.byCountryNameOrCode("IE") shouldBe Some(CountryGroup.Europe)
   }
 
+  it should "use the European region for the countries targeted by European support messages" in {
+    forAll(List("AM", "AZ", "BY", "GE", "IC", "MD", "MK", "TR", "UA")) { code =>
+      CountryGroup.byCountryCode(code) shouldBe Some(CountryGroup.Europe)
+    }
+  }
+
   it should "correctly identify its currencies" in {
     CountryGroup.availableCurrency(Set.empty)(Country.UK) shouldBe None
     CountryGroup.availableCurrency(Set(GBP, AUD))(Country.US) shouldBe None
