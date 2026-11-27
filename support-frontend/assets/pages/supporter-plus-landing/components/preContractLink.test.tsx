@@ -20,7 +20,7 @@ describe('getPreContractLinkByProduct', () => {
 		['NationalDelivery', preContractLinks.NEWSPAPER],
 		['SubscriptionCard', preContractLinks.NEWSPAPER],
 		['GuardianWeeklyDomestic', preContractLinks.GUARDIAN_WEEKLY],
-		['GuardianWeeklyRestOfWorld', preContractLinks.GUARDIAN_WEEKLY],
+		['GuardianWeeklyRestOfWorld', undefined],
 		['Contribution', undefined],
 		['OneTimeContribution', undefined],
 	] as const)('returns the pre-contract link for %s', (productKey, link) => {
@@ -42,10 +42,13 @@ describe('PreContractLink', () => {
 
 	it('renders the product pre-contract link', () => {
 		const { container } = render(
-			<PreContractLink productKey="GuardianWeeklyDomestic" />,
+			<PreContractLink
+				productKey="GuardianWeeklyDomestic"
+				ratePlanKey="MonthlyPlus"
+			/>,
 		);
 		expect(container.textContent).toBe(
-			'See more details about your subscription in your full pre-contract information here.',
+			'For more important information about your subscription click here.',
 		);
 		expect(screen.getByRole('link', { name: 'here' })).toHaveAttribute(
 			'href',
@@ -56,10 +59,10 @@ describe('PreContractLink', () => {
 	it('renders the Observer wording and link on the Observer subdomain', () => {
 		mockIsObserverSubdomain.mockReturnValue(true);
 		const { container } = render(
-			<PreContractLink productKey="SubscriptionCard" />,
+			<PreContractLink productKey="SubscriptionCard" ratePlanKey="Sunday" />,
 		);
 		expect(container.textContent).toBe(
-			'For more important information about your subscription click here.',
+			'See more details about your subscription in your full pre-contract information here.',
 		);
 		expect(screen.getByRole('link', { name: 'here' })).toHaveAttribute(
 			'href',
@@ -68,7 +71,9 @@ describe('PreContractLink', () => {
 	});
 
 	it('renders nothing when the product has no pre-contract link', () => {
-		const { container } = render(<PreContractLink productKey="Contribution" />);
+		const { container } = render(
+			<PreContractLink productKey="Contribution" ratePlanKey="Monthly" />,
+		);
 		expect(container).toBeEmptyDOMElement();
 	});
 });
