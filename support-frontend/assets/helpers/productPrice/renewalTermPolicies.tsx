@@ -341,7 +341,7 @@ const promotionPrintQuarterly = (
 		</>
 	);
 };
-const promotionAnnual = (
+const promotionDigitalAnnual = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	amount: number,
@@ -373,16 +373,71 @@ const promotionAnnual = (
 	);
 	return (
 		<>
-			Subscription auto-renews annually. Pay £{discountPrice}/year for{' '}
-			{durationPeriods} {periodName}, then £{fullPrice}/year from {expiry},
-			unless you cancel. Equivalent to £{discountPriceMonthlyEquivalent}/month
-			for {durationPeriods} {periodName}, then £{fullPriceMonthlyEquivalent}
-			/month for each year after. We'll remind you every year, 2 weeks before
-			your renewal date.
+			Subscription <strong>auto-renews annually</strong>. Pay{' '}
+			<strong>£{discountPrice}/year</strong> for{' '}
+			<strong>
+				{durationPeriods} {periodName}
+			</strong>
+			, then <strong>£{fullPrice}/year</strong> from <strong>{expiry}</strong>,
+			unless you cancel (if payments were due monthly this would be £
+			{discountPriceMonthlyEquivalent}/month for {durationPeriods} {periodName},
+			then £{fullPriceMonthlyEquivalent}
+			/month). We'll send you a reminder 14 and 7 days before each renewal. To
+			stop auto-renewal, cancel via{' '}
+			{textLink('Manage My Account', manageAccountLink)} before your next
+			renewal date.
 		</>
 	);
 };
-
+const promotionPrintAnnual = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	amount: number,
+	promotion: PromoWithCatalogInformation,
+	contribution?: number,
+): JSX.Element => {
+	const { discount } = promotion;
+	if (!discount) {
+		const totalAmount =
+			productKey === 'SupporterPlus' ? amount + (contribution ?? 0) : amount;
+		return digitalAnnual(totalAmount);
+	}
+	const { discountedPrice, periodName, durationPeriods, expiry, delivery } =
+		renewalTermDetail(productKey, ratePlanKey, amount, discount);
+	const billingPeriod = ratePlanToBillingPeriod(
+		ratePlanKey,
+	) as RecurringBillingPeriod;
+	const validContribution =
+		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
+	const fullPrice = amount + validContribution;
+	const fullPriceMonthlyEquivalent = monthlyEquivalentPrice(
+		fullPrice,
+		billingPeriod,
+	);
+	const discountPrice = discountedPrice + validContribution;
+	const discountPriceMonthlyEquivalent = monthlyEquivalentPrice(
+		discountPrice,
+		billingPeriod,
+	);
+	return (
+		<>
+			Subscription <strong>auto-renews annually</strong>. Your first payment
+			will be taken on {delivery}. You'll pay{' '}
+			<strong>£{discountPrice}/year</strong> for{' '}
+			<strong>
+				{durationPeriods} {periodName}
+			</strong>
+			, then <strong>£{fullPrice}/year</strong> from <strong>{expiry}</strong>,
+			unless you cancel (if payments were due monthly this would be £
+			{discountPriceMonthlyEquivalent}/month for {durationPeriods} {periodName},
+			then £{fullPriceMonthlyEquivalent}
+			/month). We'll send you a reminder 14 and 7 days before each renewal. To
+			stop auto-renewal, cancel via{' '}
+			{textLink('Manage My Account', manageAccountLink)} before your next
+			renewal date.
+		</>
+	);
+};
 type Policy = Partial<
 	Record<ActiveProductKey, Partial<Record<ActiveRatePlanKey, JSX.Element>>>
 >;
@@ -447,7 +502,14 @@ function getPromotionalRenewalTerm(
 	promotion: PromoWithCatalogInformation,
 	contribution?: number,
 ): JSX.Element | undefined {
-	const promotionAnnualTerms = promotionAnnual(
+	const promotionDigitalAnnualTerms = promotionDigitalAnnual(
+		productKey,
+		ratePlanKey,
+		amount,
+		promotion,
+		contribution,
+	);
+	const promotionPrintAnnualTerms = promotionPrintAnnual(
 		productKey,
 		ratePlanKey,
 		amount,
@@ -481,24 +543,24 @@ function getPromotionalRenewalTerm(
 		SupporterPlus: {
 			Monthly: promotionDigitalMonthlyTerms,
 			MonthlyTaxExclusive: promotionDigitalMonthlyTerms,
-			Annual: promotionAnnualTerms,
-			AnnualTaxExclusive: promotionAnnualTerms,
+			Annual: promotionDigitalAnnualTerms,
+			AnnualTaxExclusive: promotionDigitalAnnualTerms,
 		},
 		DigitalSubscription: {
 			Monthly: promotionDigitalMonthlyTerms,
 			MonthlyTaxExclusive: promotionDigitalMonthlyTerms,
-			Annual: promotionAnnualTerms,
-			AnnualTaxExclusive: promotionAnnualTerms,
+			Annual: promotionDigitalAnnualTerms,
+			AnnualTaxExclusive: promotionDigitalAnnualTerms,
 		},
 		GuardianWeeklyDomestic: {
 			MonthlyPlus: promotionPrintMonthlyTerms,
 			QuarterlyPlus: promotionPrintQuarterlyTerms,
-			AnnualPlus: promotionAnnualTerms,
+			AnnualPlus: promotionPrintAnnualTerms,
 		},
 		GuardianWeeklyRestOfWorld: {
 			MonthlyPlus: promotionPrintMonthlyTerms,
 			QuarterlyPlus: promotionPrintQuarterlyTerms,
-			AnnualPlus: promotionAnnualTerms,
+			AnnualPlus: promotionDigitalAnnualTerms,
 		},
 		HomeDelivery: {
 			EverydayPlus: promotionPrintMonthlyTerms,

@@ -82,26 +82,28 @@ const promoDigitalAnnual = (test: RenewalTestProps) =>
 		test.discountPrice
 	}/year for 1 year, then £${test.fullPrice}/year from ${
 		test.expiryDate
-	}, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
+	}, unless you cancel (if payments were due monthly this would be £${monthlyEquivalentPrice(
 		test.discountPrice,
 		BillingPeriod.Annual,
 	)}/month for 1 year, then £${monthlyEquivalentPrice(
 		test.fullPrice,
 		BillingPeriod.Annual,
-	)}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	)}/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 
 const promoPrintAnnual = (test: RenewalTestProps) =>
-	`Subscription auto-renews annually. Pay £${
-		test.discountPrice
-	}/year for 1 year, then £${test.fullPrice}/year from ${
+	`Subscription auto-renews annually. Your first payment will be taken on ${
+		test.deliveryDate
+	}. You'll pay £${test.discountPrice}/year for 1 year, then £${
+		test.fullPrice
+	}/year from ${
 		test.expiryDate
-	}, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
+	}, unless you cancel (if payments were due monthly this would be £${monthlyEquivalentPrice(
 		test.discountPrice,
 		BillingPeriod.Annual,
 	)}/month for 1 year, then £${monthlyEquivalentPrice(
 		test.fullPrice,
 		BillingPeriod.Annual,
-	)}/month for each year after. We'll remind you every year, 2 weeks before your renewal date.`;
+	)}/month). We'll send you a reminder 14 and 7 days before each renewal. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 
 const expectPolicy = (
 	policy: JSX.Element | undefined,
