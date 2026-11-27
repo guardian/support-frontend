@@ -10,6 +10,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { GuardianWeeklyDigitalOrderSummaryStartDate } from 'components/orderSummary/guardianWeeklyDigitalOrderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
+import { OrderSummaryTsAndCsDmcca } from 'components/orderSummary/orderSummmaryTsAndCsDmcc';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { Payment } from 'helpers/forms/checkouts';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
@@ -38,6 +39,7 @@ import {
 	getBenefitsChecklist,
 	getProductBenefitsChecklist,
 } from '../checkout/helpers/benefitsChecklist';
+import type { DmccLayouts } from '../helpers/useDMCCLayout';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
@@ -64,6 +66,7 @@ type CheckoutSummaryProps = {
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
 	nudgeSettings?: CheckoutNudgeSettings;
+	dmcc: DmccLayouts;
 };
 
 export default function CheckoutSummary({
@@ -83,6 +86,7 @@ export default function CheckoutSummary({
 	forcedCountry,
 	studentDiscount,
 	nudgeSettings,
+	dmcc,
 }: CheckoutSummaryProps) {
 	const { originalAmount } = payment;
 	const urlParams = new URLSearchParams(window.location.search);
@@ -205,19 +209,31 @@ export default function CheckoutSummary({
 						) : undefined
 					}
 					tsAndCs={
-						<OrderSummaryTsAndCs
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							ratePlanDescription={ratePlanDetail.label}
-							countryGroupId={countryGroupId}
-							thresholdAmount={thresholdAmount}
-							promotion={promotion}
-							deliveryDate={
-								isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-									? weeklyDeliveryDate
-									: undefined
-							}
-						/>
+						!dmcc.digitalDmcc ? (
+							<OrderSummaryTsAndCs
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								ratePlanDescription={ratePlanDetail.label}
+								countryGroupId={countryGroupId}
+								thresholdAmount={thresholdAmount}
+								promotion={promotion}
+								deliveryDate={
+									isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+										? weeklyDeliveryDate
+										: undefined
+								}
+							/>
+						) : null
+					}
+					tsAndCsDmcc={
+						dmcc.printDmcc ? (
+							<OrderSummaryTsAndCsDmcca
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								ratePlanDescription={ratePlanDetail.label}
+								weeklyGiftDeliveryDate={weeklyDeliveryDate}
+							/>
+						) : undefined
 					}
 					headerButton={
 						showBackButton && (

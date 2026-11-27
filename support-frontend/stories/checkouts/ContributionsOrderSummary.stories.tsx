@@ -10,6 +10,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
+import { OrderSummaryTsAndCsDmcca } from 'components/orderSummary/orderSummmaryTsAndCsDmcc';
 import {
 	getProductLabel,
 	productCatalogDescription,
@@ -70,6 +71,9 @@ enum ProductKeys {
 	Contribution = 'Contribution',
 	SupporterPlusKey = 'SupporterPlus',
 	DigitalSubscription = 'DigitalSubscription',
+	GuardianWeeklyDomestic = 'GuardianWeeklyDomestic',
+	HomeDelivery = 'HomeDelivery',
+	SubscriptionCard = 'SubscriptionCard',
 }
 
 export default {
@@ -521,4 +525,277 @@ WeeklyPricingWithTax.args = {
 	supportRegionId: SupportRegionId.CA,
 	landingPageSettings: weeklyPricingLandingPageSettings,
 	taxRateConfig: { type: 'tax_exclusive', rate: 0.15 },
+};
+
+export const DmccaWeekly = Template.bind({});
+DmccaWeekly.args = {
+	productKey: ProductKeys.GuardianWeeklyDomestic,
+	ratePlanKey: 'MonthlyPlus',
+	productLabel: getProductLabel(ProductKeys.GuardianWeeklyDomestic),
+	billingPeriod: BillingPeriod.Monthly,
+	enableCheckList: true,
+	payment: { originalAmount: 19, finalAmount: 19 },
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.GuardianWeeklyDomestic.benefits.map(
+			(benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}),
+		),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'GuardianWeeklyDomestic'}
+			ratePlanKey={'MonthlyPlus'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={19}
+		/>
+	),
+	tsAndCsDmcc: (
+		<OrderSummaryTsAndCsDmcca
+			productKey={'GuardianWeeklyDomestic'}
+			ratePlanKey={'MonthlyPlus'}
+		/>
+	),
+	startDate: undefined,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
+};
+
+export const DmccaWeeklyGift = Template.bind({});
+DmccaWeeklyGift.args = {
+	productKey: ProductKeys.GuardianWeeklyDomestic,
+	ratePlanKey: 'ThreeMonthGift',
+	productLabel: getProductLabel(ProductKeys.GuardianWeeklyDomestic),
+	billingPeriod: BillingPeriod.Quarterly,
+	enableCheckList: true,
+	payment: { originalAmount: 19, finalAmount: 19 },
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.GuardianWeeklyDomestic.benefits.map(
+			(benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}),
+		),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'GuardianWeeklyDomestic'}
+			ratePlanKey={'ThreeMonthGift'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={19}
+		/>
+	),
+	tsAndCsDmcc: (
+		<OrderSummaryTsAndCsDmcca
+			productKey={'GuardianWeeklyDomestic'}
+			ratePlanKey={'ThreeMonthGift'}
+			weeklyGiftDeliveryDate={new Date()}
+		/>
+	),
+	startDate: undefined,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
+};
+
+export const DmccaSubscardSixday = Template.bind({});
+DmccaSubscardSixday.args = {
+	productKey: ProductKeys.SubscriptionCard,
+	ratePlanKey: 'SixdayPlus',
+	productLabel: getProductLabel(ProductKeys.SubscriptionCard),
+	billingPeriod: BillingPeriod.Monthly,
+	enableCheckList: true,
+	payment: { originalAmount: 50, finalAmount: 50 },
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.SubscriptionCard.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SubscriptionCard'}
+			ratePlanKey={'SixdayPlus'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={15}
+		/>
+	),
+	tsAndCsDmcc: (
+		<OrderSummaryTsAndCsDmcca
+			productKey={'SubscriptionCard'}
+			ratePlanKey={'SixdayPlus'}
+			ratePlanDescription={'six day'}
+		/>
+	),
+	startDate: undefined,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
+};
+
+export const DmccaSubcardSunday = Template.bind({});
+DmccaSubcardSunday.args = {
+	productKey: ProductKeys.SubscriptionCard,
+	ratePlanKey: 'Sunday',
+	productLabel: getProductLabel(ProductKeys.SubscriptionCard),
+	billingPeriod: BillingPeriod.Monthly,
+	enableCheckList: true,
+	payment: { originalAmount: 50, finalAmount: 50 },
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.SubscriptionCard.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SubscriptionCard'}
+			ratePlanKey={'Sunday'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={15}
+		/>
+	),
+	tsAndCsDmcc: (
+		<OrderSummaryTsAndCsDmcca
+			productKey={'SubscriptionCard'}
+			ratePlanKey={'Sunday'}
+			ratePlanDescription={'Observer'}
+		/>
+	),
+	startDate: undefined,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
+};
+
+export const DmccaHomedeliveryEveryday = Template.bind({});
+DmccaHomedeliveryEveryday.args = {
+	productKey: ProductKeys.HomeDelivery,
+	ratePlanKey: 'EverydayPlus',
+	productLabel: getProductLabel(ProductKeys.HomeDelivery),
+	billingPeriod: BillingPeriod.Monthly,
+	enableCheckList: true,
+	payment: { originalAmount: 50, finalAmount: 50 },
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.SubscriptionCard.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'HomeDelivery'}
+			ratePlanKey={'EverydayPlus'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={15}
+		/>
+	),
+	tsAndCsDmcc: (
+		<OrderSummaryTsAndCsDmcca
+			productKey={'HomeDelivery'}
+			ratePlanKey={'EverydayPlus'}
+			ratePlanDescription={'every day'}
+		/>
+	),
+	startDate: undefined,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
+};
+
+export const DmccaHomedeliverySunday = Template.bind({});
+DmccaHomedeliverySunday.args = {
+	productKey: ProductKeys.HomeDelivery,
+	ratePlanKey: 'Sunday',
+	productLabel: getProductLabel(ProductKeys.HomeDelivery),
+	billingPeriod: BillingPeriod.Monthly,
+	enableCheckList: true,
+	payment: { originalAmount: 50, finalAmount: 50 },
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.HomeDelivery.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'HomeDelivery'}
+			ratePlanKey={'Sunday'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={15}
+		/>
+	),
+	tsAndCsDmcc: (
+		<OrderSummaryTsAndCsDmcca
+			productKey={'HomeDelivery'}
+			ratePlanKey={'Sunday'}
+			ratePlanDescription={'Observer'}
+		/>
+	),
+	startDate: undefined,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
 };

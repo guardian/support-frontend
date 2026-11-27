@@ -6,7 +6,7 @@ import {
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
-type DmccLayouts = {
+export type DmccLayouts = {
 	digitalDmcc: boolean;
 	printDmcc: boolean;
 };

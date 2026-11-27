@@ -18,6 +18,8 @@ const featureSwitchesSchema = z.object({
 	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
+	enableTooledStudentLandingPage: z.optional(z.enum(['On', 'Off'])),
+	enableStripePaymentElement: z.optional(z.enum(['On', 'Off'])),
 	enableDeepDiscount: z.optional(z.enum(['On', 'Off'])),
 	enableStudentBeansEuropeAustralia: z.optional(z.enum(['On', 'Off'])),
 	enableDMCCLayoutDigital: z.optional(z.enum(['On', 'Off'])),

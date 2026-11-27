@@ -44,6 +44,7 @@ import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
 import GuardianPageLayout from './components/GuardianPageLayout';
 import CurrentMaxRatesByCountry from './helpers/CurrentMaxRatesByCountry';
+import { useDmccLayout } from './helpers/useDMCCLayout';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
@@ -277,6 +278,8 @@ export function Checkout({
 		supportRegionId,
 	);
 
+	const dmcc = useDmccLayout(productKey);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
@@ -306,6 +309,7 @@ export function Checkout({
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
 						taxRateConfig={taxRateConfig}
+						dmcc={dmcc}
 					/>
 
 					<CheckoutForm
@@ -330,6 +334,7 @@ export function Checkout({
 						billingState={billingState}
 						setBillingState={setBillingState}
 						taxRateConfig={taxRateConfig}
+						dmcc={dmcc}
 					/>
 				</PageLayout>
 			</Elements>

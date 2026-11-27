@@ -89,7 +89,7 @@ import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheck
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
-import { useDmccLayout } from '../helpers/useDMCCLayout';
+import type { DmccLayouts } from '../helpers/useDMCCLayout';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
@@ -159,6 +159,7 @@ type CheckoutFormProps = {
 	billingState: string;
 	setBillingState: (value: string) => void;
 	taxRateConfig: TaxRateConfig;
+	dmcc: DmccLayouts;
 };
 
 export default function CheckoutForm({
@@ -182,6 +183,7 @@ export default function CheckoutForm({
 	billingState,
 	setBillingState,
 	taxRateConfig,
+	dmcc,
 }: CheckoutFormProps) {
 	const { originalAmount, finalAmount, contributionAmount } = payment;
 	const csrf: CsrfState = appConfig.csrf;
@@ -189,7 +191,8 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
-	const { digitalDmcc, printDmcc } = useDmccLayout(productKey);
+
+	const { digitalDmcc, printDmcc } = dmcc;
 	const isDmcc = printDmcc || digitalDmcc;
 
 	const abParticipations = useAbParticipations();
