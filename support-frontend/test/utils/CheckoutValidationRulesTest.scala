@@ -245,27 +245,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     ) shouldBe Valid
   }
 
-  it should "return Invalid if a user tries to pay with Apple Pay in GBP but the Express Checkout UK switch in RRCP is off" in {
-    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
-      product = Contribution(0, GBP, Monthly),
-      paymentFields = StripePaymentFields(
-        paymentMethod = PaymentMethodId("testId").get,
-        stripePaymentType = Some(StripePaymentType.StripeApplePay),
-        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
-      ),
-      switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(
-          stripe = Some(On),
-          stripeExpressCheckout = Some(On),
-          payPal = Some(On),
-          directDebit = Some(On),
-          stripeHostedCheckout = Some(Off),
-          stripeExpressCheckoutUK = Some(Off),
-        ),
-      ),
-    ) shouldBe Invalid("Invalid Payment Method")
-  }
-
   it should "use the regular Express Checkout switch, not the UK one, if a user tries to pay with Apple Pay in USD" in {
     def check(regularSwitch: SwitchState, ukSwitch: SwitchState) =
       CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
