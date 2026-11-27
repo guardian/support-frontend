@@ -60,8 +60,6 @@ export function PreContractInformation({
 			<CancellationPolicy
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				amount={amount}
-				contribution={contribution}
 				promotion={promotion}
 			/>
 			<PriceRisePolicy productKey={productKey} ratePlanKey={ratePlanKey} />

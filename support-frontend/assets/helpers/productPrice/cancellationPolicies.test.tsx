@@ -3,7 +3,6 @@ import {
 	digitalPlusTermsLink,
 	guardianAdLiteTermsLink,
 	guardianWeeklyTermsLink,
-	manageAccountLink,
 	observerLinks,
 	paperTermsLink,
 	supporterPlusTermsLink,
@@ -13,28 +12,24 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { getCancellationPolicy } from './cancellationPolicies';
-import {
-	getTestDiscountPrice,
-	getTestPricesAndPromotion,
-} from './preContractInformationTestData';
+import { getTestPricesAndPromotion } from './preContractInformationTestData';
 
-const digitalMonthly =
-	'Cancel anytime, via your account. Cancel within 14 days of sign-up and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
-const digitalAnnual = `Cancel anytime, via your account. Cancel within 14 days of sign-up or each renewal and receive a full refund of your last payment. See more about your cooling-off rights in your full pre-contract information here.`;
+const digitalMonthlyAnnual =
+	'Cooling-off rights: you can cancel with immediate effect within 14 days of sign-up: see more detail here.';
 const studentAnnual =
-	"You may cancel your All-access digital subscription within 14 days of taking out the subscription. If you do, you'll receive a full refund and your subscription will stop immediately. To cancel, go to Manage My Account or see our terms. This subscription does not auto-renew.";
-const printDelivery =
+	'This subscription does not auto-renew. If you cancel within 14 days of sign-up, you will receive a full refund and your subscription will stop immediately. To cancel, go to Manage My Account or see our Terms.';
+const weekly =
+	'Cooling-off rights: you can cancel with immediate effect anytime from sign-up until 14 days after you receive your first magazine: see more detail here.';
+const paper =
+	'Cooling-off rights: you can cancel with immediate effect anytime from sign-up until 14 days after you receive or are entitled to collect your first newspaper: see more detail here.';
+const weeklyGift = `This subscription does not auto-renew. If you cancel within 14 days of sign-up, you'll receive a full refund and your subscription will stop immediately. To cancel, contact Customer Service.`;
+const promotionWeekly =
+	'Cooling-off rights: you can cancel with immediate effect anytime from sign-up until 14 days after you receive your first magazine. You can also cancel with immediate effect within 14 days of your first higher payment: see more detail here.';
+const promotionPaper = `Cooling-off rights: you can cancel with immediate effect anytime from sign-up until 14 days after you receive or are entitled to collect your first newspaper. You can also cancel with immediate effect within 14 days of your first higher payment: see more detail here.`;
+const sundayObserver =
 	'Cancel anytime, via your account. Cancel within 14 days of receiving your first issue and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
-const printSubscription =
+const sundaySubscriptionCard =
 	'Cancel anytime, via your account. Cancel within 14 days of receiving your subscription card and receive a full refund. See more about your cooling-off rights in your full pre-contract information here.';
-const printGift =
-	"By proceeding, you are agreeing to our Terms & Conditions. This subscription does not auto-renew. If you cancel within 14 days of sign-up, you'll receive a full refund. To cancel within 14 days of sign-up and receive a refund contact Customer Service.";
-const promotionDigitalMonthly = (firstPayment: number) =>
-	`Cancel anytime, via your account. Cancel within 14 days of sign-up or your first payment at £${firstPayment} and receive a full refund of your last payment. See more about your cooling-off rights in your full pre-contract information here.`;
-const promotionPrintDelivery = (firstPayment: number) =>
-	`Cancel anytime, via your account. Cancel within 14 days of receiving your first issue or your first payment at £${firstPayment} and receive a full refund of that payment. See more about your cooling-off rights in your full pre-contract information here.`;
-const promotionPrintSubscription = (firstPayment: number) =>
-	`Cancel anytime, via your account. Cancel within 14 days of receiving your subscription card or your first payment at £${firstPayment} and receive a full refund of that payment. See more about your cooling-off rights in your full pre-contract information here.`;
 
 type PolicyCase = readonly [
 	product: ActiveProductKey,
@@ -52,23 +47,23 @@ const policyCases: PolicyCase[] = [
 	[
 		'GuardianAdLite',
 		'Monthly',
-		digitalMonthly,
-		promotionDigitalMonthly(getTestDiscountPrice('GuardianAdLite', 'Monthly')),
+		digitalMonthlyAnnual,
+		digitalMonthlyAnnual,
 		guardianAdLiteTermsLink,
 	],
 	['GuardianAdLite', 'Annual', undefined, undefined, undefined],
 	[
 		'SupporterPlus',
 		'Monthly',
-		digitalMonthly,
-		promotionDigitalMonthly(getTestDiscountPrice('SupporterPlus', 'Monthly')),
+		digitalMonthlyAnnual,
+		digitalMonthlyAnnual,
 		supporterPlusTermsLink,
 	],
 	[
 		'SupporterPlus',
 		'Annual',
-		digitalAnnual,
-		digitalAnnual,
+		digitalMonthlyAnnual,
+		digitalMonthlyAnnual,
 		supporterPlusTermsLink,
 	],
 	[
@@ -81,17 +76,15 @@ const policyCases: PolicyCase[] = [
 	[
 		'DigitalSubscription',
 		'Monthly',
-		digitalMonthly,
-		promotionDigitalMonthly(
-			getTestDiscountPrice('DigitalSubscription', 'Monthly'),
-		),
+		digitalMonthlyAnnual,
+		digitalMonthlyAnnual,
 		digitalPlusTermsLink,
 	],
 	[
 		'DigitalSubscription',
 		'Annual',
-		digitalAnnual,
-		digitalAnnual,
+		digitalMonthlyAnnual,
+		digitalMonthlyAnnual,
 		digitalPlusTermsLink,
 	],
 	['DigitalSubscription', 'ThreeMonthGift', undefined, undefined, undefined],
@@ -99,118 +92,52 @@ const policyCases: PolicyCase[] = [
 	[
 		'GuardianWeeklyDomestic',
 		'MonthlyPlus',
-		printDelivery,
-		promotionPrintDelivery(
-			getTestDiscountPrice('GuardianWeeklyDomestic', 'MonthlyPlus'),
-		),
+		weekly,
+		promotionWeekly,
 		guardianWeeklyTermsLink,
 	],
 	[
 		'GuardianWeeklyDomestic',
 		'QuarterlyPlus',
-		printDelivery,
-		promotionPrintDelivery(
-			getTestDiscountPrice('GuardianWeeklyDomestic', 'QuarterlyPlus'),
-		),
+		weekly,
+		promotionWeekly,
 		guardianWeeklyTermsLink,
 	],
 	[
 		'GuardianWeeklyDomestic',
 		'AnnualPlus',
-		printDelivery,
-		promotionPrintDelivery(
-			getTestDiscountPrice('GuardianWeeklyDomestic', 'AnnualPlus'),
-		),
+		weekly,
+		promotionWeekly,
 		guardianWeeklyTermsLink,
 	],
 	[
 		'GuardianWeeklyDomestic',
 		'ThreeMonthGift',
-		printGift,
-		printGift,
-		guardianWeeklyTermsLink,
+		weeklyGift,
+		weeklyGift,
+		undefined,
 	],
-	[
-		'GuardianWeeklyDomestic',
-		'OneYearGift',
-		printGift,
-		printGift,
-		guardianWeeklyTermsLink,
-	],
+	['GuardianWeeklyDomestic', 'OneYearGift', weeklyGift, weeklyGift, undefined],
+	['HomeDelivery', 'EverydayPlus', paper, promotionPaper, paperTermsLink],
+	['HomeDelivery', 'SixdayPlus', paper, promotionPaper, paperTermsLink],
+	['HomeDelivery', 'WeekendPlus', paper, promotionPaper, paperTermsLink],
+	['HomeDelivery', 'SaturdayPlus', paper, promotionPaper, paperTermsLink],
 	[
 		'HomeDelivery',
-		'EverydayPlus',
-		printDelivery,
-		promotionPrintDelivery(
-			getTestDiscountPrice('HomeDelivery', 'EverydayPlus'),
-		),
-		paperTermsLink,
+		'Sunday',
+		sundayObserver,
+		sundayObserver,
+		observerLinks.TERMS,
 	],
-	[
-		'HomeDelivery',
-		'SixdayPlus',
-		printDelivery,
-		promotionPrintDelivery(getTestDiscountPrice('HomeDelivery', 'SixdayPlus')),
-		paperTermsLink,
-	],
-	[
-		'HomeDelivery',
-		'WeekendPlus',
-		printDelivery,
-		promotionPrintDelivery(getTestDiscountPrice('HomeDelivery', 'WeekendPlus')),
-		paperTermsLink,
-	],
-	[
-		'HomeDelivery',
-		'SaturdayPlus',
-		printDelivery,
-		promotionPrintDelivery(
-			getTestDiscountPrice('HomeDelivery', 'SaturdayPlus'),
-		),
-		paperTermsLink,
-	],
-	['HomeDelivery', 'Sunday', printDelivery, printDelivery, observerLinks.TERMS],
-	[
-		'SubscriptionCard',
-		'EverydayPlus',
-		printSubscription,
-		promotionPrintSubscription(
-			getTestDiscountPrice('SubscriptionCard', 'EverydayPlus'),
-		),
-		paperTermsLink,
-	],
-	[
-		'SubscriptionCard',
-		'SixdayPlus',
-		printSubscription,
-		promotionPrintSubscription(
-			getTestDiscountPrice('SubscriptionCard', 'SixdayPlus'),
-		),
-		paperTermsLink,
-	],
-	[
-		'SubscriptionCard',
-		'WeekendPlus',
-		printSubscription,
-		promotionPrintSubscription(
-			getTestDiscountPrice('SubscriptionCard', 'WeekendPlus'),
-		),
-		paperTermsLink,
-	],
-	[
-		'SubscriptionCard',
-		'SaturdayPlus',
-		printSubscription,
-		promotionPrintSubscription(
-			getTestDiscountPrice('SubscriptionCard', 'SaturdayPlus'),
-		),
-		paperTermsLink,
-	],
+	['SubscriptionCard', 'EverydayPlus', paper, promotionPaper, paperTermsLink],
+	['SubscriptionCard', 'SixdayPlus', paper, promotionPaper, paperTermsLink],
+	['SubscriptionCard', 'WeekendPlus', paper, promotionPaper, paperTermsLink],
+	['SubscriptionCard', 'SaturdayPlus', paper, promotionPaper, paperTermsLink],
 	[
 		'SubscriptionCard',
 		'Sunday',
-		printSubscription,
-		printSubscription,
+		sundaySubscriptionCard,
+		sundaySubscriptionCard,
 		observerLinks.TERMS,
 	],
 ];
@@ -228,13 +155,10 @@ const expectPolicy = (
 	const { container } = render(policy);
 	expect(container.textContent).toMatchSnapshot();
 	expect(container.textContent).toBe(copy);
-	expect(
-		screen.getByRole('link', { name: /^(here|terms|Terms & Conditions)$/ }),
-	).toHaveAttribute('href', termsLink);
-	if (copy !== printGift) {
+	if (termsLink) {
 		expect(
-			screen.getByRole('link', { name: /^(your account|Manage My Account)$/ }),
-		).toHaveAttribute('href', manageAccountLink);
+			screen.getByRole('link', { name: /^(here|Terms)$/ }),
+		).toHaveAttribute('href', termsLink);
 	}
 };
 
@@ -242,8 +166,7 @@ describe('getCancellationPolicy', () => {
 	it.each(policyCases)(
 		'cancellation policy for product: %s ratePlan: %s',
 		(product, ratePlan, copy, _promotionalCopy, termsLink) => {
-			const { fullPrice } = getTestPricesAndPromotion(product, ratePlan);
-			const result = getCancellationPolicy(product, ratePlan, fullPrice);
+			const result = getCancellationPolicy(product, ratePlan);
 			expectPolicy(result, copy, termsLink);
 		},
 	);
@@ -251,45 +174,8 @@ describe('getCancellationPolicy', () => {
 	it.each(policyCases)(
 		'promotional cancellation policy for product: %s ratePlan: %s',
 		(product, ratePlan, _copy, promotionalCopy, termsLink) => {
-			const { fullPrice, promotion } = getTestPricesAndPromotion(
-				product,
-				ratePlan,
-			);
-			const result = getCancellationPolicy(
-				product,
-				ratePlan,
-				fullPrice,
-				promotion,
-			);
-			expectPolicy(result, promotionalCopy, termsLink);
-		},
-	);
-
-	it.each([
-		[
-			'SupporterPlus',
-			'Monthly',
-			digitalMonthly,
-			promotionDigitalMonthly(
-				getTestDiscountPrice('SupporterPlus', 'Monthly') + 5,
-			),
-			supporterPlusTermsLink,
-		],
-	] as const)(
-		'adds contribution to discounted SupporterPlus %s renewal terms after discounting',
-		(product, ratePlan, _copy, promotionalCopy, termsLink) => {
-			const contribution = 5;
-			const { fullPrice, promotion } = getTestPricesAndPromotion(
-				product,
-				ratePlan,
-			);
-			const result = getCancellationPolicy(
-				product,
-				ratePlan,
-				fullPrice,
-				promotion,
-				contribution,
-			);
+			const { promotion } = getTestPricesAndPromotion(product, ratePlan);
+			const result = getCancellationPolicy(product, ratePlan, promotion);
 			expectPolicy(result, promotionalCopy, termsLink);
 		},
 	);

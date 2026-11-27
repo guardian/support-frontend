@@ -15,8 +15,6 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { textLink } from 'helpers/utilities/textLink';
-import { ratePlanToBillingPeriod } from './billingPeriods';
-import { getPromotionDiscountedPrice } from './promotionPricing';
 
 const getTerms = (
 	copy: string,
@@ -47,26 +45,13 @@ const getTerms = (
 	}
 };
 
-const digitalMonthly = (
+const digitalMonthlyAnnual = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
 	<>
-		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-		within 14 days of sign-up and receive a full refund. See more about your
-		cooling-off rights in your full pre-contract information{' '}
-		{getTerms('here', productKey, ratePlanKey)}.
-	</>
-);
-const digitalAnnual = (
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-): JSX.Element => (
-	<>
-		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-		within 14 days of sign-up or each renewal and receive a full refund of your
-		last payment. See more about your cooling-off rights in your full
-		pre-contract information {getTerms('here', productKey, ratePlanKey)}.
+		Cooling-off rights: you can cancel with immediate effect within 14 days of
+		sign-up: see more detail {getTerms('here', productKey, ratePlanKey)}.
 	</>
 );
 const studentAnnual = (
@@ -74,87 +59,68 @@ const studentAnnual = (
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
 	<>
-		You may cancel your All-access digital subscription within 14 days of taking
-		out the subscription. If you do, you'll receive a full refund and your
-		subscription will stop immediately. To cancel, go to{' '}
+		This subscription does not auto-renew. If you cancel within 14 days of
+		sign-up, you will receive a full refund and your subscription will stop
+		immediately. To cancel, go to{' '}
 		{textLink('Manage My Account', manageAccountLink)} or see our{' '}
-		{getTerms('terms', productKey, ratePlanKey)}. This subscription does not
-		auto-renew.
+		{getTerms('Terms', productKey, ratePlanKey)}.
 	</>
 );
-const printMonthly = (
+const weekly = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
 	<>
-		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-		within 14 days of receiving your{' '}
-		{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
-		and receive a full refund. See more about your cooling-off rights in your
-		full pre-contract information {getTerms('here', productKey, ratePlanKey)}.
+		Cooling-off rights: you can cancel with immediate effect anytime from
+		sign-up until 14 days after you receive your first magazine: see more detail{' '}
+		{getTerms('here', productKey, ratePlanKey)}.
 	</>
 );
-const printAnnual = (
+const paperMonthly = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): JSX.Element => (
 	<>
-		Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-		within 14 days of receiving your{' '}
-		{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
-		and receive a full refund. See more about your cooling-off rights in your
-		full pre-contract information {getTerms('here', productKey, ratePlanKey)}.
+		Cooling-off rights: you can cancel with immediate effect anytime from
+		sign-up until 14 days after you receive or are entitled to collect your
+		first newspaper: see more detail {getTerms('here', productKey, ratePlanKey)}
+		.
 	</>
 );
-const printGift = (
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-): JSX.Element => (
+const weeklyGift = (): JSX.Element => (
 	<>
-		By proceeding, you are agreeing to our{' '}
-		{getTerms('Terms & Conditions', productKey, ratePlanKey)}. This subscription
-		does not auto-renew. If you cancel within 14 days of sign-up, you'll receive
-		a full refund. To cancel within 14 days of sign-up and receive a refund
-		contact {textLink('Customer Service', guardianHelpCentreLink)}.
+		This subscription does not auto-renew. If you cancel within 14 days of
+		sign-up, you'll receive a full refund and your subscription will stop
+		immediately. To cancel, contact{' '}
+		{textLink('Customer Service', guardianHelpCentreLink)}.
 	</>
 );
 
-const promotionDigitalMonthly = (
+const promotionWeekly = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	amount: number,
-	contribution?: number,
 ): JSX.Element => {
-	const validContribution =
-		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
-	const firstPayment = Math.round((amount + validContribution) * 100) / 100;
 	return (
 		<>
-			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-			within 14 days of sign-up or your first payment at £{firstPayment} and
-			receive a full refund of your last payment. See more about your
-			cooling-off rights in your full pre-contract information{' '}
-			{getTerms('here', productKey, ratePlanKey)}.
+			Cooling-off rights: you can cancel with immediate effect anytime from
+			sign-up until 14 days after you receive your first magazine. You can also
+			cancel with immediate effect within 14 days of your first higher payment:
+			see more detail {getTerms('here', productKey, ratePlanKey)}.
 		</>
 	);
 };
-const promotionPrintAnnual = (
+
+const promotionPaper = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	amount: number,
-	contribution?: number,
 ): JSX.Element => {
-	const validContribution =
-		productKey === 'SupporterPlus' ? contribution ?? 0 : 0;
-	const firstPayment = amount + validContribution;
 	return (
 		<>
-			Cancel anytime, via {textLink('your account', manageAccountLink)}. Cancel
-			within 14 days of receiving your{' '}
-			{productKey === 'SubscriptionCard' ? 'subscription card' : 'first issue'}{' '}
-			or your first payment at £{firstPayment} and receive a full refund of that
-			payment. See more about your cooling-off rights in your full pre-contract
-			information {getTerms('here', productKey, ratePlanKey)}.
+			Cooling-off rights: you can cancel with immediate effect anytime from
+			sign-up until 14 days after you receive or are entitled to collect your
+			first newspaper. You can also cancel with immediate effect within 14 days
+			of your first higher payment: see more detail{' '}
+			{getTerms('here', productKey, ratePlanKey)}.
 		</>
 	);
 };
@@ -183,48 +149,37 @@ const getCancellation = (
 ): PolicyElement => {
 	return {
 		GuardianAdLite: {
-			Monthly: digitalMonthly(productKey, ratePlanKey),
+			Monthly: digitalMonthlyAnnual(productKey, ratePlanKey),
 		},
 		SupporterPlus: {
-			Monthly: digitalMonthly(productKey, ratePlanKey),
-			MonthlyTaxExclusive: digitalMonthly(productKey, ratePlanKey),
-			Annual: digitalAnnual(productKey, ratePlanKey),
-			AnnualTaxExclusive: digitalAnnual(productKey, ratePlanKey),
+			Monthly: digitalMonthlyAnnual(productKey, ratePlanKey),
+			Annual: digitalMonthlyAnnual(productKey, ratePlanKey),
 			OneYearStudent: studentAnnual(productKey, ratePlanKey),
 		},
 		DigitalSubscription: {
-			Monthly: digitalMonthly(productKey, ratePlanKey),
-			MonthlyTaxExclusive: digitalMonthly(productKey, ratePlanKey),
-			Annual: digitalAnnual(productKey, ratePlanKey),
-			AnnualTaxExclusive: digitalAnnual(productKey, ratePlanKey),
+			Monthly: digitalMonthlyAnnual(productKey, ratePlanKey),
+			Annual: digitalMonthlyAnnual(productKey, ratePlanKey),
 		},
 		GuardianWeeklyDomestic: {
-			MonthlyPlus: printMonthly(productKey, ratePlanKey),
-			QuarterlyPlus: printMonthly(productKey, ratePlanKey),
-			AnnualPlus: printAnnual(productKey, ratePlanKey),
-			ThreeMonthGift: printGift(productKey, ratePlanKey),
-			OneYearGift: printGift(productKey, ratePlanKey),
-		},
-		GuardianWeeklyRestOfWorld: {
-			MonthlyPlus: printMonthly(productKey, ratePlanKey),
-			QuarterlyPlus: printMonthly(productKey, ratePlanKey),
-			AnnualPlus: printAnnual(productKey, ratePlanKey),
-			ThreeMonthGift: printGift(productKey, ratePlanKey),
-			OneYearGift: printGift(productKey, ratePlanKey),
+			MonthlyPlus: weekly(productKey, ratePlanKey),
+			QuarterlyPlus: weekly(productKey, ratePlanKey),
+			AnnualPlus: weekly(productKey, ratePlanKey),
+			ThreeMonthGift: weeklyGift(),
+			OneYearGift: weeklyGift(),
 		},
 		SubscriptionCard: {
-			EverydayPlus: printMonthly(productKey, ratePlanKey),
-			SixdayPlus: printMonthly(productKey, ratePlanKey),
-			WeekendPlus: printMonthly(productKey, ratePlanKey),
-			SaturdayPlus: printMonthly(productKey, ratePlanKey),
+			EverydayPlus: paperMonthly(productKey, ratePlanKey),
+			SixdayPlus: paperMonthly(productKey, ratePlanKey),
+			WeekendPlus: paperMonthly(productKey, ratePlanKey),
+			SaturdayPlus: paperMonthly(productKey, ratePlanKey),
 			SundayPlus: promotionObserverMonthly(productKey, ratePlanKey),
 			Sunday: promotionObserverMonthly(productKey, ratePlanKey),
 		},
 		HomeDelivery: {
-			EverydayPlus: printMonthly(productKey, ratePlanKey),
-			SixdayPlus: printMonthly(productKey, ratePlanKey),
-			WeekendPlus: printMonthly(productKey, ratePlanKey),
-			SaturdayPlus: printMonthly(productKey, ratePlanKey),
+			EverydayPlus: paperMonthly(productKey, ratePlanKey),
+			SixdayPlus: paperMonthly(productKey, ratePlanKey),
+			WeekendPlus: paperMonthly(productKey, ratePlanKey),
+			SaturdayPlus: paperMonthly(productKey, ratePlanKey),
 			SundayPlus: promotionObserverMonthly(productKey, ratePlanKey),
 			Sunday: promotionObserverMonthly(productKey, ratePlanKey),
 		},
@@ -234,68 +189,40 @@ const getCancellation = (
 const promotionalCancellation = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	firstPayment: number,
-	contribution?: number,
 ): PolicyElement => {
-	const promoDigitalMonthly = promotionDigitalMonthly(
-		productKey,
-		ratePlanKey,
-		firstPayment,
-		contribution,
-	);
-	const promoPrintAnnual = promotionPrintAnnual(
-		productKey,
-		ratePlanKey,
-		firstPayment,
-	);
-	const promoObserverMonthly = promotionObserverMonthly(
-		productKey,
-		ratePlanKey,
-	);
 	return {
 		GuardianAdLite: {
-			Monthly: promoDigitalMonthly,
+			Monthly: digitalMonthlyAnnual(productKey, ratePlanKey),
 		},
 		SupporterPlus: {
-			Monthly: promoDigitalMonthly,
-			MonthlyTaxExclusive: promoDigitalMonthly,
-			Annual: digitalAnnual(productKey, ratePlanKey),
-			AnnualTaxExclusive: digitalAnnual(productKey, ratePlanKey),
+			Monthly: digitalMonthlyAnnual(productKey, ratePlanKey),
+			Annual: digitalMonthlyAnnual(productKey, ratePlanKey),
 			OneYearStudent: studentAnnual(productKey, ratePlanKey),
 		},
 		DigitalSubscription: {
-			Monthly: promotionDigitalMonthly(productKey, ratePlanKey, firstPayment),
-			MonthlyTaxExclusive: promoDigitalMonthly,
-			Annual: digitalAnnual(productKey, ratePlanKey),
-			AnnualTaxExclusive: digitalAnnual(productKey, ratePlanKey),
+			Monthly: digitalMonthlyAnnual(productKey, ratePlanKey),
+			Annual: digitalMonthlyAnnual(productKey, ratePlanKey),
 		},
 		GuardianWeeklyDomestic: {
-			MonthlyPlus: promoPrintAnnual,
-			QuarterlyPlus: promoPrintAnnual,
-			AnnualPlus: promoPrintAnnual,
-			ThreeMonthGift: printGift(productKey, ratePlanKey),
-			OneYearGift: printGift(productKey, ratePlanKey),
-		},
-		GuardianWeeklyRestOfWorld: {
-			MonthlyPlus: promoPrintAnnual,
-			QuarterlyPlus: promoPrintAnnual,
-			AnnualPlus: promoPrintAnnual,
-			ThreeMonthGift: printGift(productKey, ratePlanKey),
-			OneYearGift: printGift(productKey, ratePlanKey),
+			MonthlyPlus: promotionWeekly(productKey, ratePlanKey),
+			QuarterlyPlus: promotionWeekly(productKey, ratePlanKey),
+			AnnualPlus: promotionWeekly(productKey, ratePlanKey),
+			ThreeMonthGift: weeklyGift(),
+			OneYearGift: weeklyGift(),
 		},
 		SubscriptionCard: {
-			EverydayPlus: promoPrintAnnual,
-			SixdayPlus: promoPrintAnnual,
-			WeekendPlus: promoPrintAnnual,
-			SaturdayPlus: promoPrintAnnual,
-			Sunday: promoObserverMonthly,
+			EverydayPlus: promotionPaper(productKey, ratePlanKey),
+			SixdayPlus: promotionPaper(productKey, ratePlanKey),
+			WeekendPlus: promotionPaper(productKey, ratePlanKey),
+			SaturdayPlus: promotionPaper(productKey, ratePlanKey),
+			Sunday: promotionObserverMonthly(productKey, ratePlanKey),
 		},
 		HomeDelivery: {
-			EverydayPlus: promoPrintAnnual,
-			SixdayPlus: promoPrintAnnual,
-			WeekendPlus: promoPrintAnnual,
-			SaturdayPlus: promoPrintAnnual,
-			Sunday: promoObserverMonthly,
+			EverydayPlus: promotionPaper(productKey, ratePlanKey),
+			SixdayPlus: promotionPaper(productKey, ratePlanKey),
+			WeekendPlus: promotionPaper(productKey, ratePlanKey),
+			SaturdayPlus: promotionPaper(productKey, ratePlanKey),
+			Sunday: promotionObserverMonthly(productKey, ratePlanKey),
 		},
 	};
 };
@@ -303,39 +230,18 @@ const promotionalCancellation = (
 function getPromotionalCancellation(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	amount: number,
-	promotion: PromoWithCatalogInformation,
-	contribution?: number,
 ): PolicyElement {
-	const discountedPrice = getPromotionDiscountedPrice(
-		promotion,
-		amount,
-		ratePlanToBillingPeriod(ratePlanKey),
-	);
-	return promotionalCancellation(
-		productKey,
-		ratePlanKey,
-		discountedPrice,
-		contribution,
-	);
+	return promotionalCancellation(productKey, ratePlanKey);
 }
 
 export function getCancellationPolicy(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	fullPrice: number,
 	promotion?: PromoWithCatalogInformation,
-	contribution?: number,
 ): JSX.Element | undefined {
 	const isValidPromotion = promotion?.discount?.amount !== undefined;
 	const cancellationPolicy = isValidPromotion
-		? getPromotionalCancellation(
-				productKey,
-				ratePlanKey,
-				fullPrice,
-				promotion,
-				contribution,
-		  )
+		? getPromotionalCancellation(productKey, ratePlanKey)
 		: getCancellation(productKey, ratePlanKey);
 	return cancellationPolicy[productKey]?.[ratePlanKey];
 }

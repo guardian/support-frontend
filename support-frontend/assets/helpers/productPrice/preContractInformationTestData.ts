@@ -22,7 +22,7 @@ export const getTestPricesAndPromotion = (
 	return { fullPrice, discountedPrice, promotion };
 };
 
-export const getTestDiscountPrice = (
+const getTestDiscountPrice = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ) => {
