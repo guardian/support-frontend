@@ -54,7 +54,7 @@ exports[`getRenewalTermPolicyCopy renewal term for product:GuardianWeeklyDomesti
 
 exports[`getRenewalTermPolicyCopy renewal term for product:GuardianWeeklyDomestic ratePlan:MonthlyPlus 1`] = `"Subscription auto-renews monthly. Your first payment will be taken on Friday, December 11, 2026. You'll pay £19/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
-exports[`getRenewalTermPolicyCopy renewal term for product:GuardianWeeklyDomestic ratePlan:QuarterlyPlus 1`] = `"Subscription auto-renews quarterly. Pay £57/quarter, unless you cancel. Equivalent to £19/month for each quarter. We'll remind you every 6 months, 2 weeks before your renewal date."`;
+exports[`getRenewalTermPolicyCopy renewal term for product:GuardianWeeklyDomestic ratePlan:QuarterlyPlus 1`] = `"Subscription auto-renews quarterly. Your first payment will be taken on Friday, December 11, 2026. You'll pay £57/quarter, unless you cancel (if payments were due monthly this would be £19/month). We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 
 exports[`getRenewalTermPolicyCopy renewal term for product:HomeDelivery ratePlan:EverydayPlus 1`] = `"Subscription auto-renews monthly. Your first payment will be taken on Wednesday, December 2, 2026. You'll pay £88.99/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date."`;
 

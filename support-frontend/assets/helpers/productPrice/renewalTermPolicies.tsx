@@ -121,16 +121,30 @@ const digitalAndPrintAnnual = (fullPrice: number): JSX.Element => {
 		</>
 	);
 };
-const printQuarterly = (fullPrice: number): JSX.Element => {
+const printQuarterly = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	fullPrice: number,
+): JSX.Element => {
+	const deliveryDate =
+		getFirstDeliveryDateInclDigitalSubscription(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		) ?? new Date();
 	const monthlyEquivalent = monthlyEquivalentPrice(
 		fullPrice,
 		BillingPeriod.Quarterly,
 	);
 	return (
 		<>
-			Subscription auto-renews quarterly. Pay £{fullPrice}/quarter, unless you
-			cancel. Equivalent to £{monthlyEquivalent}/month for each quarter. We'll
-			remind you every 6 months, 2 weeks before your renewal date.
+			Subscription <strong>auto-renews quarterly</strong>. Your first payment
+			will be taken on {formatUserDate(deliveryDate)}. You'll pay{' '}
+			<strong>£{fullPrice}/quarter</strong>, unless you cancel (if payments were
+			due monthly this would be £{monthlyEquivalent}/month). We'll remind you
+			every 6 months, 1 week before your subscription auto-renews. To stop
+			auto-renewal, cancel via{' '}
+			{textLink('Manage My Account', manageAccountLink)} before your next
+			renewal date.
 		</>
 	);
 };
@@ -241,7 +255,7 @@ const promotionPrintQuarterly = (
 ): JSX.Element => {
 	const { discount } = promotion;
 	if (!discount) {
-		return printQuarterly(fullPrice);
+		return printQuarterly(productKey, ratePlanKey, fullPrice);
 	}
 	const {
 		discountedPrice,
@@ -335,12 +349,12 @@ function getRenewalTerm(
 		},
 		GuardianWeeklyDomestic: {
 			MonthlyPlus: printMonthly(productKey, ratePlanKey, fullPrice),
-			QuarterlyPlus: printQuarterly(fullPrice),
+			QuarterlyPlus: printQuarterly(productKey, ratePlanKey, fullPrice),
 			AnnualPlus: digitalAndPrintAnnual(fullPrice),
 		},
 		GuardianWeeklyRestOfWorld: {
 			MonthlyPlus: printMonthly(productKey, ratePlanKey, fullPrice),
-			QuarterlyPlus: printQuarterly(fullPrice),
+			QuarterlyPlus: printQuarterly(productKey, ratePlanKey, fullPrice),
 			AnnualPlus: digitalAndPrintAnnual(fullPrice),
 		},
 		SubscriptionCard: {

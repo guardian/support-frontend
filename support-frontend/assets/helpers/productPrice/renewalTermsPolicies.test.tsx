@@ -42,12 +42,14 @@ const digitalAndPrintAnnual = (test: RenewalTestProps) =>
 		BillingPeriod.Annual,
 	)}/month. We'll remind you every year, 2 weeks before your renewal date.`;
 const printQuarterly = (test: RenewalTestProps) =>
-	`Subscription auto-renews quarterly. Pay £${
+	`Subscription auto-renews quarterly. Your first payment will be taken on ${formatUserDate(
+		test.deliveryDate,
+	)}. You'll pay £${
 		test.fullPrice
-	}/quarter, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
+	}/quarter, unless you cancel (if payments were due monthly this would be £${monthlyEquivalentPrice(
 		test.fullPrice,
 		BillingPeriod.Quarterly,
-	)}/month for each quarter. We'll remind you every 6 months, 2 weeks before your renewal date.`;
+	)}/month). We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 
 const promoDigitalMonthly = (
 	fullPrice: number,
