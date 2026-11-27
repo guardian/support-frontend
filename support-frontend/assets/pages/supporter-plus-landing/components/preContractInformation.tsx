@@ -11,6 +11,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { CancellationPolicy } from './cancellationPolicy';
+import PreContractLink from './preContractLink';
 import { PriceRisePolicy } from './priceRisePolicy';
 import { RenewalTermPolicy } from './renewalTermPolicy';
 
@@ -65,6 +66,7 @@ export function PreContractInformation({
 				promotion={promotion}
 			/>
 			<PriceRisePolicy productKey={productKey} ratePlanKey={ratePlanKey} />
+			<PreContractLink productKey={productKey} ratePlanKey={ratePlanKey} />
 		</div>
 	);
 }

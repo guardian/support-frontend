@@ -44,7 +44,21 @@ const manageAccountLink = 'https://manage.theguardian.com';
 const observerLinks = {
 	TERMS: 'https://observer.co.uk/policy/terms',
 	PRIVACY: 'https://observer.co.uk/policy/privacy',
+	PRE_CONTRACT: 'https://observer.co.uk/digital-and-print/pre-contract',
 };
+const preContractLinks = {
+	ALL_ACCESS_DIGITAL:
+		'https://www.theguardian.com/info/all-access-digital-pre-contract-information',
+	DIGITAL_PLUS:
+		'https://www.theguardian.com/info/digital-plus-pre-contract-information',
+	GUARDIAN_AD_LITE:
+		'https://www.theguardian.com/info/guardian-ad-lite-pre-contract-information',
+	NEWSPAPER:
+		'https://www.theguardian.com/info/newspaper-subscription-pre-contract-information',
+	GUARDIAN_WEEKLY:
+		'https://www.theguardian.com/info/guardian-weekly-subscription-pre-contract-information',
+};
+
 enum MediaGroup {
 	GUARDIAN = 'Guardian News & Media Ltd',
 	TORTOISE = 'GC re Tortoise Media Ltd t/a The Observer',
@@ -65,6 +79,7 @@ export {
 	digitalPlusTermsLink,
 	guardianWeeklyTermsLink,
 	observerLinks,
+	preContractLinks,
 	manageAccountLink,
 	MediaGroup,
 };

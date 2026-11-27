@@ -69,3 +69,13 @@ export function isGuardianWeeklyDigitalProduct(
 ): boolean {
 	return isGuardianWeeklyProduct(productKey) && ratePlanKey.endsWith('Plus');
 }
+
+export function isObserverProduct(
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+): boolean {
+	return (
+		['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
+		['Sunday'].includes(ratePlanKey)
+	);
+}
