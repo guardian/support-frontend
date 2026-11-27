@@ -318,17 +318,26 @@ const promotionPrintQuarterly = (
 		periodName,
 		durationPeriods,
 		expiry,
+		delivery,
 		discountMonthlyEquivalent,
 		monthlyEquivalent,
 	} = renewalTermDetail(productKey, ratePlanKey, fullPrice, discount);
 	return (
 		<>
-			Subscription auto-renews quarterly. Pay £{discountedPrice}/quarter for{' '}
-			{durationPeriods} {periodName}, then £{fullPrice}/quarter from {expiry},
-			unless you cancel. Equivalent to £{discountMonthlyEquivalent}/month for{' '}
-			{durationPeriods} {periodName}, then £{monthlyEquivalent}/month for each
-			quarter after. We'll remind you 2 weeks before {expiry} then every 6
-			months, 2 weeks before your renewal date.
+			Subscription <strong>auto-renews quarterly</strong>. Your first payment
+			will be taken on {delivery}. You'll pay{' '}
+			<strong>£{discountedPrice}/quarter</strong> for{' '}
+			<strong>
+				{durationPeriods} {periodName}
+			</strong>
+			, then <strong>£{fullPrice}/quarter</strong> from{' '}
+			<strong>{expiry}</strong>, unless you cancel (if payments were due monthly
+			this would be £{discountMonthlyEquivalent}/month for {durationPeriods}{' '}
+			{periodName}, then £{monthlyEquivalent}/month). We'll remind you 1 week
+			before your first higher payment, then every 6 months, 1 week before your
+			subscription auto-renews. To stop auto-renewal, cancel via{' '}
+			{textLink('Manage My Account', manageAccountLink)} before your next
+			renewal date.
 		</>
 	);
 };

@@ -63,19 +63,19 @@ const promoDigitalMonthly = (test: RenewalTestProps) =>
 const promoPrintMonthly = (test: RenewalTestProps) =>
 	`Subscription auto-renews monthly. Your first payment will be taken on ${test.deliveryDate}. You'll pay £${test.discountPrice}/month for 6 months, then £${test.fullPrice}/month from ${test.expiryDate}, unless you cancel. We'll remind you 1 week before your first higher payment, then every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 const promoPrintQuarterly = (test: RenewalTestProps) =>
-	`Subscription auto-renews quarterly. Pay £${
-		test.discountPrice
-	}/quarter for 2 quarters, then £${test.fullPrice}/quarter from ${
+	`Subscription auto-renews quarterly. Your first payment will be taken on ${
+		test.deliveryDate
+	}. You'll pay £${test.discountPrice}/quarter for 2 quarters, then £${
+		test.fullPrice
+	}/quarter from ${
 		test.expiryDate
-	}, unless you cancel. Equivalent to £${monthlyEquivalentPrice(
+	}, unless you cancel (if payments were due monthly this would be £${monthlyEquivalentPrice(
 		test.discountPrice,
 		BillingPeriod.Quarterly,
 	)}/month for 2 quarters, then £${monthlyEquivalentPrice(
 		test.fullPrice,
 		BillingPeriod.Quarterly,
-	)}/month for each quarter after. We'll remind you 2 weeks before ${
-		test.expiryDate
-	} then every 6 months, 2 weeks before your renewal date.`;
+	)}/month). We'll remind you 1 week before your first higher payment, then every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
 
 const promoDigitalAnnual = (test: RenewalTestProps) =>
 	`Subscription auto-renews annually. Pay £${
