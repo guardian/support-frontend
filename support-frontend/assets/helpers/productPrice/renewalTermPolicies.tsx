@@ -8,7 +8,10 @@ import type {
 } from 'helpers/productCatalog';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
+import {
+	getDateWithOrdinal,
+	getLongMonth,
+} from 'helpers/utilities/dateFormatting';
 import { textLink } from 'helpers/utilities/textLink';
 import {
 	addDays,
@@ -66,15 +69,25 @@ export const getPromotionExpiryDate = (
 	return promotionExpiryDate;
 };
 
-const contributionMonthly = (fullPrice: number): JSX.Element => (
-	<>
-		We will attempt to take payment of £{fullPrice}, on the{' '}
-		{getDateWithOrdinal(new Date())} day of every month, from now until you
-		cancel your payment. Payments may take up to 6 days to be recorded in your
-		bank account. You can change how much you give or cancel your payment at any
-		time.
-	</>
-);
+const contributionMonthly = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+): JSX.Element => {
+	const deliveryDate =
+		getFirstDeliveryDateInclDigitalSubscription(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		) ?? new Date();
+	return (
+		<>
+			This payment auto-renews monthly until you cancel. You can cancel your
+			auto-renewal at any time. We will attempt to take payment on the{' '}
+			{getDateWithOrdinal(deliveryDate)} day of every month. Payments may take
+			up to 6 days to be recorded in your bank account. To cancel or change how
+			much you give, go to {textLink('Manage My Account', manageAccountLink)}.
+		</>
+	);
+};
 
 const digitalMonthly = (fullPrice: number): JSX.Element => (
 	<>
@@ -104,6 +117,27 @@ const printMonthly = (
 			auto-renewal, cancel via{' '}
 			{textLink('Manage My Account', manageAccountLink)} before your next
 			renewal date.
+		</>
+	);
+};
+
+const contributionAnnual = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+): JSX.Element => {
+	const deliveryDate =
+		getFirstDeliveryDateInclDigitalSubscription(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		) ?? new Date();
+	return (
+		<>
+			This payment auto-renews every year until you cancel. You can cancel your
+			auto-renewal at any time. We will attempt to take payment on the{' '}
+			{getDateWithOrdinal(deliveryDate)} day of {getLongMonth(deliveryDate)}{' '}
+			every year. Payments may take up to 6 days to be recorded in your bank
+			account. To cancel or change how much you give, go to{' '}
+			{textLink('Manage My Account', manageAccountLink)}.
 		</>
 	);
 };
@@ -449,8 +483,8 @@ function getRenewalTerm(
 ): JSX.Element | undefined {
 	const renewalTerms: Policy = {
 		Contribution: {
-			Monthly: contributionMonthly(fullPrice),
-			Annual: digitalAnnual(fullPrice),
+			Monthly: contributionMonthly(productKey, ratePlanKey),
+			Annual: contributionAnnual(productKey, ratePlanKey),
 		},
 		GuardianAdLite: {
 			Monthly: digitalMonthly(fullPrice),

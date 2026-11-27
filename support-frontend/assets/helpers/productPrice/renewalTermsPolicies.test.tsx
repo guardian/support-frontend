@@ -6,7 +6,6 @@ import type {
 } from 'helpers/productCatalog';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 import { getTestPricesAndPromotion } from './preContractInformationTestData';
 import {
@@ -21,12 +20,10 @@ type RenewalTestProps = {
 	expiryDate: string;
 	deliveryDate: string;
 };
-const contributionMonthly = (test: RenewalTestProps) =>
-	`We will attempt to take payment of £${
-		test.fullPrice
-	}, on the ${getDateWithOrdinal(
-		new Date(),
-	)} day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.`;
+const contributionMonthly = () =>
+	`This payment auto-renews monthly until you cancel. You can cancel your auto-renewal at any time. We will attempt to take payment on the 27th day of every month. Payments may take up to 6 days to be recorded in your bank account. To cancel or change how much you give, go to Manage My Account.`;
+const contributionAnnual = () =>
+	`This payment auto-renews every year until you cancel. You can cancel your auto-renewal at any time. We will attempt to take payment on the 27th day of November every year. Payments may take up to 6 days to be recorded in your bank account. To cancel or change how much you give, go to Manage My Account.`;
 
 const digitalMonthly = (test: RenewalTestProps) =>
 	`Subscription auto-renews monthly. Pay £${test.fullPrice}/month, unless you cancel. We'll remind you every 6 months, 1 week before your subscription auto-renews. To stop auto-renewal, cancel via Manage My Account before your next renewal date.`;
@@ -128,7 +125,7 @@ const expectPolicy = (
 describe('getRenewalTermPolicyCopy', () => {
 	it.each([
 		['Contribution', 'Monthly', contributionMonthly],
-		['Contribution', 'Annual', digitalAnnual],
+		['Contribution', 'Annual', contributionAnnual],
 		['GuardianAdLite', 'Monthly', digitalMonthly],
 		['SupporterPlus', 'Monthly', digitalMonthly],
 		['SupporterPlus', 'Annual', digitalAnnual],
@@ -164,12 +161,14 @@ describe('getRenewalTermPolicyCopy', () => {
 			);
 			expectPolicy(
 				result,
-				policy({
-					fullPrice,
-					discountPrice: fullPrice,
-					expiryDate: deliveryDate,
-					deliveryDate,
-				}),
+				product === 'Contribution'
+					? policy()
+					: policy({
+							fullPrice,
+							discountPrice: fullPrice,
+							expiryDate: deliveryDate,
+							deliveryDate,
+					  }),
 			);
 		},
 	);
