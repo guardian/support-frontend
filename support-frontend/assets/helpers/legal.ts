@@ -44,7 +44,9 @@ const manageAccountLink = 'https://manage.theguardian.com';
 const observerLinks = {
 	TERMS: 'https://observer.co.uk/policy/terms',
 	PRIVACY: 'https://observer.co.uk/policy/privacy',
+	PRE_CONTRACT: 'https://observer.co.uk/digital-and-print/pre-contract',
 };
+
 enum MediaGroup {
 	GUARDIAN = 'Guardian News & Media Ltd',
 	TORTOISE = 'GC re Tortoise Media Ltd t/a The Observer',

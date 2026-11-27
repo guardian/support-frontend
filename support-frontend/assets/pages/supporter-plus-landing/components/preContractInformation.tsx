@@ -6,11 +6,13 @@ import {
 	textSans15,
 } from '@guardian/source/foundations';
 import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { CancellationPolicy } from './cancellationPolicy';
+import { ObserverPolicy } from './observerPolicy';
 import { PriceRisePolicy } from './priceRisePolicy';
 import { RenewalTermPolicy } from './renewalTermPolicy';
 
@@ -65,6 +67,7 @@ export function PreContractInformation({
 				promotion={promotion}
 			/>
 			<PriceRisePolicy productKey={productKey} ratePlanKey={ratePlanKey} />
+			{isObserverSubdomain() && <ObserverPolicy />}
 		</div>
 	);
 }
