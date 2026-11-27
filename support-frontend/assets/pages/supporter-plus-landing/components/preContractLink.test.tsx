@@ -12,8 +12,6 @@ jest.mock('helpers/globalsAndSwitches/observer', () => ({
 const mockIsObserverSubdomain = jest.mocked(isObserverSubdomain);
 
 describe('getPreContractLinkByProduct', () => {
-	beforeEach(() => mockIsObserverSubdomain.mockReturnValue(false));
-
 	it.each([
 		['SupporterPlus', preContractLinks.ALL_ACCESS_DIGITAL],
 		['DigitalSubscription', preContractLinks.DIGITAL_PLUS],
@@ -26,15 +24,17 @@ describe('getPreContractLinkByProduct', () => {
 		['Contribution', undefined],
 		['OneTimeContribution', undefined],
 	] as const)('returns the pre-contract link for %s', (productKey, link) => {
-		expect(getPreContractLinkByProduct(productKey)).toBe(link);
+		expect(getPreContractLinkByProduct(productKey, false)).toBe(link);
 	});
 
-	it('returns the Observer pre-contract link on the Observer subdomain', () => {
-		mockIsObserverSubdomain.mockReturnValue(true);
-		expect(getPreContractLinkByProduct('SubscriptionCard')).toBe(
-			observerLinks.PRE_CONTRACT,
-		);
-	});
+	it.each(['SubscriptionCard', 'HomeDelivery'] as const)(
+		'returns the Observer pre-contract link for %s when isObserver is true',
+		(productKey) => {
+			expect(getPreContractLinkByProduct(productKey, true)).toBe(
+				observerLinks.PRE_CONTRACT,
+			);
+		},
+	);
 });
 
 describe('PreContractLink', () => {
