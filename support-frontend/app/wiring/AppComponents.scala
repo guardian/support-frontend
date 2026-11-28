@@ -1,7 +1,7 @@
 package wiring
 
 import controllers.AssetsComponents
-import filters.{CacheHeadersCheck, RelaxReferrerPolicyFromRedirectFilter, SetCookiesCheck}
+import filters.{CacheHeadersCheck, ConnectSrcReportOnlyFilter, RelaxReferrerPolicyFromRedirectFilter, SetCookiesCheck}
 import lib.{CustomHttpErrorHandler, ErrorController}
 import monitoring.{SentryLogging, StateMachineMonitor}
 import play.api.ApplicationLoader.Context
@@ -51,6 +51,7 @@ class AppComponents(context: Context, stage: String)
     // This filter needs to be before the `securityHeadersFilter` as it removes a header set by that filter
     new RelaxReferrerPolicyFromRedirectFilter(),
     cspFilter,
+    new ConnectSrcReportOnlyFilter(configuration.getOptional[String]("csp.connectSrcReportOnly")),
     corsFilter,
     new SetCookiesCheck(),
     securityHeadersFilter,
