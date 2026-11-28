@@ -20,6 +20,10 @@
   noindex: Boolean = false,
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
+@mainJsIntegrity = @{
+  assets.integrity(mainJsBundle).map(hash => Html(s""" integrity="$hash" crossorigin="anonymous"""")).getOrElse(Html(""))
+}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -60,7 +64,7 @@
       <meta property="og:url" content="@shareUrl" />
     }
 
-    <link href="@assets(mainJsBundle)" rel="preload" as="script">
+    <link href="@assets(mainJsBundle)" rel="preload" as="script"@mainJsIntegrity>
 
     @canonicalLink.map { definedCanonicalLink =>
       <link rel="canonical" href="@definedCanonicalLink" />
@@ -143,7 +147,7 @@
 
     @body
 
-    <script async type="text/javascript" src="@assets(mainJsBundle)"></script>
+    <script async type="text/javascript" src="@assets(mainJsBundle)"@mainJsIntegrity></script>
     <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
   </body>
 </html>
